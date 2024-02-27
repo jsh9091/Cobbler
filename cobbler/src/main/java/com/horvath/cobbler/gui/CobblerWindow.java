@@ -68,7 +68,7 @@ public class CobblerWindow extends JFrame {
 	
 	/**
 	 * Returns an instance of the window. 
-	 * @return PpdWindow
+	 * @return CobblerWindow
 	 */
 	public static CobblerWindow getWindow() {
 		if (window == null) {

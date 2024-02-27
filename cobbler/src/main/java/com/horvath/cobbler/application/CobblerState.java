@@ -39,7 +39,7 @@ public final class CobblerState {
 	
 	/**
 	 * Returns an instance of the state. 
-	 * @return PpdState
+	 * @return CobblerState
 	 */
 	public static CobblerState getInstance() {
 		if (instance == null) {

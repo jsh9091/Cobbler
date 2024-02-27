@@ -25,7 +25,7 @@
 package com.horvath.cobbler.exception;
 
 /**
- * General exception class for the PPD.
+ * General exception class for Cobbler.
  * @author jhorvath
  */
 public class CobblerException extends Exception {
