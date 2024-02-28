@@ -1,5 +1,4 @@
-/*
- * MIT License
+/* MIT License
  * 
  * Copyright (c) 2024 Joshua Horvath
  * 
@@ -22,26 +21,17 @@
  * SOFTWARE.
  */
 
-package com.horvath.cobbler.command;
+package com.horvath.cobbler;
 
-import com.horvath.cobbler.exception.CobblerException;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-public abstract class CobblerCommand {
-	
-	protected String message = "";
-	protected boolean success;
+import com.horvath.cobbler.command.LoadFileCmdTest;
 
-	/**
-	 * Method for performing high level business logic.
-	 */
-	public abstract void perform() throws CobblerException;
-	
+@RunWith(Suite.class)
 
-	public String getMessage() {
-		return this.message;
-	}
-	
-	public boolean isSuccess() {
-		return this.success;
-	}
-}
+@Suite.SuiteClasses({
+	LoadFileCmdTest.class
+})
+
+public class CobblerTestSuite { }

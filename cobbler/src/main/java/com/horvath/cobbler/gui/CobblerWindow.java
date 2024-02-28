@@ -169,8 +169,6 @@ public class CobblerWindow extends JFrame {
 	 * @param level int (recommend using JOptionPane level constant)
 	 */
 	public void simpleMessagePopup(String title, String message, int level) {
-		Debugger.printLog("Displaying Pop-up: Title: " + title + " Message: " 
-				+ message, this.getClass().getName());
 		
 		if (level == JOptionPane.INFORMATION_MESSAGE) {
 			// display the message with application icon
@@ -180,6 +178,10 @@ public class CobblerWindow extends JFrame {
 			// for non-information levels, show default icons
 			JOptionPane.showMessageDialog(this, message, title, level);
 		}
+	}
+
+	public RSyntaxTextArea getTextArea() {
+		return textArea;
 	}
 
 

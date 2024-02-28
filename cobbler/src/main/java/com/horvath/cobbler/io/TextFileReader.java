@@ -24,7 +24,6 @@
 package com.horvath.cobbler.io;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -57,7 +56,7 @@ public class TextFileReader {
 
 		try (Stream<String> stream = Files.lines(Paths.get(this.file.getAbsolutePath()))) {
 			stream.forEach(s -> sb.append(s).append(System.getProperty("line.separator")));
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			throw new CobblerException("Problem reading file " + this.file.getName() + "." + ex.getMessage(), ex);
 		}
 		return sb.toString();

@@ -24,6 +24,8 @@
 
 package com.horvath.cobbler.application;
 
+import java.io.File;
+
 /**
  * The application state.
  * Contains the working set of data for the application. 
@@ -32,6 +34,9 @@ package com.horvath.cobbler.application;
 public final class CobblerState {
 
 	private static CobblerState instance = null;
+	
+	private File file;
+	private String data;
 	
 	private CobblerState() {
 		Debugger.printLog("Initializing state", this.getClass().getName());
@@ -46,6 +51,22 @@ public final class CobblerState {
 			instance = new CobblerState();
 		}
 		return instance;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
 	}
 	
 }

@@ -1,5 +1,4 @@
-/*
- * MIT License
+/* MIT License
  * 
  * Copyright (c) 2024 Joshua Horvath
  * 
@@ -24,24 +23,52 @@
 
 package com.horvath.cobbler.command;
 
+import java.io.File;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.horvath.cobbler.exception.CobblerException;
 
-public abstract class CobblerCommand {
+/**
+ * Tests operations of the LoadFileCmd class.
+ * @author jhorvath
+ */
+public class LoadFileCmdTest {
 	
-	protected String message = "";
-	protected boolean success;
-
-	/**
-	 * Method for performing high level business logic.
-	 */
-	public abstract void perform() throws CobblerException;
-	
-
-	public String getMessage() {
-		return this.message;
+	@Test
+	public void perform_NullFile_ErrorMessage() {
+		try {
+			LoadFileCmd cmd = new LoadFileCmd(null);
+			cmd.perform();
+			
+			Assert.assertFalse(cmd.isSuccess());
+			Assert.assertEquals(LoadFileCmd.ERROR_FILE_IS_NULL, cmd.getMessage());
+			
+		} catch (CobblerException ex) {
+			// should not get here
+			Assert.fail();
+		}
 	}
 	
-	public boolean isSuccess() {
-		return this.success;
+	@Test 
+	public void perform_FileNotReal_ErrorMessage() {
+		
+		File file = new File("fakeFile.cob");
+		Assert.assertTrue(!file.exists());
+
+		try {
+			LoadFileCmd cmd = new LoadFileCmd(file);
+			cmd.perform();
+
+			Assert.assertFalse(cmd.isSuccess());
+			Assert.assertEquals(LoadFileCmd.ERROR_FILE_NOT_FOUND, cmd.getMessage());
+			
+		} catch (CobblerException ex) {
+			// should not get here
+			Assert.fail();
+		}
 	}
+
+
 }
