@@ -22,12 +22,30 @@
  * SOFTWARE.
  */
 
-package com.horvath.cobler.gui.action;
+package com.horvath.cobbler.gui.action;
 
-import javax.swing.AbstractAction;
+import javax.swing.filechooser.FileSystemView;
 
-public abstract class CobblerAction extends AbstractAction {
+/**
+ * Shared functionality for Open As and Save As dialogs. 
+ * @author jhorvath
+ */
+public abstract class OpenSaveAsAction extends CobblerAction {
 
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Establishes the most recent folder location for Open / Save As dialogs. 
+	 * Initially set to the root level of the user's OS user folder.
+	 */
+	private static String lastFolder = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
+
+	protected static String getLastFolder() {
+		return lastFolder;
+	}
+
+	protected static void setLastFolder(String lastFolderPath) {
+		lastFolder = lastFolderPath;
+	}
 
 }
