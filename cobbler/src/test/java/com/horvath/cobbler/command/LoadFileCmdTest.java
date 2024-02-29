@@ -28,6 +28,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.exception.CobblerException;
 
 /**
@@ -35,6 +36,12 @@ import com.horvath.cobbler.exception.CobblerException;
  * @author jhorvath
  */
 public class LoadFileCmdTest {
+	
+	public static final String RESOURCES_DIRECTORY = "src" + File.separator + "test" 
+			+ File.separator + "resources";
+	
+	public static final String LOADFILECMDTEST_DIRECTORY = RESOURCES_DIRECTORY 
+			+ File.separator + "LoadFileCmdTest";
 	
 	@Test
 	public void perform_NullFile_ErrorMessage() {
@@ -70,5 +77,53 @@ public class LoadFileCmdTest {
 		}
 	}
 
+	@Test
+	public void perform_badFile_failure() {
+		// try to load an image file instead of a text file
+		File file = new File(LOADFILECMDTEST_DIRECTORY + File.separator + "PPD-icon-16px.png");
+		
+		Assert.assertTrue(file.exists());
+		
+		boolean exceptionCaught = false;
+		LoadFileCmd cmd = new LoadFileCmd(file);
+		try {
+			cmd.perform();
 
+			// should not get here
+			Assert.fail();
+			
+		} catch (CobblerException ex) {
+			exceptionCaught = true;
+
+			Assert.assertFalse(cmd.isSuccess());
+			Assert.assertEquals(LoadFileCmd.ERROR_UNKOWN_LOAD_PROBLEM, ex.getMessage());
+		}
+		Assert.assertTrue(exceptionCaught);
+	}
+
+	@Test
+	public void perform_validFile_success() {
+		// try to load a good file 
+		File file = new File(LOADFILECMDTEST_DIRECTORY + File.separator + "MathTest.cob");
+		
+		Assert.assertTrue(file.exists());
+		
+		try {
+			LoadFileCmd cmd = new LoadFileCmd(file);
+			cmd.perform();
+
+			Assert.assertTrue(cmd.isSuccess());
+			
+			CobblerState state = CobblerState.getInstance();
+			
+			Assert.assertNotNull(state.getData());
+			Assert.assertFalse(state.getData().isEmpty());
+			Assert.assertNotNull(state.getFile());
+			Assert.assertEquals(file.getAbsolutePath(), state.getFile().getAbsolutePath());
+
+		} catch (CobblerException ex) {
+			// should not get here
+			Assert.fail();
+		}
+	}
 }
