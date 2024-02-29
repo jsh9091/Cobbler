@@ -22,63 +22,44 @@
  * SOFTWARE.
  */
 
-package com.horvath.cobbler.application;
+package com.horvath.cobbler.gui.action;
 
+import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.JOptionPane;
 
+import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.command.NewEmptyDocumentCmd;
 import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.CobblerWindow;
 
 /**
- * Main application class.
- * 
- * @author jhorvath
+ * Action for creating a new empty document. 
  */
-public final class CobblerApplication {
-	
-	public static final String APP_VERSION = "0.1";
+public final class NewDocumentAction extends OpenSaveAsAction {
 
-	public static void main(String[] args) {
+	private static final long serialVersionUID = 1L;
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new CobblerApplication().initialize();
-			}
-		});
-	}
-
-	/**
-	 * Initializes application systems.
-	 */
-	private void initialize() {
-
-		Debugger.setDebugging(true);
-
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException ex) {
-
-			Debugger.printLog(ex.getMessage(), this.getClass().getName(), Level.SEVERE);
-		}
-
-		CobblerState.getInstance();
+	@Override
+	public void actionPerformed(ActionEvent e) {
 		
-		// initialize the application with a new empty document
+		if (CobblerWindow.checkForDirtyState()) {
+			return;
+		}
+		
 		try {
 			NewEmptyDocumentCmd cmd = new NewEmptyDocumentCmd();
 			cmd.perform();
+			
+			// refresh GUI
+			CobblerWindow.getWindow().getTextArea().setText(CobblerState.getInstance().getData());
+			
 		} catch (CobblerException ex) {
 			Debugger.printLog(ex.getMessage(), this.getClass().getName(), Level.WARNING);
+			CobblerWindow.getWindow().simpleMessagePopup("New Document Error", ex.getMessage(), JOptionPane.ERROR_MESSAGE);
 		}
-		
-		CobblerWindow.getWindow().setVisible(true);
 	}
 
 }

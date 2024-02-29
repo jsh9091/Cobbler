@@ -44,6 +44,10 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		initListeners();
 	}
 	
+	/**
+	 * Listeners for changes within the text area. 
+	 * Sets the state dirty and updates state data to reflect text area contents.
+	 */
 	private void initListeners() {
 		getDocument().addDocumentListener(new DocumentListener() {
 			CobblerState state = CobblerState.getInstance();

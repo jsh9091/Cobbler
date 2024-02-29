@@ -1,4 +1,5 @@
-/* MIT License
+/*
+ * MIT License
  * 
  * Copyright (c) 2024 Joshua Horvath
  * 
@@ -21,19 +22,32 @@
  * SOFTWARE.
  */
 
-package com.horvath.cobbler;
+package com.horvath.cobbler.command;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.io.File;
 
-import com.horvath.cobbler.command.LoadFileCmdTest;
-import com.horvath.cobbler.command.NewEmptyDocumentCmdTest;
+import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.exception.CobblerException;
 
-@RunWith(Suite.class)
+/**
+ * Command for creating a new empty document.
+ * @author jhorvath 
+ */
+public final class NewEmptyDocumentCmd extends CobblerCommand {
 
-@Suite.SuiteClasses({
-	LoadFileCmdTest.class,
-	NewEmptyDocumentCmdTest.class
-})
+	@Override
+	public void perform() throws CobblerException {
+		Debugger.printLog("Creating a new empty docuemnt.", this.getClass().getName());
+		success = false;
+		
+		// clear out the state
+		CobblerState state = CobblerState.getInstance();
+		state.setData("");
+		state.setFile(new File(""));
+		state.setDirty(false);
 
-public class CobblerTestSuite { }
+		success = true;
+	}
+
+}

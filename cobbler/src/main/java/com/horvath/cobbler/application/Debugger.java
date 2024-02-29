@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  * Simple debugger class. 
  * @author jhorvath
  */
-public class Debugger {
+public final class Debugger {
 
 	private static boolean debugging = false; 
 	private static Logger logger = Logger.getLogger(Debugger.class.getName());

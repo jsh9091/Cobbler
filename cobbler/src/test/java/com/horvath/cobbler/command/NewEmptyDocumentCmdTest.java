@@ -21,19 +21,46 @@
  * SOFTWARE.
  */
 
-package com.horvath.cobbler;
+package com.horvath.cobbler.command;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.io.File;
 
-import com.horvath.cobbler.command.LoadFileCmdTest;
-import com.horvath.cobbler.command.NewEmptyDocumentCmdTest;
+import org.junit.Assert;
+import org.junit.Test;
 
-@RunWith(Suite.class)
+import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.exception.CobblerException;
 
-@Suite.SuiteClasses({
-	LoadFileCmdTest.class,
-	NewEmptyDocumentCmdTest.class
-})
+/**
+ *  Tests operations of the NewEmptyDocumentCmd class.
+ *  @author jhorvath
+ */
+public class NewEmptyDocumentCmdTest {
+	
+	@Test
+	public void perform_oldDataInState_StateCleared() {
 
-public class CobblerTestSuite { }
+		CobblerState state = CobblerState.getInstance();
+
+		// set data in state		
+		state.setFile(new File("fakeFile.cob"));
+		state.setData("some text");
+		state.setDirty(true);
+		
+		try {
+			NewEmptyDocumentCmd cmd = new NewEmptyDocumentCmd();
+			cmd.perform();
+			
+			Assert.assertTrue(cmd.isSuccess());
+						
+			Assert.assertTrue(state.getData().isEmpty());
+			Assert.assertTrue(state.getFile().getName().isEmpty());
+			Assert.assertFalse(state.isDirty());
+			
+		} catch (CobblerException ex) {
+			// should not get here
+			Assert.fail();
+		}
+	}
+
+}

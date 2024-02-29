@@ -38,6 +38,7 @@ import javax.swing.WindowConstants;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
 
@@ -45,7 +46,7 @@ import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
  * Class that defines the main application window. 
  * @author jhorvath
  */
-public class CobblerWindow extends JFrame {
+public final class CobblerWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -179,6 +180,33 @@ public class CobblerWindow extends JFrame {
 			// for non-information levels, show default icons
 			JOptionPane.showMessageDialog(this, message, title, level);
 		}
+	}
+	
+	/**
+	 * Checks the state for unsaved changes and, if there are, asks user to confirm
+	 * abandoning changes. Returns true if the user chose to keep the unsaved
+	 * changes, otherwise returns false.
+	 * 
+	 * @return boolean
+	 */
+	public static boolean checkForDirtyState() {
+
+		boolean stop = false;
+
+		// are there unsaved changes?
+		if (CobblerState.getInstance().isDirty()) {
+			// ask user to confirm abandoning unsaved changes
+			int result = JOptionPane.showConfirmDialog(getWindow(),
+					"There are unsaved changes, are you sure you want to lose these changes?", "Confirmation",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+			// the user chose to stop the operation and continue with the unsaved changes
+			if (result == JOptionPane.NO_OPTION) {
+				stop = true;
+			}
+		}
+
+		return stop;
 	}
 
 	public CobSyntaxTextArea getTextArea() {

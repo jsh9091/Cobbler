@@ -35,7 +35,7 @@ import com.horvath.cobbler.exception.CobblerException;
  * Performs of writing given string data to a given file.
  * @author jhorvath
  */
-public class TextFileWriter {
+public final class TextFileWriter {
 	
 	private File file;
 	private String data;

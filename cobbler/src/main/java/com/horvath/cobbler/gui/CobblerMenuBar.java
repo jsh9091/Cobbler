@@ -32,6 +32,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import com.horvath.cobbler.application.CobblerApplication;
+import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
 
 /**
@@ -44,6 +45,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	
 	JMenu fileMenu;
 	JMenuItem aboutItem;
+	JMenuItem newItem;
 	JMenuItem openItem;
 	JMenuItem closeItem;
 	JMenuItem saveItem;
@@ -66,6 +68,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		fileMenu = new JMenu("File");
 		aboutItem = new JMenuItem(); 
+		newItem = new JMenuItem();
 		openItem = new JMenuItem();
 		closeItem = new JMenuItem("Close");
 		saveItem = new JMenuItem("Save");
@@ -88,6 +91,9 @@ public final class CobblerMenuBar extends JMenuBar {
 		    }
 		});
 		
+		newItem.setAction(new NewDocumentAction());
+		newItem.setText("New");
+		
 		openItem.setAction(new OpenFileAction());
 		openItem.setText("Open...");
 		
@@ -101,6 +107,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		fileMenu.add(aboutItem);
 		fileMenu.addSeparator();
+		fileMenu.add(newItem);
 		fileMenu.add(openItem);
 		fileMenu.add(closeItem);
 		fileMenu.add(saveItem);

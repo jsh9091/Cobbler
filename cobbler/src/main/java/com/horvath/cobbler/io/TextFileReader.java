@@ -34,7 +34,7 @@ import com.horvath.cobbler.exception.CobblerException;
  * Performs of reading text data from a given file.
  * @author jhorvath
  */
-public class TextFileReader {
+public final class TextFileReader {
 	private File file;
 
 	/**

@@ -42,13 +42,17 @@ import com.horvath.cobbler.gui.CobblerWindow;
  * GUI level operations for loading a file. 
  * @author jhorvath 
  */
-public class OpenFileAction extends OpenSaveAsAction {
+public final class OpenFileAction extends OpenSaveAsAction {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Debugger.printLog("Open a new file", this.getClass().getName());
+		
+		if (CobblerWindow.checkForDirtyState()) {
+			return;
+		}
 		
 		// create the "open as" dialog
 		JFileChooser chooser = new JFileChooser(getLastFolder());
@@ -60,7 +64,7 @@ public class OpenFileAction extends OpenSaveAsAction {
 		chooser.setFileFilter(filter);
 
 		// display the dialog for user to select a file
-		int returnValue = chooser.showOpenDialog(null);
+		int returnValue = chooser.showOpenDialog(CobblerWindow.getWindow());
 		
 		// if the user selected a file 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
