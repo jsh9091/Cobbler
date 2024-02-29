@@ -38,6 +38,8 @@ import com.horvath.cobbler.gui.CobblerWindow;
  * @author jhorvath
  */
 public class CobblerApplication {
+	
+	public static final String APP_VERSION = "0.1";
 
 	public static void main(String[] args) {
 

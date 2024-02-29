@@ -37,6 +37,7 @@ public final class CobblerState {
 	
 	private File file;
 	private String data;
+	private boolean dirty;
 	
 	private CobblerState() {
 		Debugger.printLog("Initializing state", this.getClass().getName());
@@ -67,6 +68,19 @@ public final class CobblerState {
 
 	public void setData(String data) {
 		this.data = data;
+	}
+
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	@Override
+	public String toString() {
+		return "CobblerState [file=" + file + ", dirty=" + dirty + "]";
 	}
 	
 }

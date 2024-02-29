@@ -31,6 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.gui.action.OpenFileAction;
 
 /**
@@ -82,7 +83,8 @@ public final class CobblerMenuBar extends JMenuBar {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ae) {
-				CobblerWindow.getWindow().simpleMessagePopup("About Cobbler", "Cobbler is a simple text editor.");
+				CobblerWindow.getWindow().simpleMessagePopup("About Cobbler v. " + CobblerApplication.APP_VERSION, 
+						"Cobbler is a simple text editor.");
 		    }
 		});
 		

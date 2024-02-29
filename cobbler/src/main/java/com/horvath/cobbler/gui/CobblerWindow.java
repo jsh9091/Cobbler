@@ -26,19 +26,20 @@ package com.horvath.cobbler.gui;
 
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
 
 /**
  * Class that defines the main application window. 
@@ -51,7 +52,7 @@ public class CobblerWindow extends JFrame {
 	private static CobblerWindow window = null;
 	
 	private CobblerMenuBar menuBar;
-	private RSyntaxTextArea textArea;
+	private CobSyntaxTextArea textArea;
 	private RTextScrollPane scrollpane;
 	
 	/**
@@ -83,7 +84,7 @@ public class CobblerWindow extends JFrame {
 	private void initializeComponents() {
 		menuBar = new CobblerMenuBar();
 
-		textArea = new RSyntaxTextArea(20, 60);
+		textArea = new CobSyntaxTextArea(20, 60);
 		scrollpane = new RTextScrollPane(textArea);
 	}
 	
@@ -180,7 +181,7 @@ public class CobblerWindow extends JFrame {
 		}
 	}
 
-	public RSyntaxTextArea getTextArea() {
+	public CobSyntaxTextArea getTextArea() {
 		return textArea;
 	}
 

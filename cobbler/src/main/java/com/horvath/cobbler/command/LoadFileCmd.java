@@ -83,6 +83,8 @@ public final class LoadFileCmd extends CobblerCommand {
 		CobblerState state = CobblerState.getInstance();
 		state.setData(data);
 		state.setFile(file);
+		// clear the dirty flag
+		state.setDirty(false);
 		
 		this.success = true;
 	}

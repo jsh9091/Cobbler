@@ -120,6 +120,7 @@ public class LoadFileCmdTest {
 			Assert.assertFalse(state.getData().isEmpty());
 			Assert.assertNotNull(state.getFile());
 			Assert.assertEquals(file.getAbsolutePath(), state.getFile().getAbsolutePath());
+			Assert.assertFalse(state.isDirty());
 
 		} catch (CobblerException ex) {
 			// should not get here
