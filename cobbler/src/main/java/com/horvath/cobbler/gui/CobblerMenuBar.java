@@ -71,7 +71,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		aboutItem = new JMenuItem(); 
 		newItem = new JMenuItem();
 		openItem = new JMenuItem();
-		closeItem = new JMenuItem("Close");
+		closeItem = new JMenuItem();
 		saveItem = new JMenuItem("Save");
 		saveAsItem = new JMenuItem("Save As...");
 		quitItem = new JMenuItem();
@@ -97,6 +97,9 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		openItem.setAction(new OpenFileAction());
 		openItem.setText("Open...");
+		
+		closeItem.setAction(new NewDocumentAction());
+		closeItem.setText("Close");
 		
 		quitItem.setAction(new ShutdownAction());
 		quitItem.setText("Quit");
