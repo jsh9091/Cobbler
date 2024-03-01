@@ -34,6 +34,7 @@ import javax.swing.JMenuItem;
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
+import com.horvath.cobbler.gui.action.ShutdownAction;
 
 /**
  * Main menu bar of application. 
@@ -97,13 +98,8 @@ public final class CobblerMenuBar extends JMenuBar {
 		openItem.setAction(new OpenFileAction());
 		openItem.setText("Open...");
 		
-		quitItem.setAction(new AbstractAction("Quit") {
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent ae) {
-				System.exit(0);
-		    }
-		});
+		quitItem.setAction(new ShutdownAction());
+		quitItem.setText("Quit");
 		
 		fileMenu.add(aboutItem);
 		fileMenu.addSeparator();

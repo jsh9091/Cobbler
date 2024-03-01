@@ -22,32 +22,37 @@
  * SOFTWARE.
  */
 
-package com.horvath.cobbler.command;
+package com.horvath.cobbler.gui.action;
 
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.util.logging.Level;
 
-import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
-import com.horvath.cobbler.exception.CobblerException;
+import com.horvath.cobbler.gui.CobblerWindow;
 
 /**
- * Command for creating a new empty document.
- * @author jhorvath 
+ * Action for shutting down application. 
  */
-public final class NewEmptyDocumentCmd extends CobblerCommand {
+public class ShutdownAction extends CobblerAction {
+
+	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void perform() throws CobblerException {
-		Debugger.printLog("Creating a new empty docuemnt", this.getClass().getName());
-		success = false;
+	public void actionPerformed(ActionEvent e) {
+		shutdownApplication();
+	}
+	
+	/**
+	 * Checks the dirty state of application and shuts down. 
+	 */
+	public void shutdownApplication() {
 		
-		// clear out the state
-		CobblerState state = CobblerState.getInstance();
-		state.setData("");
-		state.setFile(new File(""));
-		state.setDirty(false);
-
-		success = true;
+		if (CobblerWindow.checkForDirtyState()) {
+			return;
+		}
+		
+		Debugger.printLog("Shutting down application", this.getClass().getName(), Level.INFO);
+		System.exit(0);
 	}
 
 }

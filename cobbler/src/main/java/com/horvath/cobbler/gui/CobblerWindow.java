@@ -31,6 +31,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -40,6 +42,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.gui.action.ShutdownAction;
 import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
 
 /**
@@ -100,8 +103,14 @@ public final class CobblerWindow extends JFrame {
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
+		addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosing(WindowEvent windowEvent) {
+		    	new ShutdownAction().shutdownApplication();
+		    }
+		});
+		// action listener above is in charge of shutting down application
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 	}
 	
 	/**
@@ -212,6 +221,5 @@ public final class CobblerWindow extends JFrame {
 	public CobSyntaxTextArea getTextArea() {
 		return textArea;
 	}
-
 
 }
