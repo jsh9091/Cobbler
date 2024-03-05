@@ -28,7 +28,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.gui.CobblerWindow;
 
