@@ -55,7 +55,9 @@ public final class CobblerMenuBar extends JMenuBar {
 	JMenuItem quitItem;
 	
 	JMenu editMenu;
+	JMenuItem selectAllItem;
 	JMenuItem copyItem;
+	JMenuItem cutItem;
 	JMenuItem pasteItem;
 	
 	/**
@@ -78,8 +80,10 @@ public final class CobblerMenuBar extends JMenuBar {
 		quitItem = new JMenuItem();
 		
 		editMenu = new JMenu("Edit");
-		copyItem = new JMenuItem("Copy");
-		pasteItem = new JMenuItem("Paste");
+		selectAllItem = new JMenuItem();
+		cutItem = new JMenuItem();
+		copyItem = new JMenuItem();
+		pasteItem = new JMenuItem();
 	}
 	
 	private void configureComponents() {
@@ -121,7 +125,41 @@ public final class CobblerMenuBar extends JMenuBar {
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
 		
+		selectAllItem.setAction(new AbstractAction("Select All") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+			    CobblerWindow.getWindow().getTextArea().selectAll();
+		    }
+		});
+
+		copyItem.setAction(new AbstractAction("Copy") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				CobblerWindow.getWindow().getTextArea().copy();
+		    }
+		});
+		
+		cutItem.setAction(new AbstractAction("Cut") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				CobblerWindow.getWindow().getTextArea().cut();
+		    }
+		});
+		
+		pasteItem.setAction(new AbstractAction("Paste") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+			    CobblerWindow.getWindow().getTextArea().paste();
+		    }
+		});
+		
+		editMenu.add(selectAllItem);
 		editMenu.add(copyItem);
+		editMenu.add(cutItem);
 		editMenu.add(pasteItem);
 		
 		this.add(fileMenu);
