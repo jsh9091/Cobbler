@@ -60,11 +60,7 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 	        }
 
 	        @Override
-	        public void insertUpdate(DocumentEvent e) {
-	        	state.setDirty(true);
-	        	String text = CobblerWindow.getWindow().getTextArea().getText();
-	        	state.setData(text);
-	        }
+	        public void insertUpdate(DocumentEvent e) { }
 
 	        @Override
 	        public void changedUpdate(DocumentEvent arg0) {
