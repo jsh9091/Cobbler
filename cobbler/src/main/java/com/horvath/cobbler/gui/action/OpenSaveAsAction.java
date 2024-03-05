@@ -24,6 +24,7 @@
 
 package com.horvath.cobbler.gui.action;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 /**
@@ -33,6 +34,9 @@ import javax.swing.filechooser.FileSystemView;
 public abstract class OpenSaveAsAction extends CobblerAction {
 
 	private static final long serialVersionUID = 1L;
+	
+	protected static String[] cobolExtensions = {"cob", "COB", "cbl", "CBL", "cpy", "CPY", "pco", "PCO", "fd", "FD",
+			"sel", "SEL", "ws", "WSL" };
 	
 	/**
 	 * Establishes the most recent folder location for Open / Save As dialogs. 
@@ -46,6 +50,10 @@ public abstract class OpenSaveAsAction extends CobblerAction {
 
 	protected static void setLastFolder(String lastFolderPath) {
 		lastFolder = lastFolderPath;
+	}
+	
+	protected static FileNameExtensionFilter getFileNameExtensionFilter() {
+		return new FileNameExtensionFilter("COBOL Source Files", cobolExtensions);
 	}
 
 }

@@ -30,8 +30,6 @@ import java.util.logging.Level;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.command.LoadFileCmd;
@@ -59,9 +57,7 @@ public final class OpenFileAction extends OpenSaveAsAction {
 		chooser.setDialogTitle("Select a COBOL file");
 		
 		// automatically filter out non-Cobol files
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("COBOL Source Files", "cob", "COB", "cbl", "CBL",
-				"cpy", "CPY", "pco", "PCO", "fd", "FD", "sel", "SEL", "ws", "WSL");
-		chooser.setFileFilter(filter);
+		chooser.setFileFilter(getFileNameExtensionFilter());
 
 		// display the dialog for user to select a file
 		int returnValue = chooser.showOpenDialog(CobblerWindow.getWindow());

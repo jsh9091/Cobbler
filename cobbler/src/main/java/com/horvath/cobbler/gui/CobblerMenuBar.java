@@ -34,6 +34,7 @@ import javax.swing.JMenuItem;
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
+import com.horvath.cobbler.gui.action.SaveAction;
 import com.horvath.cobbler.gui.action.ShutdownAction;
 
 /**
@@ -72,8 +73,8 @@ public final class CobblerMenuBar extends JMenuBar {
 		newItem = new JMenuItem();
 		openItem = new JMenuItem();
 		closeItem = new JMenuItem();
-		saveItem = new JMenuItem("Save");
-		saveAsItem = new JMenuItem("Save As...");
+		saveItem = new JMenuItem();
+		saveAsItem = new JMenuItem();
 		quitItem = new JMenuItem();
 		
 		editMenu = new JMenu("Edit");
@@ -100,6 +101,12 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		closeItem.setAction(new NewDocumentAction());
 		closeItem.setText("Close");
+		
+		saveItem.setAction(new SaveAction(SaveAction.SaveType.SAVE));
+		saveItem.setText("Save");
+		
+		saveAsItem.setAction(new SaveAction(SaveAction.SaveType.SAVE_AS));
+		saveAsItem.setText("Save As...");
 		
 		quitItem.setAction(new ShutdownAction());
 		quitItem.setText("Quit");
