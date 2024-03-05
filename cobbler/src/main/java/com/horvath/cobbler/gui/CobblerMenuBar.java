@@ -45,20 +45,22 @@ public final class CobblerMenuBar extends JMenuBar {
 	
 	private static final long serialVersionUID = 1L;
 	
-	JMenu fileMenu;
-	JMenuItem aboutItem;
-	JMenuItem newItem;
-	JMenuItem openItem;
-	JMenuItem closeItem;
-	JMenuItem saveItem;
-	JMenuItem saveAsItem;
-	JMenuItem quitItem;
+	protected JMenu fileMenu;
+	protected JMenuItem aboutItem;
+	protected JMenuItem newItem;
+	protected JMenuItem openItem;
+	protected JMenuItem closeItem;
+	protected JMenuItem saveItem;
+	protected JMenuItem saveAsItem;
+	protected JMenuItem quitItem;
 	
-	JMenu editMenu;
-	JMenuItem selectAllItem;
-	JMenuItem copyItem;
-	JMenuItem cutItem;
-	JMenuItem pasteItem;
+	protected JMenu editMenu;
+	protected JMenuItem undoItem;
+	protected JMenuItem redoItem;
+	protected JMenuItem selectAllItem;
+	protected JMenuItem copyItem;
+	protected JMenuItem cutItem;
+	protected JMenuItem pasteItem;
 	
 	/**
 	 * Constructor. 
@@ -80,6 +82,8 @@ public final class CobblerMenuBar extends JMenuBar {
 		quitItem = new JMenuItem();
 		
 		editMenu = new JMenu("Edit");
+		undoItem = new JMenuItem();
+		redoItem = new JMenuItem();
 		selectAllItem = new JMenuItem();
 		cutItem = new JMenuItem();
 		copyItem = new JMenuItem();
@@ -115,6 +119,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		quitItem.setAction(new ShutdownAction());
 		quitItem.setText("Quit");
 		
+		// add file menu items to the menu
 		fileMenu.add(aboutItem);
 		fileMenu.addSeparator();
 		fileMenu.add(newItem);
@@ -133,6 +138,22 @@ public final class CobblerMenuBar extends JMenuBar {
 		    }
 		});
 
+		undoItem.setAction(new AbstractAction("Undo") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				CobblerWindow.getWindow().getTextArea().undoLastAction();;
+		    }
+		});
+		
+		redoItem.setAction(new AbstractAction("Redo") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				CobblerWindow.getWindow().getTextArea().redoLastAction();;
+		    }
+		});
+		
 		copyItem.setAction(new AbstractAction("Copy") {
 			private static final long serialVersionUID = 1L;
 
@@ -157,11 +178,17 @@ public final class CobblerMenuBar extends JMenuBar {
 		    }
 		});
 		
+		// add edit menu items to menu 
+		editMenu.add(undoItem);
+		editMenu.add(redoItem);
+		editMenu.addSeparator();
 		editMenu.add(selectAllItem);
+		editMenu.addSeparator();
 		editMenu.add(copyItem);
 		editMenu.add(cutItem);
 		editMenu.add(pasteItem);
 		
+		// add menus to menu bar
 		this.add(fileMenu);
 		this.add(editMenu);	
 	}

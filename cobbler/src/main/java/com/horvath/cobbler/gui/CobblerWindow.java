@@ -97,7 +97,7 @@ public final class CobblerWindow extends JFrame {
 	 */
 	private void configureComponents() {
 		
-		setTitle("Cobbler"); // TODO make this more configurable 
+		setTitle("Cobbler");
 
 		setLayout(new GridBagLayout());
 		
@@ -111,6 +111,8 @@ public final class CobblerWindow extends JFrame {
 		});
 		// action listener above is in charge of shutting down application
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		
+		updateUndoRedoMenuitems();
 	}
 	
 	/**
@@ -216,6 +218,14 @@ public final class CobblerWindow extends JFrame {
 		}
 
 		return stop;
+	}
+
+	/**
+	 * Updates the enabled / disabled status of the undo and re-do menu items. 
+	 */
+	public void updateUndoRedoMenuitems() {
+		menuBar.undoItem.setEnabled(textArea.canUndo());
+		menuBar.redoItem.setEnabled(textArea.canRedo());
 	}
 
 	public CobSyntaxTextArea getTextArea() {

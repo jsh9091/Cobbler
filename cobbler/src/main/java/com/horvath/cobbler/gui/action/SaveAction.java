@@ -41,7 +41,7 @@ import com.horvath.cobbler.gui.CobblerWindow;
  *  GUI level operations for Saving a file. 
  *  @author jhorvath 
  */
-public class SaveAction extends OpenSaveAsAction {
+public final class SaveAction extends OpenSaveAsAction {
 	
 	private static final long serialVersionUID = 1L;
 

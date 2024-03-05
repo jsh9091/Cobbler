@@ -36,7 +36,7 @@ import com.horvath.cobbler.io.TextFileWriter;
  * Command for saving a file to disk. 
  * @author jhorvath 
  */
-public class SaveFileCmd extends CobblerCommand {
+public final class SaveFileCmd extends CobblerCommand {
 	
 	private File file;
 	

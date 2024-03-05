@@ -51,24 +51,31 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 	private void initListeners() {
 		getDocument().addDocumentListener(new DocumentListener() {
 			CobblerState state = CobblerState.getInstance();
-			
-	        @Override
-	        public void removeUpdate(DocumentEvent e) {
-	        	state.setDirty(true);
-	        	String text = CobblerWindow.getWindow().getTextArea().getText();
-	        	state.setData(text);
-	        }
 
-	        @Override
-	        public void insertUpdate(DocumentEvent e) { }
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				doUpdates();
+			}
 
-	        @Override
-	        public void changedUpdate(DocumentEvent arg0) {
-	        	state.setDirty(true);
-	        	String text = CobblerWindow.getWindow().getTextArea().getText();
-	        	state.setData(text);
-	        }
-	    });
+			@Override
+			public void insertUpdate(DocumentEvent e) { }
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				doUpdates();
+			}
+
+			/**
+			 * Updates the state and window for text area changes.
+			 */
+			public void doUpdates() {
+				state.setDirty(true);
+				CobblerWindow window = CobblerWindow.getWindow();
+				String text = window.getTextArea().getText();
+				window.updateUndoRedoMenuitems();
+				state.setData(text);
+			}
+		});
 	}
 
 }
