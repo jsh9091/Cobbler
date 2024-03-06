@@ -27,7 +27,10 @@ package com.horvath.cobbler.gui.syntax;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.gui.CobblerWindow;
 
@@ -40,6 +43,13 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 	 */
 	public CobSyntaxTextArea(int rows, int cols) {
 		super(rows, cols);
+		
+		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+		final String style = "text/COBOL";
+		atmf.putMapping(style, "com.horvath.cobbler.gui.syntax.CobolTokenMaker");
+		setSyntaxEditingStyle(style);
+		
+		// initializing listeners must come after setting code style
 		initListeners();
 	}
 	
@@ -49,7 +59,6 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 	 */
 	private void initListeners() {
 		getDocument().addDocumentListener(new DocumentListener() {
-			CobblerState state = CobblerState.getInstance();
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -68,11 +77,11 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 			 * Updates the state and window for text area changes.
 			 */
 			public void doUpdates() {
+				CobblerState state = CobblerState.getInstance();
 				state.setDirty(true);
-				CobblerWindow window = CobblerWindow.getWindow();
-				String text = window.getTextArea().getText();
-				window.updateUndoRedoMenuitems();
+				String text = getText();
 				state.setData(text);
+				CobblerWindow.getWindow().updateUndoRedoMenuitems();
 			}
 		});
 	}
