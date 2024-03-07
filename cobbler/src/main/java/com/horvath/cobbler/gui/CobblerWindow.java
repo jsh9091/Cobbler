@@ -34,12 +34,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.gui.action.ShutdownAction;
@@ -56,6 +60,8 @@ public final class CobblerWindow extends JFrame {
 	private static CobblerWindow window = null;
 	
 	private CobblerMenuBar menuBar;
+	private JPanel docNamePanel;
+	private JLabel docNameLabel;
 	private CobSyntaxTextArea textArea;
 	private RTextScrollPane scrollpane;
 	
@@ -87,6 +93,9 @@ public final class CobblerWindow extends JFrame {
 	 */
 	private void initializeComponents() {
 		menuBar = new CobblerMenuBar();
+		
+		docNamePanel = new JPanel();
+		docNameLabel = new JLabel(" ");
 
 		textArea = new CobSyntaxTextArea(20, 60);
 		scrollpane = new RTextScrollPane(textArea);
@@ -97,7 +106,7 @@ public final class CobblerWindow extends JFrame {
 	 */
 	private void configureComponents() {
 		
-		setTitle("Cobbler");
+		setTitle(CobblerApplication.APP_NAME);
 
 		setLayout(new GridBagLayout());
 		
@@ -115,10 +124,19 @@ public final class CobblerWindow extends JFrame {
 		updateUndoRedoMenuitems();
 	}
 	
+	private void layoutNamePanel() {
+		docNamePanel.setLayout(new GridBagLayout());
+		docNamePanel.add(docNameLabel);
+		docNamePanel.setSize(300, 15);
+		docNamePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	}
+	
 	/**
 	 * Performs layout operations of the GUI components within the panel.
 	 */
 	private void layoutComponents() {
+		
+		layoutNamePanel();
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -134,6 +152,16 @@ public final class CobblerWindow extends JFrame {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
+		gbc.gridwidth = 1;
+		gbc.weighty = 0.0;
+		gbc.weightx = 0.0;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.anchor = GridBagConstraints.CENTER;
+		add(docNamePanel, gbc);
+		
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
 		gbc.gridwidth = 1;
 		gbc.weighty = 1.0;
 		gbc.weightx = 0.5;
@@ -226,6 +254,10 @@ public final class CobblerWindow extends JFrame {
 	public void updateUndoRedoMenuitems() {
 		menuBar.undoItem.setEnabled(textArea.canUndo());
 		menuBar.redoItem.setEnabled(textArea.canRedo());
+	}
+	
+	public void setDocumentName(String name) {
+		docNameLabel.setText(name);
 	}
 
 	public CobSyntaxTextArea getTextArea() {

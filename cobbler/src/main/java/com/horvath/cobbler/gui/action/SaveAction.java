@@ -134,6 +134,10 @@ public final class SaveAction extends OpenSaveAsAction {
 		SaveFileCmd cmd = new SaveFileCmd(file);
 		try {
 			cmd.perform();
+			
+			if (cmd.isSuccess()) {
+				CobblerWindow.getWindow().setDocumentName(CobblerState.getInstance().getFile().getName());
+			}
 
 		} catch (CobblerException ex) {
 			Debugger.printLog(ex.getMessage() + " " + file.getName(), this.getClass().getName(), Level.WARNING);
