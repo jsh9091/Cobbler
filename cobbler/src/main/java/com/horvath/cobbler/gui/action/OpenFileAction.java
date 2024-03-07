@@ -80,6 +80,8 @@ public final class OpenFileAction extends OpenSaveAsAction {
 					CobblerWindow.getWindow().getTextArea().setCaretPosition(0);
 					CobblerWindow.getWindow().getTextArea().discardAllEdits();
 					CobblerWindow.getWindow().setDocumentName(CobblerState.getInstance().getFile().getName());
+					// need to clear state because GUI updates impact the state dirty flag
+					CobblerState.getInstance().setDirty(false);
 					
 				} else {
 					CobblerWindow.getWindow().simpleMessagePopup("Load Error",
