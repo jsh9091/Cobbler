@@ -24,12 +24,14 @@
 
 package com.horvath.cobbler.gui;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
@@ -103,21 +105,26 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		newItem.setAction(new NewDocumentAction());
 		newItem.setText("New");
+		newItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
 		
 		openItem.setAction(new OpenFileAction());
 		openItem.setText("Open...");
+		openItem.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		closeItem.setAction(new NewDocumentAction());
 		closeItem.setText("Close");
 		
 		saveItem.setAction(new SaveAction(SaveAction.SaveType.SAVE));
 		saveItem.setText("Save");
+		saveItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		saveAsItem.setAction(new SaveAction(SaveAction.SaveType.SAVE_AS));
 		saveAsItem.setText("Save As...");
 		
 		quitItem.setAction(new ShutdownAction());
 		quitItem.setText("Quit");
+		quitItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		// add file menu items to the menu
 		fileMenu.add(aboutItem);
@@ -137,6 +144,7 @@ public final class CobblerMenuBar extends JMenuBar {
 			    CobblerWindow.getWindow().getTextArea().selectAll();
 		    }
 		});
+		selectAllItem.setAccelerator(KeyStroke.getKeyStroke('A', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 		undoItem.setAction(new AbstractAction("Undo") {
 			private static final long serialVersionUID = 1L;
@@ -145,6 +153,7 @@ public final class CobblerMenuBar extends JMenuBar {
 				CobblerWindow.getWindow().getTextArea().undoLastAction();;
 		    }
 		});
+		undoItem.setAccelerator(KeyStroke.getKeyStroke('Z', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		redoItem.setAction(new AbstractAction("Redo") {
 			private static final long serialVersionUID = 1L;
@@ -153,6 +162,7 @@ public final class CobblerMenuBar extends JMenuBar {
 				CobblerWindow.getWindow().getTextArea().redoLastAction();;
 		    }
 		});
+		redoItem.setAccelerator(KeyStroke.getKeyStroke('Y', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		copyItem.setAction(new AbstractAction("Copy") {
 			private static final long serialVersionUID = 1L;
@@ -161,6 +171,7 @@ public final class CobblerMenuBar extends JMenuBar {
 				CobblerWindow.getWindow().getTextArea().copy();
 		    }
 		});
+		copyItem.setAccelerator(KeyStroke.getKeyStroke('C', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		cutItem.setAction(new AbstractAction("Cut") {
 			private static final long serialVersionUID = 1L;
@@ -169,6 +180,7 @@ public final class CobblerMenuBar extends JMenuBar {
 				CobblerWindow.getWindow().getTextArea().cut();
 		    }
 		});
+		cutItem.setAccelerator(KeyStroke.getKeyStroke('X', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		pasteItem.setAction(new AbstractAction("Paste") {
 			private static final long serialVersionUID = 1L;
@@ -177,6 +189,7 @@ public final class CobblerMenuBar extends JMenuBar {
 			    CobblerWindow.getWindow().getTextArea().paste();
 		    }
 		});
+		pasteItem.setAccelerator(KeyStroke.getKeyStroke('V', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		// add edit menu items to menu 
 		editMenu.add(undoItem);
