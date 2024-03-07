@@ -74,14 +74,13 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 
 	      char c = array[i];
 	      
-	      // parse out comment tokens
-	      if (array[offset + commentMarkerPosition] == '*') {
-	    	  if (i == offset + commentMarkerPosition) {
+	      // parse out comment tokens, either character in column 7
+	      if (array[offset + commentMarkerPosition] == '*' 
+	    		  || array[offset + commentMarkerPosition] == '/') {
+	    	  if (i >= offset + commentMarkerPosition && i < end - 1) {
 	    		  currentTokenType = Token.COMMENT_MULTILINE;
 	    	  } else if (i == end - 1) {
 	    		  currentTokenType = Token.COMMENT_EOL;
-	    	  } else if (i > offset + commentMarkerPosition && i < end - 1) {
-	    		  currentTokenType = Token.COMMENT_MULTILINE;
 	    	  }
 	      }
 
