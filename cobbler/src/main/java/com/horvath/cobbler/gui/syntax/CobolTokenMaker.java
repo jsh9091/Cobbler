@@ -68,9 +68,22 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 	   currentTokenStart = offset;
 	   currentTokenType  = startTokenType;
 
+	   final int commentMarkerPosition = 6; 
+	   
 	   for (int i=offset; i<end; i++) {
 
 	      char c = array[i];
+	      
+	      // parse out comment tokens
+	      if (array[offset + commentMarkerPosition] == '*') {
+	    	  if (i == offset + commentMarkerPosition) {
+	    		  currentTokenType = Token.COMMENT_MULTILINE;
+	    	  } else if (i == end - 1) {
+	    		  currentTokenType = Token.COMMENT_EOL;
+	    	  } else if (i > offset + commentMarkerPosition && i < end - 1) {
+	    		  currentTokenType = Token.COMMENT_MULTILINE;
+	    	  }
+	      }
 
 	      switch (currentTokenType) {
 
@@ -87,10 +100,6 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 
 	               case '"':
 	                  currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
-	                  break;
-
-	               case '#':
-	                  currentTokenType = Token.COMMENT_EOL;
 	                  break;
 
 	               default:
@@ -212,6 +221,31 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 
 	            break;
 
+	         case Token.COMMENT_KEYWORD:
+		            i = end - 1;
+		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
+		            currentTokenType = Token.NULL;
+		            break;
+
+	         case Token.COMMENT_MULTILINE:
+		            i = end - 1;
+		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
+		            currentTokenType = Token.NULL;
+		            break;
+
+	         case Token.COMMENT_MARKUP:
+		            i = end - 1;
+		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
+		            currentTokenType = Token.NULL;
+		            break;
+		            
+	         case Token.COMMENT_DOCUMENTATION:
+		            i = end - 1;
+		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
+		            // We need to set token type to null so at the bottom we don't add one more token.
+		            currentTokenType = Token.NULL;
+		            break;
+		            
 	         case Token.COMMENT_EOL:
 	            i = end - 1;
 	            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
@@ -271,19 +305,20 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 
 		TokenMap tokenMap = new TokenMap();
 
-		tokenMap.put("-", Token.RESERVED_WORD);
-		tokenMap.put("*", Token.RESERVED_WORD);
-		tokenMap.put("/", Token.RESERVED_WORD);
-		tokenMap.put("**", Token.RESERVED_WORD);
-		tokenMap.put(">", Token.RESERVED_WORD);
-		tokenMap.put("<", Token.RESERVED_WORD);
-		tokenMap.put("=", Token.RESERVED_WORD);
-		tokenMap.put("==", Token.RESERVED_WORD);
-		tokenMap.put(">=", Token.RESERVED_WORD);
-		tokenMap.put("<=", Token.RESERVED_WORD);
-		tokenMap.put("<>", Token.RESERVED_WORD);
-		tokenMap.put("*>", Token.RESERVED_WORD);
-		tokenMap.put(">>", Token.RESERVED_WORD);
+		tokenMap.put("-", Token.OPERATOR);
+		tokenMap.put("*", Token.OPERATOR);
+		tokenMap.put("/", Token.OPERATOR);
+		tokenMap.put("**", Token.OPERATOR);
+		tokenMap.put(">", Token.OPERATOR);
+		tokenMap.put("<", Token.OPERATOR);
+		tokenMap.put("=", Token.OPERATOR);
+		tokenMap.put("==", Token.OPERATOR);
+		tokenMap.put(">=", Token.OPERATOR);
+		tokenMap.put("<=", Token.OPERATOR);
+		tokenMap.put("<>", Token.OPERATOR);
+		tokenMap.put("*>", Token.OPERATOR);
+		tokenMap.put(">>", Token.OPERATOR);
+		
 		tokenMap.put("ACCEPT", Token.RESERVED_WORD);
 		tokenMap.put("ACCESS", Token.RESERVED_WORD);
 		tokenMap.put("ADD", Token.RESERVED_WORD);
