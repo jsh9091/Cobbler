@@ -78,6 +78,7 @@ public final class OpenFileAction extends OpenSaveAsAction {
 					// update the GUI
 					CobblerWindow.getWindow().getTextArea().setText(CobblerState.getInstance().getData());
 					CobblerWindow.getWindow().getTextArea().setCaretPosition(0);
+					CobblerWindow.getWindow().getTextArea().discardAllEdits();
 					
 				} else {
 					CobblerWindow.getWindow().simpleMessagePopup("Load Error",
