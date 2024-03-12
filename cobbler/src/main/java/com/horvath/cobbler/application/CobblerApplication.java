@@ -31,6 +31,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.horvath.cobbler.command.NewEmptyDocumentCmd;
+import com.horvath.cobbler.command.LoadSettingsCmd;
 import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.CobblerWindow;
 
@@ -71,10 +72,15 @@ public final class CobblerApplication {
 
 		CobblerState.getInstance();
 		
-		// initialize the application with a new empty document
+		
 		try {
-			NewEmptyDocumentCmd cmd = new NewEmptyDocumentCmd();
-			cmd.perform();
+			// create and load settings data file
+			LoadSettingsCmd settingsCmd = new LoadSettingsCmd();
+			settingsCmd.perform();
+
+			// initialize the application with a new empty document
+			NewEmptyDocumentCmd newDocCmd = new NewEmptyDocumentCmd();
+			newDocCmd.perform();
 		} catch (CobblerException ex) {
 			Debugger.printLog(ex.getMessage(), this.getClass().getName(), Level.WARNING);
 		}
