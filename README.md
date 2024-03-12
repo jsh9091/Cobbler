@@ -1,2 +1,2 @@
 # Cobbler
- Simple Text Editor
+ Simple COBOL Text Editor
