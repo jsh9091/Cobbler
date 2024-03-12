@@ -30,9 +30,15 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.exception.CobblerException;
+import com.horvath.cobbler.gui.syntax.GuiTheme;
 
+/**
+ * Reads application properties file into state. 
+ * @author jhorvath
+ */
 public final class LoadSettingsCmd extends AbstractSettingsCmd {
 
 	@Override
@@ -47,19 +53,31 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 
         	// load a properties file
             prop.load(input);
-            
+
             if (prop.isEmpty()) {
             	// load default values into state
+            	defaultSettings();
             	
             } else {
             	// load data from file into state
+            	String themeText = prop.getProperty(FIELD_THEME);
+            	GuiTheme loadedTheme = GuiTheme.fromString(themeText);
+            	CobblerState.getInstance().setCurrentTheme(loadedTheme);
             }
 
         } catch (IOException io) {
+        	defaultSettings();
 			final String message = "Error Reading the properties file." + io.getMessage();
 			Debugger.printLog(message, this.getClass().getName(),
 					Level.SEVERE);
 			throw new CobblerException(message, io); 
         }
+	}
+	
+	/**
+	 * Loads default values to state. 
+	 */
+	private void defaultSettings() {
+		CobblerState.getInstance().setCurrentTheme(GuiTheme.Default);
 	}
 }

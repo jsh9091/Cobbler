@@ -33,6 +33,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -41,6 +43,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import com.horvath.cobbler.application.CobblerApplication;
@@ -48,6 +51,7 @@ import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.gui.action.ShutdownAction;
 import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
+import com.horvath.cobbler.gui.syntax.GuiTheme;
 
 /**
  * Class that defines the main application window. 
@@ -122,6 +126,8 @@ public final class CobblerWindow extends JFrame {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		updateUndoRedoMenuitems();
+		
+		updateTextAreaTheme();
 	}
 	
 	private void layoutNamePanel() {
@@ -144,6 +150,7 @@ public final class CobblerWindow extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
+		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
 		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.anchor = GridBagConstraints.NORTH;
@@ -255,6 +262,21 @@ public final class CobblerWindow extends JFrame {
 		menuBar.undoItem.setEnabled(textArea.canUndo());
 		menuBar.redoItem.setEnabled(textArea.canRedo());
 	}
+	
+	/**
+	 * Updates the visual theme displayed in the text editor. 
+	 */
+	public void updateTextAreaTheme() {
+		// get theme location string from state - should always have a value 
+		GuiTheme selectedTheme = CobblerState.getInstance().getCurrentTheme();
+		
+		  try {
+		     Theme theme = Theme.load(getClass().getResourceAsStream(selectedTheme.toString()));
+		     theme.apply(textArea);
+		  } catch (IOException ioe) {
+			  Debugger.printLog("Error updating theme.", this.getClass().getName(), Level.SEVERE);
+		  }
+		}
 	
 	public void setDocumentName(String name) {
 		docNameLabel.setText(name);

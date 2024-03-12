@@ -26,6 +26,8 @@ package com.horvath.cobbler.application;
 
 import java.io.File;
 
+import com.horvath.cobbler.gui.syntax.GuiTheme;
+
 /**
  * The application state.
  * Contains the working set of data for the application. 
@@ -38,7 +40,11 @@ public final class CobblerState {
 	private File file;
 	private String data;
 	private boolean dirty;
+	private GuiTheme currentTheme;
 	
+	/**
+	 * Constructor. 
+	 */
 	private CobblerState() {
 		Debugger.printLog("Initializing state", this.getClass().getName());
 	}
@@ -76,6 +82,17 @@ public final class CobblerState {
 
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
+	}
+
+	public GuiTheme getCurrentTheme() {
+		if (currentTheme == null) {
+			currentTheme = GuiTheme.Default;
+		}
+		return currentTheme;
+	}
+
+	public void setCurrentTheme(GuiTheme currentTheme) {
+		this.currentTheme = currentTheme;
 	}
 
 	@Override

@@ -30,13 +30,20 @@ import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.exception.CobblerException;
 
+/**
+ * Saves state settings data to propteries file. 
+ * @jhorvath 
+ */
 public final class SaveSettingsCmd extends AbstractSettingsCmd {
 
 	@Override
 	public void perform() throws CobblerException {
+		success = false;
+		
 		Debugger.printLog("Load Settings Properties File", this.getClass().getName());
 		
 		setupSettingsFolderAndFile();
@@ -46,10 +53,12 @@ public final class SaveSettingsCmd extends AbstractSettingsCmd {
             Properties prop = new Properties();
 
             // set the properties values from state
+            prop.setProperty(FIELD_THEME, CobblerState.getInstance().getCurrentTheme().toString());
 
             // save properties to project root folder
             prop.store(output, null);
 
+            success = true;
 
         } catch (IOException io) {
 			final String message = "Error Saving the properties file." + io.getMessage();

@@ -40,6 +40,8 @@ public abstract class AbstractSettingsCmd extends CobblerCommand {
 	public static final String USER_HOME = System.getProperty("user.home");
 	public static final String SETTING_FOLDER = USER_HOME + File.separator + "Cobbler";
 	public static final String APP_SETTINGS = SETTING_FOLDER + File.separator + "Cobbler.properties";
+	
+	protected static final String FIELD_THEME = "theme";
 		
 	/**
 	 * Checks that settings folder and file exist, and if they don't creates them. 

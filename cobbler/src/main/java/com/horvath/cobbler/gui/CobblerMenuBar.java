@@ -49,6 +49,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	
 	protected JMenu fileMenu;
 	protected JMenuItem aboutItem;
+	protected JMenuItem settingItem;
 	protected JMenuItem newItem;
 	protected JMenuItem openItem;
 	protected JMenuItem closeItem;
@@ -76,6 +77,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		fileMenu = new JMenu("File");
 		aboutItem = new JMenuItem(); 
+		settingItem = new JMenuItem();
 		newItem = new JMenuItem();
 		openItem = new JMenuItem();
 		closeItem = new JMenuItem();
@@ -103,6 +105,12 @@ public final class CobblerMenuBar extends JMenuBar {
 		    }
 		});
 		
+		settingItem.addActionListener(e -> {
+			SettingsDialog settingsDialog = new SettingsDialog();
+			settingsDialog.setVisible(true);
+		});
+		settingItem.setText("Settings...");
+		
 		newItem.setAction(new NewDocumentAction());
 		newItem.setText("New");
 		newItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -128,6 +136,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		// add file menu items to the menu
 		fileMenu.add(aboutItem);
+		fileMenu.add(settingItem);
 		fileMenu.addSeparator();
 		fileMenu.add(newItem);
 		fileMenu.add(openItem);
