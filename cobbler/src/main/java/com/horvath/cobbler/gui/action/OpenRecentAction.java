@@ -28,133 +28,87 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.logging.Level;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
-import com.horvath.cobbler.command.SaveFileCmd;
+import com.horvath.cobbler.command.LoadFileCmd;
 import com.horvath.cobbler.command.SaveSettingsCmd;
 import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.CobblerWindow;
 
 /**
- *  GUI level operations for Saving a file. 
- *  @author jhorvath 
+ * Action for opening a recent file. 
  */
-public final class SaveAction extends OpenSaveAsAction {
+public class OpenRecentAction extends CobblerAction {
 	
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Enumeration to determine if operation is save or save as. 
-	 */
-	public enum SaveType {
-		  SAVE,
-		  SAVE_AS
-	}
-	
-	private SaveType type;
+	private String filepath;
 	
 	/**
 	 * Constructor. 
-	 * @param type SaveType
+	 * @param filepath
 	 */
-	public SaveAction(SaveType type) {
-		this.type = type;
+	public OpenRecentAction(String filepath) {
+		this.filepath = filepath;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Debugger.printLog("Open a recent file", this.getClass().getName());
 		
-		File file = CobblerState.getInstance().getFile();		
+		if (CobblerWindow.checkForDirtyState()) {
+			return;
+		}
 		
-		// if the user selected the "Save" menu option and the file exists
-		if (this.type == SaveType.SAVE && file.exists()) { 
-			// run the save command without Save As dialog
-			runCommand(file);
-			
-		} else {
-			File userFile = saveAsDialog(file);
-			
-			if (userFile == null) {
-				// user canceled 
-				return;
-				
-			} else {
-				// run save command 
-				runCommand(userFile);
-			}
+		File file = new File(filepath);
+		
+		if (!file.exists()) {
+			CobblerWindow.getWindow().simpleMessagePopup("File Not Found", 
+					"The selected file was not found at the location it was " 
+			+ System.lineSeparator() + "opened from. The file was probably moved or renamed.", 
+			JOptionPane.WARNING_MESSAGE);
+			return;
 		}
-	}
-	
-	/**
-	 * Shows a save as dialog and allow user to specify a name and location to save the file. 
-	 * 
-	 * @param file File 
-	 * @return File 
-	 */
-	private File saveAsDialog(File file) {
-
-		File resultFile;
-
-		JFileChooser chooser = new JFileChooser(getLastFolder());
-		chooser.setDialogTitle("Save As");
-		chooser.setSelectedFile(file);
-
-		// automatically filter out non-Cobol files
-		chooser.setFileFilter(getFileNameExtensionFilter());
-
-		int option = chooser.showSaveDialog(CobblerWindow.getWindow());
-
-		// user clicked "Save" button
-		if (option == JFileChooser.APPROVE_OPTION) {
-			// if the file name does not appear to have an extension
-			if (!chooser.getSelectedFile().getName().contains(".")) {
-				// add default file extension
-				resultFile = new File(chooser.getSelectedFile() + "." + cobolExtensions[0]);
-			} else {
-				resultFile = chooser.getSelectedFile();
-			}
-
-		} else {
-			// user canceled
-			resultFile = null;
-		}
-
-		return resultFile;
-	}
-	
-	/**
-	 * Runs the save command. 
-	 * 
-	 * @param file File 
-	 */
-	private void runCommand(File file) {
-
-		SaveFileCmd cmd = new SaveFileCmd(file);
+		
 		try {
+			// perform core logic of loading the file into state 
+			LoadFileCmd cmd = new LoadFileCmd(file);
 			cmd.perform();
 			
 			if (cmd.isSuccess()) {
 				CobblerWindow window = CobblerWindow.getWindow();
 				CobblerState state = CobblerState.getInstance();
+				
+				// update the text area GUI
+				window.getTextArea().setText(state.getData());
+				window.getTextArea().setCaretPosition(0);
+				window.getTextArea().discardAllEdits();
+				
+				// display document name to user in GUI
 				window.setDocumentName(state.getFile().getName());
 				
 				// recent files updates
 				state.updateRecentFiles(file.getAbsolutePath());
 				window.updateRecentFilesMenu();
 				
-				// update the settings file to store the newly saved file location
+				// update the settings file to reorder the recently opened files
 				SaveSettingsCmd saveSettingsCmd = new SaveSettingsCmd();
 				saveSettingsCmd.perform();
 				
+				// need to clear state because GUI updates impact the state dirty flag
 				state.setDirty(false);
+				
+			} else {
+				CobblerWindow.getWindow().simpleMessagePopup("Load Error",
+						LoadFileCmd.ERROR_UNKOWN_LOAD_PROBLEM + " " + cmd.getMessage(),
+						JOptionPane.WARNING_MESSAGE);
 			}
-
+			
 		} catch (CobblerException ex) {
 			Debugger.printLog(ex.getMessage() + " " + file.getName(), this.getClass().getName(), Level.WARNING);
-			CobblerWindow.getWindow().simpleMessagePopup("Save Error", ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+			CobblerWindow.getWindow().simpleMessagePopup("Load Error", ex.getMessage(), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

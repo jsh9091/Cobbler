@@ -27,6 +27,7 @@ package com.horvath.cobbler.command;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -45,13 +46,15 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 	public void perform() throws CobblerException {
 		Debugger.printLog("Load Settings Properties File", this.getClass().getName());
 		
+		success = false; 
+		
 		setupSettingsFolderAndFile();
 		
         try (InputStream input = new FileInputStream(APP_SETTINGS)) {
 
         	Properties prop = new Properties();    
 
-        	// load a properties file
+        	// load the properties file
             prop.load(input);
 
             if (prop.isEmpty()) {
@@ -59,12 +62,30 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             	defaultSettings();
             	
             } else {
-            	// load data from file into state
+            	CobblerState state = CobblerState.getInstance();
+            	
+            	// load theme data from file into state
             	String themeText = prop.getProperty(FIELD_THEME);
             	GuiTheme loadedTheme = GuiTheme.fromString(themeText);
-            	CobblerState.getInstance().setCurrentTheme(loadedTheme);
+            	state.setCurrentTheme(loadedTheme);
+            	
+            	// load recent files 
+            	ArrayList<String> fileList = new ArrayList<>();
+            	for (int i = 0; i < CobblerState.MAX_RECENT_FILES; i++) {
+            		String filepath = prop.getProperty(FIELD_RECENT_FILE + i);
+            		if (filepath == null) {
+            			break;
+            		}
+            		fileList.add(filepath);
+            	}
+            	if (!fileList.isEmpty()) {
+            		state.getRecentFilesList().addAll(fileList);
+            	}
+            	
             }
 
+            success = true; 
+            
         } catch (IOException io) {
         	defaultSettings();
 			final String message = "Error Reading the properties file." + io.getMessage();

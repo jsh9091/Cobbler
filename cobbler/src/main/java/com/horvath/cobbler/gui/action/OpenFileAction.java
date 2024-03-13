@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.command.LoadFileCmd;
+import com.horvath.cobbler.command.SaveSettingsCmd;
 import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.CobblerWindow;
 
@@ -75,11 +76,25 @@ public final class OpenFileAction extends OpenSaveAsAction {
 				cmd.perform();
 				
 				if (cmd.isSuccess()) {
-					// update the GUI
-					CobblerWindow.getWindow().getTextArea().setText(CobblerState.getInstance().getData());
-					CobblerWindow.getWindow().getTextArea().setCaretPosition(0);
-					CobblerWindow.getWindow().getTextArea().discardAllEdits();
-					CobblerWindow.getWindow().setDocumentName(CobblerState.getInstance().getFile().getName());
+					CobblerWindow window = CobblerWindow.getWindow();
+					CobblerState state = CobblerState.getInstance();
+					
+					// update the text area GUI
+					window.getTextArea().setText(state.getData());
+					window.getTextArea().setCaretPosition(0);
+					window.getTextArea().discardAllEdits();
+					
+					// display document name to user in GUI
+					window.setDocumentName(state.getFile().getName());
+					
+					// recent files updates
+					state.updateRecentFiles(selectedFile.getAbsolutePath());
+					window.updateRecentFilesMenu();
+					
+					// update the settings file to store the newly opened file location
+					SaveSettingsCmd saveSettingsCmd = new SaveSettingsCmd();
+					saveSettingsCmd.perform();
+					
 					// need to clear state because GUI updates impact the state dirty flag
 					CobblerState.getInstance().setDirty(false);
 					

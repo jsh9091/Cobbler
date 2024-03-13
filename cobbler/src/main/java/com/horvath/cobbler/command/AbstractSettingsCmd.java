@@ -42,6 +42,7 @@ public abstract class AbstractSettingsCmd extends CobblerCommand {
 	public static final String APP_SETTINGS = SETTING_FOLDER + File.separator + "Cobbler.properties";
 	
 	protected static final String FIELD_THEME = "theme";
+	protected static final String FIELD_RECENT_FILE = "recent";
 		
 	/**
 	 * Checks that settings folder and file exist, and if they don't creates them. 

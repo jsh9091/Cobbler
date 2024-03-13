@@ -33,7 +33,7 @@ import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.io.TextFileReader;
 
 /**
- * Tests operations of the SaveFileCm class.
+ * Tests operations of the SaveFileCmd class.
  * @author jhorvath
  */
 public class SaveFileCmdTest {

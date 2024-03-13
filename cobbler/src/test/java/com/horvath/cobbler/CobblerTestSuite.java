@@ -27,15 +27,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import com.horvath.cobbler.command.LoadFileCmdTest;
+import com.horvath.cobbler.command.LoadSettingsCmdTest;
 import com.horvath.cobbler.command.NewEmptyDocumentCmdTest;
 import com.horvath.cobbler.command.SaveFileCmdTest;
+import com.horvath.cobbler.command.SaveSettingsCmdTest;
 
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
 	LoadFileCmdTest.class,
 	NewEmptyDocumentCmdTest.class,
-	SaveFileCmdTest.class
+	SaveFileCmdTest.class,
+	SaveSettingsCmdTest.class,
+	LoadSettingsCmdTest.class
 })
 
 public class CobblerTestSuite { }

@@ -52,6 +52,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem settingItem;
 	protected JMenuItem newItem;
 	protected JMenuItem openItem;
+	protected JMenu recentFilesMenu;
 	protected JMenuItem closeItem;
 	protected JMenuItem saveItem;
 	protected JMenuItem saveAsItem;
@@ -80,6 +81,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		settingItem = new JMenuItem();
 		newItem = new JMenuItem();
 		openItem = new JMenuItem();
+		recentFilesMenu = new JMenu("Recent Files");
 		closeItem = new JMenuItem();
 		saveItem = new JMenuItem();
 		saveAsItem = new JMenuItem();
@@ -140,6 +142,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		fileMenu.addSeparator();
 		fileMenu.add(newItem);
 		fileMenu.add(openItem);
+		fileMenu.add(recentFilesMenu);
 		fileMenu.add(closeItem);
 		fileMenu.add(saveItem);
 		fileMenu.add(saveAsItem);
@@ -214,4 +217,5 @@ public final class CobblerMenuBar extends JMenuBar {
 		this.add(fileMenu);
 		this.add(editMenu);	
 	}
+	
 }

@@ -41,7 +41,7 @@ import com.horvath.cobbler.gui.syntax.GuiTheme;
  * Action for saving settings data. 
  * @author jhorvath
  */
-public final class SaveSettingsAction extends OpenSaveAsAction {
+public final class SaveSettingsAction extends CobblerAction {
 
 	private static final long serialVersionUID = 1L;
 	

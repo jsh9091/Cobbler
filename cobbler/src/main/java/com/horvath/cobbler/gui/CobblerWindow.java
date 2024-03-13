@@ -39,6 +39,7 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -49,6 +50,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.gui.action.OpenRecentAction;
 import com.horvath.cobbler.gui.action.ShutdownAction;
 import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
 import com.horvath.cobbler.gui.syntax.GuiTheme;
@@ -63,7 +65,7 @@ public final class CobblerWindow extends JFrame {
 	
 	private static CobblerWindow window = null;
 	
-	private CobblerMenuBar menuBar;
+	private CobblerMenuBar cobMenuBar;
 	private JPanel docNamePanel;
 	private JLabel docNameLabel;
 	private CobSyntaxTextArea textArea;
@@ -96,7 +98,7 @@ public final class CobblerWindow extends JFrame {
 	 * Initializes the components of the window. 
 	 */
 	private void initializeComponents() {
-		menuBar = new CobblerMenuBar();
+		cobMenuBar = new CobblerMenuBar();
 		
 		docNamePanel = new JPanel();
 		docNameLabel = new JLabel(" ");
@@ -126,8 +128,8 @@ public final class CobblerWindow extends JFrame {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		updateUndoRedoMenuitems();
-		
 		updateTextAreaTheme();
+		updateRecentFilesMenu();
 	}
 	
 	private void layoutNamePanel() {
@@ -154,7 +156,7 @@ public final class CobblerWindow extends JFrame {
 		gbc.weightx = 0.5;
 		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.anchor = GridBagConstraints.NORTH;
-		add(menuBar, gbc);
+		add(cobMenuBar, gbc);
 		
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
@@ -259,27 +261,44 @@ public final class CobblerWindow extends JFrame {
 	 * Updates the enabled / disabled status of the undo and re-do menu items. 
 	 */
 	public void updateUndoRedoMenuitems() {
-		menuBar.undoItem.setEnabled(textArea.canUndo());
-		menuBar.redoItem.setEnabled(textArea.canRedo());
+		cobMenuBar.undoItem.setEnabled(textArea.canUndo());
+		cobMenuBar.redoItem.setEnabled(textArea.canRedo());
 	}
 	
 	/**
 	 * Updates the visual theme displayed in the text editor. 
 	 */
 	public void updateTextAreaTheme() {
-		// get theme location string from state - should always have a value 
+		// get theme location string from state - should always have a value
 		GuiTheme selectedTheme = CobblerState.getInstance().getCurrentTheme();
-		
-		  try {
-		     Theme theme = Theme.load(getClass().getResourceAsStream(selectedTheme.toString()));
-		     theme.apply(textArea);
-		  } catch (IOException ioe) {
-			  Debugger.printLog("Error updating theme.", this.getClass().getName(), Level.SEVERE);
-		  }
+
+		try {
+			Theme theme = Theme.load(getClass().getResourceAsStream(selectedTheme.toString()));
+			theme.apply(textArea);
+		} catch (IOException ioe) {
+			Debugger.printLog("Error updating theme.", this.getClass().getName(), Level.SEVERE);
 		}
+	}
+	
+	/**
+	 * Updates the recent files menu. 
+	 */
+	public void updateRecentFilesMenu() {
+		cobMenuBar.recentFilesMenu.removeAll();
+		for (String recentFile : CobblerState.getInstance().getRecentFilesList()) {
+			JMenuItem item = new JMenuItem();
+			item.addActionListener(new OpenRecentAction(recentFile));
+			item.setText(recentFile);
+			cobMenuBar.recentFilesMenu.add(item);
+		}
+	}
 	
 	public void setDocumentName(String name) {
 		docNameLabel.setText(name);
+	}
+	
+	public CobblerMenuBar getCobMenuBar() {
+		return this.cobMenuBar;
 	}
 
 	public CobSyntaxTextArea getTextArea() {

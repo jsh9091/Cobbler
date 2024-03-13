@@ -25,6 +25,7 @@
 package com.horvath.cobbler.application;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import com.horvath.cobbler.gui.syntax.GuiTheme;
 
@@ -41,12 +42,15 @@ public final class CobblerState {
 	private String data;
 	private boolean dirty;
 	private GuiTheme currentTheme;
+	private ArrayList<String> recentFilesList;
+	public static final int MAX_RECENT_FILES = 5;
 	
 	/**
 	 * Constructor. 
 	 */
 	private CobblerState() {
 		Debugger.printLog("Initializing state", this.getClass().getName());
+		this.recentFilesList = new ArrayList<>();
 	}
 	
 	/**
@@ -58,6 +62,35 @@ public final class CobblerState {
 			instance = new CobblerState();
 		}
 		return instance;
+	}
+	
+	/**
+	 * Updates the collection of recently opened files. 
+	 * @param filepath String
+	 */
+	public void updateRecentFiles(String filepath) {
+		
+		if (recentFilesList.isEmpty()) {
+			recentFilesList.add(filepath);
+			return;
+		}
+		
+		// if we already have this one, but it is not the last one opened
+		if (recentFilesList.contains(filepath) && !recentFilesList.get(0).equals(filepath)) {
+			// move from middle or end of list
+			recentFilesList.remove(filepath);
+			// to the beginning of list
+			recentFilesList.add(0, filepath);
+			
+		} else if (!recentFilesList.contains(filepath)) {
+			// we don't already have this, add it to the start
+			recentFilesList.add(0, filepath);
+		}
+		
+		// if recent files collection is greater than max, then truncate 
+		while (recentFilesList.size() > MAX_RECENT_FILES) {
+			recentFilesList.remove(recentFilesList.size() - 1);
+		}
 	}
 
 	public File getFile() {
@@ -93,6 +126,10 @@ public final class CobblerState {
 
 	public void setCurrentTheme(GuiTheme currentTheme) {
 		this.currentTheme = currentTheme;
+	}	
+
+	public ArrayList<String> getRecentFilesList() {
+		return recentFilesList;
 	}
 
 	@Override
