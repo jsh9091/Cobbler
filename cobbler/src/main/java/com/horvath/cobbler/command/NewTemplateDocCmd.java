@@ -36,7 +36,7 @@ import com.horvath.cobbler.exception.CobblerException;
  * Command for generating a new hello world COBOL program. 
  * @author jhorvath 
  */
-public class NewTemplateDocCmd extends CobblerCommand {
+public final class NewTemplateDocCmd extends CobblerCommand {
 	
 	private static final String EOL = System.lineSeparator();
 	private static final String COMMENT_SPACE = "      ";

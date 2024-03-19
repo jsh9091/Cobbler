@@ -58,7 +58,9 @@ public final class SaveSettingsAction extends CobblerAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// get the user selected value from the GUI
-		String theme = (String) dialog.getThemeMenu().getSelectedItem(); 
+		final String theme = (String) dialog.getThemeMenu().getSelectedItem();
+		
+		final boolean clearRecent = dialog.getClearRecentCheckBox().isSelected();
 		
 		// get the enumeration value 
 		GuiTheme selectedTheme = GuiTheme.Default;
@@ -71,6 +73,9 @@ public final class SaveSettingsAction extends CobblerAction {
 		
 		// update state
 		CobblerState.getInstance().setCurrentTheme(selectedTheme);
+		if (clearRecent) {
+			CobblerState.getInstance().getRecentFilesList().clear();
+		}
 		
 		try {
 			// run command to update properties file 
@@ -81,6 +86,9 @@ public final class SaveSettingsAction extends CobblerAction {
 				// update GUI
 				dialog.dispose();
 				CobblerWindow.getWindow().updateTextAreaTheme();
+				if (clearRecent) {
+					CobblerWindow.getWindow().updateRecentFilesMenu();
+				}
 			}
 			
 		} catch (CobblerException ex) {

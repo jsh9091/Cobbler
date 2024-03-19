@@ -34,7 +34,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import com.horvath.cobbler.application.CobblerApplication;
-import com.horvath.cobbler.gui.action.NewCodTemplateAction;
+import com.horvath.cobbler.gui.action.NewCobTemplateAction;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
 import com.horvath.cobbler.gui.action.SaveAction;
@@ -120,7 +120,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		newItem.setText("New");
 		newItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
-		newTemplatedItem.setAction(new NewCodTemplateAction());
+		newTemplatedItem.setAction(new NewCobTemplateAction());
 		newTemplatedItem.setText("New Document Template");
 		newTemplatedItem.setToolTipText("Creates a new Hello World COBOL program.");
 		

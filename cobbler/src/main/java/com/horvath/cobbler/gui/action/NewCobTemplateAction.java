@@ -39,7 +39,7 @@ import com.horvath.cobbler.gui.CobblerWindow;
  * Action for generating a new hello world COBOL program.  
  * @author jhorvath 
  */
-public class NewCodTemplateAction extends OpenSaveAsAction {
+public final class NewCobTemplateAction extends OpenSaveAsAction {
 
 	private static final long serialVersionUID = 1L;
 

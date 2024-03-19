@@ -29,6 +29,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -46,6 +47,7 @@ public final class SettingsDialog extends JDialog {
 	
 	private JLabel themeMenuLabel;
 	private JComboBox<String> themeMenu;
+	private JCheckBox clearRecentCheckBox;
 	private JButton saveSettingsBtn;
 	
 	/**
@@ -65,6 +67,7 @@ public final class SettingsDialog extends JDialog {
 	private void initializeComponents() {
 		themeMenuLabel = new JLabel();
 		themeMenu = new JComboBox<String>(CobblerState.getInstance().getCurrentTheme().names());
+		clearRecentCheckBox = new JCheckBox("Clear Recent menu", false);  
 		saveSettingsBtn = new JButton();
 	}
 	
@@ -74,7 +77,7 @@ public final class SettingsDialog extends JDialog {
 	private void configureComponents() {
 		// dialog 
 		setTitle("Settings");
-		setSize(250, 120);
+		setSize(250, 160);
 		setResizable(false);
 		setLocationRelativeTo(CobblerWindow.getWindow());
 		
@@ -96,7 +99,7 @@ public final class SettingsDialog extends JDialog {
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.insets = new Insets(20, 10, 10, 10);
+		gbc.insets = new Insets(10, 10, 10, 10);
 		gbc.anchor = GridBagConstraints.WEST;
 		this.add(themeMenuLabel, gbc);
 		
@@ -106,13 +109,23 @@ public final class SettingsDialog extends JDialog {
 		gbc.gridwidth = 1;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
-		gbc.insets = new Insets(20, 10, 10, 10);
+		gbc.insets = new Insets(15, 10, 10, 10);
 		gbc.anchor = GridBagConstraints.WEST;
 		this.add(themeMenu, gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 1;
+		gbc.gridx = 0;
 		gbc.gridy = 1;
+		gbc.gridwidth = 2;
+		gbc.weighty = 0.0;
+		gbc.weightx = 0.5;
+		gbc.insets = new Insets(0, 10, 0, 10);
+		gbc.anchor = GridBagConstraints.CENTER;
+		this.add(clearRecentCheckBox, gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 1;
+		gbc.gridy = 2;
 		gbc.gridwidth = 2;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
@@ -123,6 +136,10 @@ public final class SettingsDialog extends JDialog {
 
 	public JComboBox<String> getThemeMenu() {
 		return themeMenu;
+	}
+
+	public JCheckBox getClearRecentCheckBox() {
+		return clearRecentCheckBox;
 	}
 	
 }
