@@ -34,6 +34,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import com.horvath.cobbler.application.CobblerApplication;
+import com.horvath.cobbler.gui.action.NewCodTemplateAction;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
 import com.horvath.cobbler.gui.action.SaveAction;
@@ -51,6 +52,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem aboutItem;
 	protected JMenuItem settingItem;
 	protected JMenuItem newItem;
+	protected JMenuItem newTemplatedItem;
 	protected JMenuItem openItem;
 	protected JMenu recentFilesMenu;
 	protected JMenuItem closeItem;
@@ -80,6 +82,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		aboutItem = new JMenuItem(); 
 		settingItem = new JMenuItem();
 		newItem = new JMenuItem();
+		newTemplatedItem = new JMenuItem();
 		openItem = new JMenuItem();
 		recentFilesMenu = new JMenu("Recent Files");
 		closeItem = new JMenuItem();
@@ -103,7 +106,7 @@ public final class CobblerMenuBar extends JMenuBar {
 
 			public void actionPerformed(ActionEvent ae) {
 				CobblerWindow.getWindow().simpleMessagePopup("About Cobbler v. " + CobblerApplication.APP_VERSION, 
-						"Cobbler is a simple text editor.");
+						"Cobbler is a simple COBOL text editor.");
 		    }
 		});
 		
@@ -116,7 +119,10 @@ public final class CobblerMenuBar extends JMenuBar {
 		newItem.setAction(new NewDocumentAction());
 		newItem.setText("New");
 		newItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-
+		
+		newTemplatedItem.setAction(new NewCodTemplateAction());
+		newTemplatedItem.setText("New Document Template");
+		newTemplatedItem.setToolTipText("Creates a new Hello World COBOL program.");
 		
 		openItem.setAction(new OpenFileAction());
 		openItem.setText("Open...");
@@ -141,6 +147,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		fileMenu.add(settingItem);
 		fileMenu.addSeparator();
 		fileMenu.add(newItem);
+		fileMenu.add(newTemplatedItem);
 		fileMenu.add(openItem);
 		fileMenu.add(recentFilesMenu);
 		fileMenu.add(closeItem);

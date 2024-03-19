@@ -29,6 +29,7 @@ import org.junit.runners.Suite;
 import com.horvath.cobbler.command.LoadFileCmdTest;
 import com.horvath.cobbler.command.LoadSettingsCmdTest;
 import com.horvath.cobbler.command.NewEmptyDocumentCmdTest;
+import com.horvath.cobbler.command.NewTemplateDocCmdTest;
 import com.horvath.cobbler.command.SaveFileCmdTest;
 import com.horvath.cobbler.command.SaveSettingsCmdTest;
 
@@ -39,7 +40,8 @@ import com.horvath.cobbler.command.SaveSettingsCmdTest;
 	NewEmptyDocumentCmdTest.class,
 	SaveFileCmdTest.class,
 	SaveSettingsCmdTest.class,
-	LoadSettingsCmdTest.class
+	LoadSettingsCmdTest.class,
+	NewTemplateDocCmdTest.class
 })
 
 public class CobblerTestSuite { }
