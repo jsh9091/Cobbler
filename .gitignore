@@ -32,3 +32,5 @@ cobbler/.classpath
 cobbler/.settings/org.eclipse.core.resources.prefs
 cobbler/.settings/org.eclipse.jdt.core.prefs
 cobbler/.settings/org.eclipse.m2e.core.prefs
+cobbler/.DS_Store
+.DS_Store
