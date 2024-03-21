@@ -28,15 +28,18 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -70,6 +73,13 @@ public final class CobblerWindow extends JFrame {
 	private JLabel docNameLabel;
 	private CobSyntaxTextArea textArea;
 	private RTextScrollPane scrollpane;
+	
+	// locations for application icon
+	public static final String APP_ICON_16X = "Cob-icon-16px.png";
+	public static final String APP_ICON_32X = "Cob-icon-64px.png";
+	public static final String APP_ICON_64X = "Cob-icon-16px.png";
+	public static final String APP_ICON_128X = "Cob-icon-128px.png";
+	public static final String APP_ICON_512X = "Cob-icon-256px.png";
 	
 	/**
 	 * Constructor. 
@@ -105,6 +115,11 @@ public final class CobblerWindow extends JFrame {
 
 		textArea = new CobSyntaxTextArea(20, 60);
 		scrollpane = new RTextScrollPane(textArea);
+		
+		URL url = this.getClass().getClassLoader().getResource(APP_ICON_512X);
+		ImageIcon icon = new ImageIcon(url);
+		
+		setIconImage(icon.getImage());
 	}
 	
 	/**
@@ -132,6 +147,9 @@ public final class CobblerWindow extends JFrame {
 		updateRecentFilesMenu();
 	}
 	
+	/**
+	 * Layout method for helper layout panel. 
+	 */
 	private void layoutNamePanel() {
 		docNamePanel.setLayout(new GridBagLayout());
 		docNamePanel.add(docNameLabel);
@@ -203,6 +221,19 @@ public final class CobblerWindow extends JFrame {
 	}
 	
 	/**
+	 * Returns a scaled version of the application appropriate for display in a JOptionPane.
+	 * @return ImageIcon 
+	 */
+	public ImageIcon getAppIcon() {
+		URL url =  this.getClass().getClassLoader().getResource(APP_ICON_128X);
+		ImageIcon icon = new ImageIcon(url);
+		// scale the image so it looks good
+		Image image = icon.getImage();
+		Image scaledImage = image.getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+		return new ImageIcon(scaledImage);
+	}
+	
+	/**
 	 * Displays a simple pop-up message with an OK button. 
 	 * @param title String 
 	 * @param message String
@@ -222,7 +253,7 @@ public final class CobblerWindow extends JFrame {
 		
 		if (level == JOptionPane.INFORMATION_MESSAGE) {
 			// display the message with application icon
-			JOptionPane.showMessageDialog(this, message, title, level, null); // TODO application icon
+			JOptionPane.showMessageDialog(this, message, title, level, getAppIcon());
 			
 		} else {
 			// for non-information levels, show default icons
