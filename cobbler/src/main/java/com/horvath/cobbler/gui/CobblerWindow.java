@@ -74,12 +74,7 @@ public final class CobblerWindow extends JFrame {
 	private CobSyntaxTextArea textArea;
 	private RTextScrollPane scrollpane;
 	
-	// locations for application icon
-	public static final String APP_ICON_16X = "Cob-icon-16px.png";
-	public static final String APP_ICON_32X = "Cob-icon-64px.png";
-	public static final String APP_ICON_64X = "Cob-icon-16px.png";
-	public static final String APP_ICON_128X = "Cob-icon-128px.png";
-	public static final String APP_ICON_512X = "Cob-icon-256px.png";
+	public static final String APP_ICON = "Cobber-icon.png";
 	
 	/**
 	 * Constructor. 
@@ -116,7 +111,7 @@ public final class CobblerWindow extends JFrame {
 		textArea = new CobSyntaxTextArea(20, 60);
 		scrollpane = new RTextScrollPane(textArea);
 		
-		URL url = this.getClass().getClassLoader().getResource(APP_ICON_512X);
+		URL url = this.getClass().getClassLoader().getResource(APP_ICON);
 		ImageIcon icon = new ImageIcon(url);
 		
 		setIconImage(icon.getImage());
@@ -225,7 +220,7 @@ public final class CobblerWindow extends JFrame {
 	 * @return ImageIcon 
 	 */
 	public ImageIcon getAppIcon() {
-		URL url =  this.getClass().getClassLoader().getResource(APP_ICON_128X);
+		URL url =  this.getClass().getClassLoader().getResource(APP_ICON);
 		ImageIcon icon = new ImageIcon(url);
 		// scale the image so it looks good
 		Image image = icon.getImage();
