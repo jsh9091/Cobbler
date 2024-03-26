@@ -24,16 +24,23 @@
 
 package com.horvath.cobbler.gui;
 
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import com.horvath.cobbler.application.CobblerApplication;
+import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.gui.action.NewCobTemplateAction;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
@@ -49,7 +56,6 @@ public final class CobblerMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
 	protected JMenu fileMenu;
-	protected JMenuItem aboutItem;
 	protected JMenuItem settingItem;
 	protected JMenuItem newItem;
 	protected JMenuItem newTemplatedItem;
@@ -68,6 +74,11 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem cutItem;
 	protected JMenuItem pasteItem;
 	
+	protected JMenu helpMenu;
+	protected JMenuItem aboutItem;
+	protected JMenuItem userManualItem;
+	
+	
 	/**
 	 * Constructor. 
 	 */
@@ -79,7 +90,6 @@ public final class CobblerMenuBar extends JMenuBar {
 	private void initComponents() {
 		
 		fileMenu = new JMenu("File");
-		aboutItem = new JMenuItem(); 
 		settingItem = new JMenuItem();
 		newItem = new JMenuItem();
 		newTemplatedItem = new JMenuItem();
@@ -97,18 +107,14 @@ public final class CobblerMenuBar extends JMenuBar {
 		cutItem = new JMenuItem();
 		copyItem = new JMenuItem();
 		pasteItem = new JMenuItem();
+		
+		helpMenu = new JMenu("Help");
+		aboutItem = new JMenuItem(); 
+		userManualItem = new JMenuItem(); 
+
 	}
 	
 	private void configureComponents() {
-		
-		aboutItem.setAction(new AbstractAction("About Cobbler") {
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent ae) {
-				CobblerWindow.getWindow().simpleMessagePopup("About Cobbler v. " + CobblerApplication.APP_VERSION, 
-						"Cobbler is a simple COBOL text editor.");
-		    }
-		});
 		
 		settingItem.addActionListener(e -> {
 			SettingsDialog settingsDialog = new SettingsDialog();
@@ -143,7 +149,6 @@ public final class CobblerMenuBar extends JMenuBar {
 		quitItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		// add file menu items to the menu
-		fileMenu.add(aboutItem);
 		fileMenu.add(settingItem);
 		fileMenu.addSeparator();
 		fileMenu.add(newItem);
@@ -220,9 +225,38 @@ public final class CobblerMenuBar extends JMenuBar {
 		editMenu.add(cutItem);
 		editMenu.add(pasteItem);
 		
+		aboutItem.setAction(new AbstractAction("About Cobbler") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				CobblerWindow.getWindow().simpleMessagePopup("About Cobbler v. " + CobblerApplication.APP_VERSION, 
+						"Cobbler is a simple COBOL text editor.");
+		    }
+		});
+		
+		userManualItem.setAction(new AbstractAction("User Manual") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				URL url =  this.getClass().getClassLoader().getResource("Cobbler_Manual.pdf");
+				try {
+					Desktop.getDesktop().open(new File(url.getFile()));
+				} catch (IOException ex) {
+					final String message = "Error opening user manual.";
+					CobblerWindow.getWindow().simpleMessagePopup("Error", message, JOptionPane.WARNING_MESSAGE);
+					Debugger.printLog(message, this.getClass().getName(), Level.WARNING);
+				}
+		    }
+		});
+
+		// add help menu items to menu 
+		helpMenu.add(aboutItem);
+		helpMenu.add(userManualItem);
+		
 		// add menus to menu bar
 		this.add(fileMenu);
 		this.add(editMenu);	
+		this.add(helpMenu);
 	}
 	
 }
