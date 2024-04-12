@@ -30,6 +30,12 @@
 			<artifactId>rsyntaxtextarea</artifactId>
 			<version>3.4.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fifesoft/rstaui -->
+		<dependency>
+			<groupId>com.fifesoft</groupId>
+			<artifactId>rstaui</artifactId>
+			<version>3.3.1</version>
+		</dependency>
 	</dependencies>
 
   <build>

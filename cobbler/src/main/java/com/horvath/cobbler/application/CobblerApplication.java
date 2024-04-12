@@ -42,7 +42,7 @@ import com.horvath.cobbler.gui.CobblerWindow;
  */
 public final class CobblerApplication {
 	
-	public static final String APP_VERSION = "0.1";
+	public static final String APP_VERSION = "0.2";
 	public static final String APP_NAME = "Cobbler";
 
 	public static void main(String[] args) {

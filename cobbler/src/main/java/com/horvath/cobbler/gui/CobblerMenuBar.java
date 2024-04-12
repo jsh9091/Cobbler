@@ -41,6 +41,7 @@ import javax.swing.KeyStroke;
 
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.gui.action.GoToLineAction;
 import com.horvath.cobbler.gui.action.NewCobTemplateAction;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
@@ -56,7 +57,6 @@ public final class CobblerMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
 	protected JMenu fileMenu;
-	protected JMenuItem settingItem;
 	protected JMenuItem newItem;
 	protected JMenuItem newTemplatedItem;
 	protected JMenuItem openItem;
@@ -74,6 +74,10 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem cutItem;
 	protected JMenuItem pasteItem;
 	
+	protected JMenu utilitiesMenu;
+	protected JMenuItem goToLineItem;
+	protected JMenuItem settingItem;
+	
 	protected JMenu helpMenu;
 	protected JMenuItem aboutItem;
 	protected JMenuItem userManualItem;
@@ -90,7 +94,6 @@ public final class CobblerMenuBar extends JMenuBar {
 	private void initComponents() {
 		
 		fileMenu = new JMenu("File");
-		settingItem = new JMenuItem();
 		newItem = new JMenuItem();
 		newTemplatedItem = new JMenuItem();
 		openItem = new JMenuItem();
@@ -107,7 +110,11 @@ public final class CobblerMenuBar extends JMenuBar {
 		cutItem = new JMenuItem();
 		copyItem = new JMenuItem();
 		pasteItem = new JMenuItem();
-		
+
+		utilitiesMenu = new JMenu("Utilities");
+		goToLineItem = new JMenuItem();
+		settingItem = new JMenuItem();
+
 		helpMenu = new JMenu("Help");
 		aboutItem = new JMenuItem(); 
 		userManualItem = new JMenuItem(); 
@@ -115,12 +122,6 @@ public final class CobblerMenuBar extends JMenuBar {
 	}
 	
 	private void configureComponents() {
-		
-		settingItem.addActionListener(e -> {
-			SettingsDialog settingsDialog = new SettingsDialog();
-			settingsDialog.setVisible(true);
-		});
-		settingItem.setText("Settings...");
 		
 		newItem.setAction(new NewDocumentAction());
 		newItem.setText("New");
@@ -149,8 +150,6 @@ public final class CobblerMenuBar extends JMenuBar {
 		quitItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		// add file menu items to the menu
-		fileMenu.add(settingItem);
-		fileMenu.addSeparator();
 		fileMenu.add(newItem);
 		fileMenu.add(newTemplatedItem);
 		fileMenu.add(openItem);
@@ -225,6 +224,21 @@ public final class CobblerMenuBar extends JMenuBar {
 		editMenu.add(cutItem);
 		editMenu.add(pasteItem);
 		
+		goToLineItem.setAction(new GoToLineAction());
+		goToLineItem.setText("Go to line...");
+		goToLineItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		
+		settingItem.addActionListener(e -> {
+			SettingsDialog settingsDialog = new SettingsDialog();
+			settingsDialog.setVisible(true);
+		});
+		settingItem.setText("Settings...");
+		
+		// add utilities menu items to menu 
+		utilitiesMenu.add(goToLineItem);
+		utilitiesMenu.addSeparator();
+		utilitiesMenu.add(settingItem);
+		
 		aboutItem.setAction(new AbstractAction("About Cobbler") {
 			private static final long serialVersionUID = 1L;
 
@@ -256,6 +270,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		// add menus to menu bar
 		this.add(fileMenu);
 		this.add(editMenu);	
+		this.add(utilitiesMenu);
 		this.add(helpMenu);
 	}
 	
