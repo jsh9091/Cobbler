@@ -114,7 +114,11 @@ public final class NewTemplateDocCmd extends CobblerCommand {
 		sb.append(username);
 		sb.append(".\".");
 		sb.append(EOL);
-
+		sb.append(EOL);
+		
+		sb.append(INDENT_SPACE);
+		sb.append("PROCEDURE DIVISION. ");
+		sb.append(EOL);
 		sb.append(EOL);
 
 		sb.append(INDENT_SPACE);
