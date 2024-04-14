@@ -1,2 +1,2 @@
 # Cobbler
- Simple COBOL Text Editor
+Cobbler is a lightweight COBOL text editor.
