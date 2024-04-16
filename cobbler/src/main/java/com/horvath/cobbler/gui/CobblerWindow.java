@@ -27,6 +27,7 @@ package com.horvath.cobbler.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -137,7 +138,7 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 	private void configureComponents() {
 		
 		setTitle(CobblerApplication.APP_NAME);
-
+		setMinimumSize(new Dimension(500, 500));
 		setLayout(new GridBagLayout());
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
