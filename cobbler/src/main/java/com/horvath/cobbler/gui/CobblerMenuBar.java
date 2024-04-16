@@ -41,6 +41,7 @@ import javax.swing.KeyStroke;
 
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.gui.action.FindReplaceDialogAction;
 import com.horvath.cobbler.gui.action.GoToLineAction;
 import com.horvath.cobbler.gui.action.NewCobTemplateAction;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
@@ -76,6 +77,8 @@ public final class CobblerMenuBar extends JMenuBar {
 	
 	protected JMenu utilitiesMenu;
 	protected JMenuItem goToLineItem;
+	protected JMenuItem findItem;
+	protected JMenuItem replaceItem;
 	protected JMenuItem settingItem;
 	
 	protected JMenu helpMenu;
@@ -113,6 +116,8 @@ public final class CobblerMenuBar extends JMenuBar {
 
 		utilitiesMenu = new JMenu("Utilities");
 		goToLineItem = new JMenuItem();
+		findItem = new JMenuItem();
+		replaceItem = new JMenuItem();
 		settingItem = new JMenuItem();
 
 		helpMenu = new JMenu("Help");
@@ -227,7 +232,15 @@ public final class CobblerMenuBar extends JMenuBar {
 		goToLineItem.setAction(new GoToLineAction());
 		goToLineItem.setText("Go to line...");
 		goToLineItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+		findItem.setAction(new FindReplaceDialogAction(FindReplaceDialogAction.Mode.FIND));
+		findItem.setText("Find...");
+		findItem.setAccelerator(KeyStroke.getKeyStroke('F', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
+		replaceItem.setAction(new FindReplaceDialogAction(FindReplaceDialogAction.Mode.REPLACE));
+		replaceItem.setText("Replace...");
+		replaceItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
 		settingItem.addActionListener(e -> {
 			SettingsDialog settingsDialog = new SettingsDialog();
 			settingsDialog.setVisible(true);
@@ -236,6 +249,8 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		// add utilities menu items to menu 
 		utilitiesMenu.add(goToLineItem);
+		utilitiesMenu.add(findItem);
+		utilitiesMenu.add(replaceItem);
 		utilitiesMenu.addSeparator();
 		utilitiesMenu.add(settingItem);
 		

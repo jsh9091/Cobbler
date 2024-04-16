@@ -24,6 +24,7 @@
 
 package com.horvath.cobbler.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GridBagConstraints;
@@ -45,10 +46,18 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import org.fife.rsta.ui.search.FindDialog;
+import org.fife.rsta.ui.search.ReplaceDialog;
+import org.fife.rsta.ui.search.SearchEvent;
+import org.fife.rsta.ui.search.SearchListener;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.SearchContext;
+import org.fife.ui.rtextarea.SearchEngine;
+import org.fife.ui.rtextarea.SearchResult;
 
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.CobblerState;
@@ -62,7 +71,7 @@ import com.horvath.cobbler.gui.syntax.GuiTheme;
  * Class that defines the main application window. 
  * @author jhorvath
  */
-public final class CobblerWindow extends JFrame {
+public final class CobblerWindow extends JFrame implements SearchListener {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -73,6 +82,10 @@ public final class CobblerWindow extends JFrame {
 	private JLabel docNameLabel;
 	private CobSyntaxTextArea textArea;
 	private RTextScrollPane scrollpane;
+	
+	private FindDialog findDialog;
+	private ReplaceDialog replaceDialog;
+	private StatusBar statusBar;
 	
 	public static final String APP_ICON = "Cobber-icon.png";
 	
@@ -110,6 +123,7 @@ public final class CobblerWindow extends JFrame {
 
 		textArea = new CobSyntaxTextArea(20, 60);
 		scrollpane = new RTextScrollPane(textArea);
+		statusBar = new StatusBar();
 		
 		URL url = this.getClass().getClassLoader().getResource(APP_ICON);
 		ImageIcon icon = new ImageIcon(url);
@@ -190,6 +204,16 @@ public final class CobblerWindow extends JFrame {
 		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.anchor = GridBagConstraints.SOUTH;
 		add(scrollpane, gbc);
+		
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.gridwidth = 1;
+		gbc.weighty = 0.0;
+		gbc.weightx = 0.0;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.anchor = GridBagConstraints.LINE_END;
+		add(statusBar, gbc);
 	}
 	
 	/**
@@ -319,6 +343,62 @@ public final class CobblerWindow extends JFrame {
 		}
 	}
 	
+	@Override
+	public String getSelectedText() {
+		return textArea.getSelectedText();
+	}
+
+	/**
+	 * Listens for events from our search dialogs and actually does the dirty
+	 * work.
+	 * @param se SearchEvent
+	 * @author Robert Futrell
+	 * @author jhorvath
+	 */
+	@Override
+	public void searchEvent(SearchEvent se) {
+
+		SearchEvent.Type type = se.getType();
+		SearchContext context = se.getSearchContext();
+		SearchResult result;
+
+		switch (type) {
+		case MARK_ALL:
+			result = SearchEngine.markAll(textArea, context);
+			break;
+		case FIND:
+			result = SearchEngine.find(textArea, context);
+			if (!result.wasFound() || result.isWrapped()) {
+				UIManager.getLookAndFeel().provideErrorFeedback(textArea);
+			}
+			break;
+		case REPLACE:
+			result = SearchEngine.replace(textArea, context);
+			if (!result.wasFound() || result.isWrapped()) {
+				UIManager.getLookAndFeel().provideErrorFeedback(textArea);
+			}
+			break;
+		case REPLACE_ALL:
+			result = SearchEngine.replaceAll(textArea, context);
+			simpleMessagePopup("Replace Result", result.getCount() + " occurrences replaced.");
+			break;
+		default: 
+			result = null;
+		}
+
+		String text = "";
+		if (result.wasFound()) {
+			text = "Text found; occurrences marked: " + result.getMarkedCount();
+		} else if (type == SearchEvent.Type.MARK_ALL) {
+			if (result.getMarkedCount() > 0) {
+				text = "Occurrences marked: " + result.getMarkedCount();
+			}
+		} else {
+			text = "Text not found";
+		}
+		statusBar.updateText(text);
+	}
+	
 	public void setDocumentName(String name) {
 		docNameLabel.setText(name);
 	}
@@ -331,4 +411,54 @@ public final class CobblerWindow extends JFrame {
 		return textArea;
 	}
 
+	public FindDialog getFindDialog() {
+		return findDialog;
+	}
+
+	public void setFindDialog(FindDialog findDialog) {
+		this.findDialog = findDialog;
+	}
+
+	public ReplaceDialog getReplaceDialog() {
+		return replaceDialog;
+	}
+
+	public void setReplaceDialog(ReplaceDialog replaceDialog) {
+		this.replaceDialog = replaceDialog;
+	}
+
+	public StatusBar getStatusBar() {
+		return statusBar;
+	}
+
+	/**
+	 * The status bar for this application.
+	 */
+	public static class StatusBar extends JPanel {
+
+		private static final long serialVersionUID = 1L;
+		private JLabel label;
+
+		/**
+		 * Constructor. 
+		 */
+		StatusBar() {
+			label = new JLabel("Ready");
+			setLayout(new BorderLayout());
+			add(label, BorderLayout.LINE_START);
+			add(new JLabel());
+		}
+
+		/**
+		 * Updates displayed text in the status bar. 
+		 * @param text String
+		 */
+		public void updateText(String text) {
+			this.label.setText(text);
+		}
+		
+		public void resetBar() {
+			this.label.setText("Ready");
+		}
+	}
 }
