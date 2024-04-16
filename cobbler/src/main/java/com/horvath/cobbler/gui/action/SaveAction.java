@@ -82,6 +82,17 @@ public final class SaveAction extends OpenSaveAsAction {
 				return;
 				
 			} else {
+				if (file.exists()) {
+					// ask user if they want to overwrite the file
+					int result = JOptionPane.showConfirmDialog(CobblerWindow.getWindow(),
+							"A file with the same name exits at this location. Overwrite file?", "Confirmation",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					
+					// the user chose to stop the operation and not overwrite the file
+					if (result == JOptionPane.NO_OPTION) {
+						return;
+					}
+				}
 				// run save command 
 				runCommand(userFile);
 			}
