@@ -76,7 +76,6 @@ public final class CobblerApplication {
 
 		CobblerState.getInstance();
 		
-		
 		try {
 			// create and load settings data file
 			LoadSettingsCmd settingsCmd = new LoadSettingsCmd();
