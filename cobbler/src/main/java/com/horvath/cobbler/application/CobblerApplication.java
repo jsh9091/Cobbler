@@ -24,16 +24,19 @@
 
 package com.horvath.cobbler.application;
 
+import java.io.File;
 import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import com.horvath.cobbler.command.NewEmptyDocumentCmd;
+import com.horvath.cobbler.command.LoadFileCmd;
 import com.horvath.cobbler.command.LoadSettingsCmd;
+import com.horvath.cobbler.command.NewEmptyDocumentCmd;
 import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.CobblerWindow;
+import com.horvath.cobbler.gui.action.OpenFileAction;
 
 /**
  * Main application class.
@@ -47,9 +50,11 @@ public final class CobblerApplication {
 
 	public static void main(String[] args) {
 
+		final String arg = args.length > 0 ? args[0] : "";
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new CobblerApplication().initialize();
+				new CobblerApplication().initialize(arg);
 			}
 		});
 	}
@@ -57,8 +62,7 @@ public final class CobblerApplication {
 	/**
 	 * Initializes application systems.
 	 */
-	private void initialize() {
-
+	private void initialize(String arg) {
 		Debugger.setDebugging(true);
 
 		try {
@@ -78,9 +82,22 @@ public final class CobblerApplication {
 			LoadSettingsCmd settingsCmd = new LoadSettingsCmd();
 			settingsCmd.perform();
 
-			// initialize the application with a new empty document
-			NewEmptyDocumentCmd newDocCmd = new NewEmptyDocumentCmd();
-			newDocCmd.perform();
+			File file = new File(arg);
+			if (file.exists()) {
+				// load file into state
+				LoadFileCmd cmd = new LoadFileCmd(file);
+				cmd.perform();
+				
+				if (cmd.isSuccess()) {
+					OpenFileAction.updateGuiForOpenedFile(file.getAbsolutePath());
+				}
+				
+			} else {
+				// initialize the application with a new empty document
+				NewEmptyDocumentCmd newDocCmd = new NewEmptyDocumentCmd();
+				newDocCmd.perform();
+			}
+
 		} catch (CobblerException ex) {
 			Debugger.printLog(ex.getMessage(), this.getClass().getName(), Level.WARNING);
 		}

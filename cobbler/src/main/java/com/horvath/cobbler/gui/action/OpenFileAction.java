@@ -76,27 +76,7 @@ public final class OpenFileAction extends OpenSaveAsAction {
 				cmd.perform();
 				
 				if (cmd.isSuccess()) {
-					CobblerWindow window = CobblerWindow.getWindow();
-					CobblerState state = CobblerState.getInstance();
-					
-					// update the text area GUI
-					window.getTextArea().setText(state.getData());
-					window.getTextArea().setCaretPosition(0);
-					window.getTextArea().discardAllEdits();
-					
-					// display document name to user in GUI
-					window.setDocumentName(state.getFile().getName());
-					
-					// recent files updates
-					state.updateRecentFiles(selectedFile.getAbsolutePath());
-					window.updateRecentFilesMenu();
-					
-					// update the settings file to store the newly opened file location
-					SaveSettingsCmd saveSettingsCmd = new SaveSettingsCmd();
-					saveSettingsCmd.perform();
-					
-					// need to clear state because GUI updates impact the state dirty flag
-					CobblerState.getInstance().setDirty(false);
+					updateGuiForOpenedFile(selectedFile.getAbsolutePath());
 					
 				} else {
 					CobblerWindow.getWindow().simpleMessagePopup("Load Error",
@@ -109,6 +89,35 @@ public final class OpenFileAction extends OpenSaveAsAction {
 				CobblerWindow.getWindow().simpleMessagePopup("Load Error", ex.getMessage(), JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+	
+	/**
+	 * Updates main application window and state for an opened file. 
+	 * @param filePath String 
+	 * @throws CobblerException
+	 */
+	public static void updateGuiForOpenedFile(String filePath) throws CobblerException {
+		CobblerWindow window = CobblerWindow.getWindow();
+		CobblerState state = CobblerState.getInstance();
+		
+		// update the text area GUI
+		window.getTextArea().setText(state.getData());
+		window.getTextArea().setCaretPosition(0);
+		window.getTextArea().discardAllEdits();
+		
+		// display document name to user in GUI
+		window.setDocumentName(state.getFile().getName());
+		
+		// recent files updates
+		state.updateRecentFiles(filePath);
+		window.updateRecentFilesMenu();
+		
+		// update the settings file to store the newly opened file location
+		SaveSettingsCmd saveSettingsCmd = new SaveSettingsCmd();
+		saveSettingsCmd.perform();
+		
+		// need to clear state because GUI updates impact the state dirty flag
+		CobblerState.getInstance().setDirty(false);
 	}
 
 }
