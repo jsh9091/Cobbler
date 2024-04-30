@@ -85,7 +85,6 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem aboutItem;
 	protected JMenuItem userManualItem;
 	
-	
 	/**
 	 * Constructor. 
 	 */
@@ -94,6 +93,9 @@ public final class CobblerMenuBar extends JMenuBar {
 		configureComponents();
 	}
 	
+	/**
+	 * Initializes the menu components. 
+	 */
 	private void initComponents() {
 		
 		fileMenu = new JMenu("File");
@@ -123,11 +125,29 @@ public final class CobblerMenuBar extends JMenuBar {
 		helpMenu = new JMenu("Help");
 		aboutItem = new JMenuItem(); 
 		userManualItem = new JMenuItem(); 
-
 	}
 	
+	/**
+	 * Configure menus for menu bar. 
+	 */
 	private void configureComponents() {
 		
+		configFileMenu();
+		configEditMenu();
+		configUtilitiesMenu();
+		configHelpMenu();
+		
+		// add menus to menu bar
+		this.add(fileMenu);
+		this.add(editMenu);	
+		this.add(utilitiesMenu);
+		this.add(helpMenu);
+	}
+	
+	/**
+	 * Configures File menu. 
+	 */
+	private void configFileMenu() {
 		newItem.setAction(new NewDocumentAction());
 		newItem.setText("New");
 		newItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -164,7 +184,12 @@ public final class CobblerMenuBar extends JMenuBar {
 		fileMenu.add(saveAsItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
-		
+	}
+	
+	/**
+	 * Configures Edit menu. 
+	 */
+	private void configEditMenu() {
 		selectAllItem.setAction(new AbstractAction("Select All") {
 			private static final long serialVersionUID = 1L;
 
@@ -228,7 +253,12 @@ public final class CobblerMenuBar extends JMenuBar {
 		editMenu.add(copyItem);
 		editMenu.add(cutItem);
 		editMenu.add(pasteItem);
-		
+	}
+	
+	/**
+	 * Configures Utilities menu. 
+	 */
+	private void configUtilitiesMenu() { 
 		goToLineItem.setAction(new GoToLineAction());
 		goToLineItem.setText("Go to line...");
 		goToLineItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -253,6 +283,12 @@ public final class CobblerMenuBar extends JMenuBar {
 		utilitiesMenu.add(replaceItem);
 		utilitiesMenu.addSeparator();
 		utilitiesMenu.add(settingItem);
+	}
+	
+	/**
+	 * Configures Help menu. 
+	 */
+	private void configHelpMenu() {
 		
 		aboutItem.setAction(new AbstractAction("About Cobbler") {
 			private static final long serialVersionUID = 1L;
@@ -281,12 +317,6 @@ public final class CobblerMenuBar extends JMenuBar {
 		// add help menu items to menu 
 		helpMenu.add(aboutItem);
 		helpMenu.add(userManualItem);
-		
-		// add menus to menu bar
-		this.add(fileMenu);
-		this.add(editMenu);	
-		this.add(utilitiesMenu);
-		this.add(helpMenu);
 	}
-	
+		
 }
