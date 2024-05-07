@@ -88,7 +88,7 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 	private ReplaceDialog replaceDialog;
 	private StatusBar statusBar;
 	
-	public static final String APP_ICON = "Cobber-icon.png";
+	public static final String APP_ICON = "/resources/Cobber-icon.png";
 	
 	/**
 	 * Constructor. 
@@ -126,8 +126,7 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 		scrollpane = new RTextScrollPane(textArea);
 		statusBar = new StatusBar();
 		
-		URL url = this.getClass().getClassLoader().getResource(APP_ICON);
-		ImageIcon icon = new ImageIcon(url);
+		ImageIcon icon = getImageIcon();
 		
 		setIconImage(icon.getImage());
 	}
@@ -245,12 +244,20 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 	 * @return ImageIcon 
 	 */
 	public ImageIcon getAppIcon() {
-		URL url =  this.getClass().getClassLoader().getResource(APP_ICON);
-		ImageIcon icon = new ImageIcon(url);
+		ImageIcon icon = getImageIcon();
 		// scale the image so it looks good
 		Image image = icon.getImage();
 		Image scaledImage = image.getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 		return new ImageIcon(scaledImage);
+	}
+	
+	/**
+	 * Gets the image file and prepares it in an ImageIcon object.
+	 * @return ImageIcon
+	 */
+	private ImageIcon getImageIcon() {
+		URL url = CobblerWindow.class.getResource(APP_ICON);
+		return new ImageIcon(url);
 	}
 	
 	/**

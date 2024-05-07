@@ -28,8 +28,9 @@ import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
@@ -84,6 +85,8 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenu helpMenu;
 	protected JMenuItem aboutItem;
 	protected JMenuItem userManualItem;
+	
+	protected static final String USER_MANUAL = "/resources/Cobbler_Manual.pdf";
 	
 	/**
 	 * Constructor. 
@@ -303,15 +306,39 @@ public final class CobblerMenuBar extends JMenuBar {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ae) {
-				URL url =  this.getClass().getClassLoader().getResource("Cobbler_Manual.pdf");
 				try {
-					Desktop.getDesktop().open(new File(url.getFile()));
+					openManual(USER_MANUAL);
 				} catch (IOException ex) {
 					final String message = "Error opening user manual.";
 					CobblerWindow.getWindow().simpleMessagePopup("Error", message, JOptionPane.WARNING_MESSAGE);
 					Debugger.printLog(message, this.getClass().getName(), Level.WARNING);
 				}
 		    }
+			
+			/**
+			 * Opens the manual in default application. 
+			 * 
+			 * @param path String
+			 * @throws IOException
+			 */
+			public void openManual(String path) throws IOException {
+				if (Desktop.isDesktopSupported()) {
+					File tempFile = new File("Cobbler_Manual.pdf");
+
+					try (InputStream is = CobblerMenuBar.class.getResourceAsStream(path);
+							FileOutputStream fos = new FileOutputStream(tempFile)) {
+
+						// write out temporary file
+						while (is.available() > 0) {
+							fos.write(is.read());
+						}
+
+						// open the file in the default application for file type
+						Desktop.getDesktop().open(tempFile);
+						tempFile.deleteOnExit();
+					}
+				}
+			}
 		});
 
 		// add help menu items to menu 

@@ -45,7 +45,7 @@ import com.horvath.cobbler.gui.action.OpenFileAction;
  */
 public final class CobblerApplication {
 	
-	public static final String APP_VERSION = "0.2";
+	public static final String APP_VERSION = "0.0.3";
 	public static final String APP_NAME = "Cobbler";
 
 	public static void main(String[] args) {
