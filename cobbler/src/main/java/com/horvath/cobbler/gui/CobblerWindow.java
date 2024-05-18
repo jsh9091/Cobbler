@@ -395,9 +395,9 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 		}
 
 		String text = "";
-		if (result.wasFound()) {
+		if (result != null && result.wasFound()) {
 			text = "Text found; occurrences marked: " + result.getMarkedCount();
-		} else if (type == SearchEvent.Type.MARK_ALL) {
+		} else if (result != null && type == SearchEvent.Type.MARK_ALL) {
 			if (result.getMarkedCount() > 0) {
 				text = "Occurrences marked: " + result.getMarkedCount();
 			}
