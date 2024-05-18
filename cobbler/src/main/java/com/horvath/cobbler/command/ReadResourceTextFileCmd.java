@@ -34,23 +34,24 @@ import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.exception.CobblerException;
 
 /**
- * Command for reading text files located within application resources. 
- * Needed because application will run as a runnable jar so 
- * file objects will not work.
- * @author jhorvath 
+ * Command for reading text files located within application resources. Needed
+ * because application will run as a runnable jar so file objects will not work.
+ * 
+ * @author jhorvath
  */
 public final class ReadResourceTextFileCmd extends CobblerCommand {
-	
+
 	private String path;
 	private ArrayList<String> resultList;
-	
+
 	public static final String BAD_FILEPATH = "The file path must not be null or empty.";
-	
+
 	public static final String INTRINSIC_FUNCTIONS = "/resources/intrinsic-functions" + ".txt"; // TODO change location
 	public static final String RESERVED_WORDS = "/resources/reserved-words.txt"; // TODO change location
-	
+
 	/**
-	 * Constructor. 
+	 * Constructor.
+	 * 
 	 * @param path
 	 */
 	public ReadResourceTextFileCmd(String path) {
@@ -60,56 +61,59 @@ public final class ReadResourceTextFileCmd extends CobblerCommand {
 	@Override
 	public void perform() throws CobblerException {
 		this.success = false;
-		
+
 		if (this.path == null || this.path.isEmpty()) {
 			throw new CobblerException(BAD_FILEPATH);
 		}
 
 		Debugger.printLog("Reading resoucer file: " + this.path, this.getClass().getName());
-		
+
 		resultList = new ArrayList<>();
-		
-		 InputStream is = getFileAsIOStream(this.path);
-		 loadFileContent(is);
-		
-		 this.success = true;
+
+		InputStream is = getFileAsIOStream(this.path);
+		loadFileContent(is);
+
+		this.success = true;
 	}
-	
-	/**
-	 * Creates the input stream for reading the file. 
-	 * @param fileName String
-	 * @return InputStream
-	 */
-	private InputStream getFileAsIOStream(final String fileName) {
-        InputStream ioStream = ReadResourceTextFileCmd.class.getResourceAsStream(fileName);;
-        
-        if (ioStream == null) {
-            throw new IllegalArgumentException(fileName + " is not found");
-        }
-        return ioStream;
-    }
 
 	/**
-	 * Performs operations of actually reading the file and populating the return list. 
+	 * Creates the input stream for reading the file.
+	 * 
+	 * @param filepath String
+	 * @return InputStream
+	 */
+	private InputStream getFileAsIOStream(final String filepath) {
+		InputStream ioStream = ReadResourceTextFileCmd.class.getResourceAsStream(filepath);
+
+		if (ioStream == null) {
+			throw new IllegalArgumentException(filepath + " is not found");
+		}
+		return ioStream;
+	}
+
+	/**
+	 * Performs operations of actually reading the file and populating the return
+	 * list.
+	 * 
 	 * @param is InputStream
 	 * @throws CobblerException
 	 */
-    private void loadFileContent(InputStream is) throws CobblerException {
-        try (InputStreamReader isr = new InputStreamReader(is); 
-                BufferedReader br = new BufferedReader(isr);) {
-        	
-            String line;
-            while ((line = br.readLine()) != null) {
-            	line = line.trim();
-            	if (!line.isEmpty()) {
-                	resultList.add(line.trim());
-            	}
-            }
-            is.close();
-        } catch (IOException ex) {
+	private void loadFileContent(InputStream is) throws CobblerException {
+		try (InputStreamReader isr = new InputStreamReader(is); 
+				BufferedReader br = new BufferedReader(isr);) {
+
+			String line;
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				if (!line.isEmpty()) {
+					resultList.add(line);
+				}
+			}
+			is.close();
+		} catch (IOException ex) {
 			throw new CobblerException(ex.getMessage(), ex);
-		} 
-    }
+		}
+	}
 
 	public ArrayList<String> getResultList() {
 		return resultList;
