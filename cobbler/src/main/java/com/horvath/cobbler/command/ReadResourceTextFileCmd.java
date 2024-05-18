@@ -46,8 +46,9 @@ public final class ReadResourceTextFileCmd extends CobblerCommand {
 
 	public static final String BAD_FILEPATH = "The file path must not be null or empty.";
 
-	public static final String INTRINSIC_FUNCTIONS = "/resources/intrinsic-functions" + ".txt"; // TODO change location
+	public static final String INTRINSIC_FUNCTIONS = "/resources/intrinsic-functions.txt"; // TODO change location
 	public static final String RESERVED_WORDS = "/resources/reserved-words.txt"; // TODO change location
+	public static final String OPERATORS = "/resources/operators.txt"; // TODO change location
 
 	/**
 	 * Constructor.

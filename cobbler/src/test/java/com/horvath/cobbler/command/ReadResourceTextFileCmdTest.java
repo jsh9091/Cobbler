@@ -127,4 +127,24 @@ public class ReadResourceTextFileCmdTest {
 			Assert.fail(); // should not get here
 		}
 	}
+	
+	@Test 
+	public void perform_operators_listReturned() {
+		try {
+			ReadResourceTextFileCmd cmd = new ReadResourceTextFileCmd(ReadResourceTextFileCmd.OPERATORS);
+			cmd.perform();
+
+			Assert.assertTrue(cmd.success);
+			Assert.assertFalse(cmd.getResultList().isEmpty());
+
+			// spot checks
+			Assert.assertTrue(cmd.getResultList().contains("+"));
+			Assert.assertTrue(cmd.getResultList().contains("**"));
+			Assert.assertTrue(cmd.getResultList().contains("=="));
+			Assert.assertTrue(cmd.getResultList().contains(">>"));
+
+		} catch (CobblerException ex) {
+			Assert.fail(); // should not get here
+		}
+	}
 }
