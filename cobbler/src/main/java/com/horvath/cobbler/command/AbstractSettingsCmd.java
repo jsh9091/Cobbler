@@ -25,7 +25,9 @@
 package com.horvath.cobbler.command;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 
 import com.horvath.cobbler.application.Debugger;
@@ -40,6 +42,7 @@ public abstract class AbstractSettingsCmd extends CobblerCommand {
 	public static final String USER_HOME = System.getProperty("user.home");
 	public static final String SETTING_FOLDER = USER_HOME + File.separator + "Cobbler";
 	public static final String APP_SETTINGS = SETTING_FOLDER + File.separator + "Cobbler.properties";
+	public static final String APP_DICTIONARY = SETTING_FOLDER + File.separator + "english_dic.zip"; 
 	
 	protected static final String FIELD_THEME = "theme";
 	protected static final String FIELD_RECENT_FILE = "recent";
@@ -48,27 +51,48 @@ public abstract class AbstractSettingsCmd extends CobblerCommand {
 	 * Checks that settings folder and file exist, and if they don't creates them. 
 	 * @throws CobblerException 
 	 */
-	protected void setupSettingsFolderAndFile() throws CobblerException {
+	public static void setupSettingsFolderAndFile() throws CobblerException {
 		
 		try {
 			File folder = new File(SETTING_FOLDER);
 			if (!folder.exists()) {
-				Debugger.printLog("Creating Settings Folder", this.getClass().getName());
+				Debugger.printLog("Creating Settings Folder", AbstractSettingsCmd.class.getName());
 				folder.mkdir();
 			}
 			
 			File file = new File(APP_SETTINGS);
 			if (!file.exists()) {
-				Debugger.printLog("Creating Settings Properties File", this.getClass().getName());
+				Debugger.printLog("Creating Settings Properties File", AbstractSettingsCmd.class.getName());
 				file.createNewFile();
+			}
+			
+			File dictionaryFile = new File(APP_DICTIONARY);
+			if (!dictionaryFile.exists()) {
+				// need to copy file because cannot access from inside runnable jar
+				copyFile(dictionaryFile, "/resources/english_dic.zip");
 			}
 			
 		} catch (IOException io) {
 			final String message = "Error Creating Settings folder or file. " + io.getMessage();
-			Debugger.printLog(message, this.getClass().getName(),
+			Debugger.printLog(message, AbstractSettingsCmd.class.getName(),
 					Level.SEVERE);
 			throw new CobblerException(message, io); 
 		}
 	}
 
+	/**
+	 * Copies a file. 
+	 * @param dictionaryFile File - the file to write to
+	 * @param fileName String - the location we are copying from 
+	 * @throws IOException
+	 */
+	private static void copyFile(File dictionaryFile, String fileName) throws IOException {
+		try (InputStream is = AbstractSettingsCmd.class.getResourceAsStream(fileName);
+				FileOutputStream fos = new FileOutputStream(dictionaryFile)) {
+			while (is.available() > 0) {
+				fos.write(is.read());
+			}
+		}
+	}
+	
 }

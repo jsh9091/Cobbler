@@ -24,7 +24,10 @@
 
 package com.horvath.cobbler.gui.syntax;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -36,9 +39,13 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
 
 import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.command.AbstractSettingsCmd;
 import com.horvath.cobbler.command.ReadResourceTextFileCmd;
+import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.CobblerWindow;
 
 /**
@@ -65,6 +72,18 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		AutoCompletion ac = new AutoCompletion(provider);
 		ac.install(this);
 		
+		try {
+			AbstractSettingsCmd.setupSettingsFolderAndFile();
+			File zip = new File(AbstractSettingsCmd.APP_DICTIONARY);
+			if (zip.exists()) {
+				SpellingParser parser = SpellingParser.createEnglishSpellingParser(zip, true);
+				this.addParser(parser);
+			}
+		} catch (IOException | CobblerException ex) {
+			Debugger.printLog("There was a problem setting spell checker: " 
+					+ ex.getMessage(), CobSyntaxTextArea.class.getName(), Level.WARNING);
+		}
+
 		// initializing listeners must come after setting code style
 		initListeners();
 	}
