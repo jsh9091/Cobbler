@@ -44,7 +44,7 @@ public final class SaveSettingsCmd extends AbstractSettingsCmd {
 	public void perform() throws CobblerException {
 		success = false;
 		
-		Debugger.printLog("Load Settings Properties File", this.getClass().getName());
+		Debugger.printLog("Saving Settings Properties File", this.getClass().getName());
 		
 		setupSettingsFolderAndFile();
 		
