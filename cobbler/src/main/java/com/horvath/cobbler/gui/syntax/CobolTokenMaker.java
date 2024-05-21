@@ -24,8 +24,6 @@
 package com.horvath.cobbler.gui.syntax;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-
 import javax.swing.text.Segment;
 
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMaker;
@@ -33,9 +31,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMap;
 
-import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.command.ReadResourceTextFileCmd;
-import com.horvath.cobbler.exception.CobblerException;
 
 public class CobolTokenMaker extends AbstractTokenMaker {
 	protected Segment s;
@@ -311,38 +307,11 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 		TokenMap tokenMap = new TokenMap();
 		
 		// get data from input files and process tokens
-		tokenMap = processOperators(readResouceFile(ReadResourceTextFileCmd.OPERATORS), tokenMap);
-		tokenMap = processReservedWords(readResouceFile(ReadResourceTextFileCmd.RESERVED_WORDS), tokenMap);
-		tokenMap = processFunctions(readResouceFile(ReadResourceTextFileCmd.INTRINSIC_FUNCTIONS), tokenMap);
+		tokenMap = processOperators(SyntaxUtils.readResouceFile(ReadResourceTextFileCmd.OPERATORS), tokenMap);
+		tokenMap = processReservedWords(SyntaxUtils.readResouceFile(ReadResourceTextFileCmd.RESERVED_WORDS), tokenMap);
+		tokenMap = processFunctions(SyntaxUtils.readResouceFile(ReadResourceTextFileCmd.INTRINSIC_FUNCTIONS), tokenMap);
 		
 		return tokenMap;
-	}
-	
-	/**
-	 * Reads in a specified file from application resources and returns a list of
-	 * strings. This method will always return an array list, even if it is empty in
-	 * the case something goes wrong.
-	 * 
-	 * @param filepath String
-	 * @return ArrayList<String>
-	 */
-	private ArrayList<String> readResouceFile(final String filepath) {
-		// if reading file fails, make sure we return an empty list
-		ArrayList<String> list = new ArrayList<>();
-		
-		try {
-			ReadResourceTextFileCmd cmd = new ReadResourceTextFileCmd(filepath);
-			cmd.perform();
-
-			if (cmd.isSuccess()) {
-				list = cmd.getResultList();
-			}
-			
-		} catch (CobblerException ex) {
-			Debugger.printLog("FAILED to read file: " + filepath, this.getClass().getName(), Level.SEVERE);
-		}
-		
-		return list;
 	}
 	
 	/**
@@ -373,12 +342,11 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 		for (String s : list) {			
 			tokenMap.put(s.toLowerCase(), Token.RESERVED_WORD);
 			tokenMap.put(s.toUpperCase(), Token.RESERVED_WORD);
-			tokenMap.put(toTitleCase(s), Token.RESERVED_WORD);
+			tokenMap.put(SyntaxUtils.toTitleCase(s), Token.RESERVED_WORD);
 			
 			tokenMap.put(s.toLowerCase() + ".", Token.RESERVED_WORD);
 			tokenMap.put(s.toUpperCase() + ".", Token.RESERVED_WORD);
-			tokenMap.put(toTitleCase(s) + ".", Token.RESERVED_WORD);
-
+			tokenMap.put(SyntaxUtils.toTitleCase(s) + ".", Token.RESERVED_WORD);
 		}
 		
 		return tokenMap;
@@ -396,38 +364,10 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 		for (String s : list) {			
 			tokenMap.put(s.toLowerCase(), Token.FUNCTION);
 			tokenMap.put(s.toUpperCase(), Token.FUNCTION);
-			tokenMap.put(toTitleCase(s), Token.FUNCTION);
+			tokenMap.put(SyntaxUtils.toTitleCase(s), Token.FUNCTION);
 		}
 		
 		return tokenMap;
-	}
-	
-	/**
-	 * Converts a given string of text to title case. 
-	 * Example input: a line of text 
-	 * Example output: A Line Of Text
-	 * @param input String
-	 * @return String 
-	 */
-	private String toTitleCase(String input) {
-		// start with clean slate of lower case letters
-		input = input.toLowerCase();
-		StringBuilder titleCase = new StringBuilder(input.length());
-		// initially set true to convert first character
-		boolean nextTitleCase = true;
-
-		for (char ch : input.toCharArray()) {
-			if (Character.isSpaceChar(ch) || ch == '-') {
-				nextTitleCase = true;
-				
-			} else if (nextTitleCase) {
-				ch = Character.toTitleCase(ch);
-				nextTitleCase = false;
-			}
-
-			titleCase.append(ch);
-		}
-		return titleCase.toString();
 	}
 
 }

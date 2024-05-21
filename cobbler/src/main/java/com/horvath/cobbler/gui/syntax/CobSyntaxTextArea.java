@@ -24,16 +24,27 @@
 
 package com.horvath.cobbler.gui.syntax;
 
+import java.util.ArrayList;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
 import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.command.ReadResourceTextFileCmd;
 import com.horvath.cobbler.gui.CobblerWindow;
 
+/**
+ * RSyntaxTextArea text area for use with COBOL. 
+ * @author jhorvath
+ */
 public final class CobSyntaxTextArea extends RSyntaxTextArea {
 
 	private static final long serialVersionUID = 1L;
@@ -48,6 +59,11 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		final String style = "text/COBOL";
 		atmf.putMapping(style, "com.horvath.cobbler.gui.syntax.CobolTokenMaker");
 		setSyntaxEditingStyle(style);
+		
+		// typing auto-complete 
+		CompletionProvider provider = createCompletionProvider();
+		AutoCompletion ac = new AutoCompletion(provider);
+		ac.install(this);
 		
 		// initializing listeners must come after setting code style
 		initListeners();
@@ -86,4 +102,35 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		});
 	}
 
+	/**
+	 * Creates the auto-complete provider. 
+	 * @return CompletionProvider
+	 */
+	private CompletionProvider createCompletionProvider() {
+		DefaultCompletionProvider provider = new DefaultCompletionProvider();
+		
+		// read Cobol reserved words from resource file and populate provider
+		ArrayList<String> list = SyntaxUtils.readResouceFile(ReadResourceTextFileCmd.RESERVED_WORDS);
+		populateProvider(provider, list);
+		list.clear();
+		
+		// read Cobol functions from resource file and populate provider
+		list = SyntaxUtils.readResouceFile(ReadResourceTextFileCmd.INTRINSIC_FUNCTIONS);
+		populateProvider(provider, list);
+		
+		return provider;
+	}
+	
+	/**
+	 * Populates the auto-complete provider with data from the strings in the given list. 
+	 * @param provider DefaultCompletionProvider
+	 * @param list ArrayList<String>
+	 */
+	private void populateProvider(DefaultCompletionProvider provider, ArrayList<String> list) {
+		for (String s : list) {			
+			provider.addCompletion(new BasicCompletion(provider, s.toLowerCase()));
+			provider.addCompletion(new BasicCompletion(provider, s.toUpperCase()));
+			provider.addCompletion(new BasicCompletion(provider, SyntaxUtils.toTitleCase(s)));
+		}
+	}
 }
