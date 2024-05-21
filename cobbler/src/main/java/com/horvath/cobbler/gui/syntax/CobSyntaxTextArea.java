@@ -55,6 +55,7 @@ import com.horvath.cobbler.gui.CobblerWindow;
 public final class CobSyntaxTextArea extends RSyntaxTextArea {
 
 	private static final long serialVersionUID = 1L;
+	private SpellingParser parser = null;
 	
 	/**
 	 * Constructor. 
@@ -76,8 +77,8 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 			AbstractSettingsCmd.setupSettingsFolderAndFile();
 			File zip = new File(AbstractSettingsCmd.APP_DICTIONARY);
 			if (zip.exists()) {
-				SpellingParser parser = SpellingParser.createEnglishSpellingParser(zip, true);
-				this.addParser(parser);
+				parser = SpellingParser.createEnglishSpellingParser(zip, true);
+				enableDisableSpellchecker();
 			}
 		} catch (IOException | CobblerException ex) {
 			Debugger.printLog("There was a problem setting spell checker: " 
@@ -150,6 +151,17 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 			provider.addCompletion(new BasicCompletion(provider, s.toLowerCase()));
 			provider.addCompletion(new BasicCompletion(provider, s.toUpperCase()));
 			provider.addCompletion(new BasicCompletion(provider, SyntaxUtils.toTitleCase(s)));
+		}
+	}
+	
+	/**
+	 * Enables or disables the spell checker based on state value.
+	 */
+	public void enableDisableSpellchecker() {
+		if (CobblerState.getInstance().isSpellcheckOn() && parser != null) {
+			this.addParser(parser);
+		} else {
+			this.removeParser(parser);
 		}
 	}
 }

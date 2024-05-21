@@ -82,6 +82,13 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             		state.getRecentFilesList().addAll(fileList);
             	}
             	
+            	// load spell check setting
+            	String spellcheckOnProp = prop.getProperty(FIELD_SPELL_CHECK_ON);
+            	if ("true".equalsIgnoreCase(spellcheckOnProp)) {
+            		state.setSpellcheckOn(true);
+            	} else {
+            		state.setSpellcheckOn(false);
+            	}
             }
 
             success = true; 
@@ -99,6 +106,8 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 	 * Loads default values to state. 
 	 */
 	private void defaultSettings() {
-		CobblerState.getInstance().setCurrentTheme(GuiTheme.Default);
+		CobblerState state = CobblerState.getInstance();
+		state.setCurrentTheme(GuiTheme.Default);
+		state.setSpellcheckOn(true);
 	}
 }

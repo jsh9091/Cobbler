@@ -60,8 +60,6 @@ public final class SaveSettingsAction extends CobblerAction {
 		// get the user selected value from the GUI
 		final String theme = (String) dialog.getThemeMenu().getSelectedItem();
 		
-		final boolean clearRecent = dialog.getClearRecentCheckBox().isSelected();
-		
 		// get the enumeration value 
 		GuiTheme selectedTheme = GuiTheme.Default;
 		for (GuiTheme day : GuiTheme.values()) { 
@@ -71,11 +69,16 @@ public final class SaveSettingsAction extends CobblerAction {
 		    }
 		}
 		
+		final boolean clearRecent = dialog.getClearRecentCheckBox().isSelected();
+		final boolean spellCheckEnabled = dialog.getSpellcheckOnCheckBox().isSelected();
+		
 		// update state
-		CobblerState.getInstance().setCurrentTheme(selectedTheme);
+		CobblerState state = CobblerState.getInstance();
+		state.setCurrentTheme(selectedTheme);
 		if (clearRecent) {
-			CobblerState.getInstance().getRecentFilesList().clear();
+			state.getRecentFilesList().clear();
 		}
+		state.setSpellcheckOn(spellCheckEnabled);
 		
 		try {
 			// run command to update properties file 
@@ -85,10 +88,13 @@ public final class SaveSettingsAction extends CobblerAction {
 			if (cmd.isSuccess()) {
 				// update GUI
 				dialog.dispose();
-				CobblerWindow.getWindow().updateTextAreaTheme();
+				CobblerWindow window = CobblerWindow.getWindow();
+				window.updateTextAreaTheme();
 				if (clearRecent) {
-					CobblerWindow.getWindow().updateRecentFilesMenu();
+					window.updateRecentFilesMenu();
 				}
+				// update the spell checker
+				window.getTextArea().enableDisableSpellchecker();
 			}
 			
 		} catch (CobblerException ex) {

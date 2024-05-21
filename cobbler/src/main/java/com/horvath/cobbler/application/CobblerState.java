@@ -44,6 +44,7 @@ public final class CobblerState {
 	private GuiTheme currentTheme;
 	private ArrayList<String> recentFilesList;
 	public static final int MAX_RECENT_FILES = 5;
+	private boolean spellcheckOn; 
 	
 	/**
 	 * Constructor. 
@@ -130,6 +131,14 @@ public final class CobblerState {
 
 	public ArrayList<String> getRecentFilesList() {
 		return recentFilesList;
+	}
+
+	public boolean isSpellcheckOn() {
+		return spellcheckOn;
+	}
+
+	public void setSpellcheckOn(boolean spellcheckOn) {
+		this.spellcheckOn = spellcheckOn;
 	}
 
 	@Override

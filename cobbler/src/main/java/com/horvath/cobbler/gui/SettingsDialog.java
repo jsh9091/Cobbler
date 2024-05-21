@@ -48,6 +48,7 @@ public final class SettingsDialog extends JDialog {
 	private JLabel themeMenuLabel;
 	private JComboBox<String> themeMenu;
 	private JCheckBox clearRecentCheckBox;
+	private JCheckBox spellcheckOnCheckBox;
 	private JButton saveSettingsBtn;
 	
 	/**
@@ -67,7 +68,8 @@ public final class SettingsDialog extends JDialog {
 	private void initializeComponents() {
 		themeMenuLabel = new JLabel();
 		themeMenu = new JComboBox<String>(CobblerState.getInstance().getCurrentTheme().names());
-		clearRecentCheckBox = new JCheckBox("Clear Recent menu", false);  
+		clearRecentCheckBox = new JCheckBox("Clear Recent menu", false);
+		spellcheckOnCheckBox = new JCheckBox("Spell Checker On", CobblerState.getInstance().isSpellcheckOn());
 		saveSettingsBtn = new JButton();
 	}
 	
@@ -124,8 +126,18 @@ public final class SettingsDialog extends JDialog {
 		this.add(clearRecentCheckBox, gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 1;
+		gbc.gridx = 0;
 		gbc.gridy = 2;
+		gbc.gridwidth = 2;
+		gbc.weighty = 0.0;
+		gbc.weightx = 0.5;
+		gbc.insets = new Insets(0, 10, 0, 10);
+		gbc.anchor = GridBagConstraints.CENTER;
+		this.add(spellcheckOnCheckBox, gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 1;
+		gbc.gridy = 3;
 		gbc.gridwidth = 2;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
@@ -140,6 +152,10 @@ public final class SettingsDialog extends JDialog {
 
 	public JCheckBox getClearRecentCheckBox() {
 		return clearRecentCheckBox;
+	}
+
+	public JCheckBox getSpellcheckOnCheckBox() {
+		return spellcheckOnCheckBox;
 	}
 	
 }
