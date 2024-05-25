@@ -59,6 +59,10 @@ public class LoadSettingsCmdTest {
 
 				// load properties file
 				userProperties.load(input);
+				
+				// need to remove dictionary for proper test operations
+				File dictionary = new File(AbstractSettingsCmd.APP_DICTIONARY);
+				dictionary.delete();
 
 			} catch (IOException io) {
 				// should not get here
@@ -100,7 +104,7 @@ public class LoadSettingsCmdTest {
 			LoadSettingsCmd cmd = new LoadSettingsCmd();
 			cmd.perform();
 
-			Assert.assertTrue(cmd.success);
+			Assert.assertTrue(cmd.isSuccess());
 
 			CobblerState state = CobblerState.getInstance();
 

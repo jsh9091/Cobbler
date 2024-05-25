@@ -61,6 +61,10 @@ public class SaveSettingsCmdTest {
 
 	        	// load a properties file
 				userProperties.load(input);
+				
+				// need to remove dictionary for proper test operations
+				File dictionary = new File(AbstractSettingsCmd.APP_DICTIONARY);
+				dictionary.delete();
 	            
 			} catch (IOException io) {
 				// should not get here
@@ -94,7 +98,7 @@ public class SaveSettingsCmdTest {
 			SaveSettingsCmd cmd = new SaveSettingsCmd();
 			cmd.perform();
 			
-			Assert.assertTrue(cmd.success);
+			Assert.assertTrue(cmd.isSuccess());
 			
 			Assert.assertTrue(settingsFolder.exists());
 			Assert.assertTrue(settingsFile.exists());
