@@ -1,4 +1,5 @@
-/* MIT License
+/*
+ * MIT License
  * 
  * Copyright (c) 2024 Joshua Horvath
  * 
@@ -21,31 +22,23 @@
  * SOFTWARE.
  */
 
-package com.horvath.cobbler;
+package com.horvath.cobbler.command;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+public abstract class AbstractLineNumberCmd extends CobblerCommand {
+	
+	protected enum LineState {
+		NUMBERED,
+		NOT_NUMBERED,
+		INDETERMINATE
+	}
 
-import com.horvath.cobbler.command.CheckLineNumberStateCmdTest;
-import com.horvath.cobbler.command.LoadFileCmdTest;
-import com.horvath.cobbler.command.LoadSettingsCmdTest;
-import com.horvath.cobbler.command.NewEmptyDocumentCmdTest;
-import com.horvath.cobbler.command.NewTemplateDocCmdTest;
-import com.horvath.cobbler.command.ReadResourceTextFileCmdTest;
-import com.horvath.cobbler.command.SaveFileCmdTest;
-import com.horvath.cobbler.command.SaveSettingsCmdTest;
-
-@RunWith(Suite.class)
-
-@Suite.SuiteClasses({
-	LoadFileCmdTest.class,
-	NewEmptyDocumentCmdTest.class,
-	SaveFileCmdTest.class,
-	SaveSettingsCmdTest.class,
-	LoadSettingsCmdTest.class,
-	NewTemplateDocCmdTest.class,
-	ReadResourceTextFileCmdTest.class,
-	CheckLineNumberStateCmdTest.class
-})
-
-public class CobblerTestSuite { }
+	/**
+	 * Splits the given string on line returns and returns an array of the individual lines.
+	 * 
+	 * @param string String
+	 * @return String[]
+	 */
+	public static String[] splitStringOnNewlines(String string) {
+		return string.split("\\r?\\n|\\r");
+	}
+}
