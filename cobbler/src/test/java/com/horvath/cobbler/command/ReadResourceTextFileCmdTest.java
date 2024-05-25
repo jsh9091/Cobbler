@@ -74,7 +74,7 @@ public class ReadResourceTextFileCmdTest {
 			ReadResourceTextFileCmd cmd = new ReadResourceTextFileCmd(ReadResourceTextFileCmd.INTRINSIC_FUNCTIONS);
 			cmd.perform();
 
-			Assert.assertTrue(cmd.success);
+			Assert.assertTrue(cmd.isSuccess());
 			Assert.assertFalse(cmd.getResultList().isEmpty());
 
 			// spot checks
@@ -94,7 +94,7 @@ public class ReadResourceTextFileCmdTest {
 			ReadResourceTextFileCmd cmd = new ReadResourceTextFileCmd(ReadResourceTextFileCmd.RESERVED_WORDS);
 			cmd.perform();
 
-			Assert.assertTrue(cmd.success);
+			Assert.assertTrue(cmd.isSuccess());
 			Assert.assertFalse(cmd.getResultList().isEmpty());
 
 			// spot checks
@@ -114,7 +114,7 @@ public class ReadResourceTextFileCmdTest {
 			ReadResourceTextFileCmd cmd = new ReadResourceTextFileCmd(ReadResourceTextFileCmd.RESERVED_WORDS);
 			cmd.perform();
 
-			Assert.assertTrue(cmd.success);
+			Assert.assertTrue(cmd.isSuccess());
 			Assert.assertFalse(cmd.getResultList().isEmpty());
 
 			for (String s : cmd.getResultList()) {
@@ -134,7 +134,7 @@ public class ReadResourceTextFileCmdTest {
 			ReadResourceTextFileCmd cmd = new ReadResourceTextFileCmd(ReadResourceTextFileCmd.OPERATORS);
 			cmd.perform();
 
-			Assert.assertTrue(cmd.success);
+			Assert.assertTrue(cmd.isSuccess());
 			Assert.assertFalse(cmd.getResultList().isEmpty());
 
 			// spot checks
