@@ -26,7 +26,12 @@ package com.horvath.cobbler.command;
 
 public abstract class AbstractLineNumberCmd extends CobblerCommand {
 	
-	protected enum LineState {
+	/**
+	 * In Cobol line numbers take up the first 6 columns of a row. 
+	 */
+	protected final static int LAST_NUM_COL = 6;
+	
+	public enum LineState {
 		NUMBERED,
 		NOT_NUMBERED,
 		INDETERMINATE

@@ -42,10 +42,10 @@ public final class CheckLineNumberStateCmd extends AbstractLineNumberCmd {
 	
 	/**
 	 * Constructor. 
-	 * @param lines String[]
+	 * @param text String
 	 */
-	public CheckLineNumberStateCmd(String[] lines) {
-		this.lines = lines;
+	public CheckLineNumberStateCmd(String text) {
+		this.lines = splitStringOnNewlines(text);
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public final class CheckLineNumberStateCmd extends AbstractLineNumberCmd {
 				indeterminate = true; 
 			}
 			
-			if (line.length() > 6) {
+			if (line.length() > LAST_NUM_COL) {
 				// do the whitespace and digit tests
 				boolean spaceline = isSixCharsForWhiteSpace(line);
 				spacesBooleanList.add(spaceline);
@@ -117,7 +117,7 @@ public final class CheckLineNumberStateCmd extends AbstractLineNumberCmd {
 		boolean firstSixColumnsWhiteSpace = true;
 		char[] chars = line.toCharArray();
 		
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < LAST_NUM_COL; i++) {
 			char c = chars[i];
 			
 			if (c != ' ') {

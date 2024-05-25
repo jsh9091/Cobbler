@@ -136,10 +136,8 @@ public final class CheckLineNumberStateCmdTest {
 		sb.append(" DATE-WRITTEN. May 25, 2024");
 		sb.append(LINEFEED_RETURN);
 		
-		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(sb.toString());
-		
 		 try {
-			 CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(lines);
+			 CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(sb.toString());
 			 cmd.perform();
 			 
 			 Assert.assertTrue(cmd.isSuccess());
@@ -158,10 +156,8 @@ public final class CheckLineNumberStateCmdTest {
 		sb.append("000020 DATE-WRITTEN. May 25, 2024");
 		sb.append(LINEFEED_RETURN);
 		
-		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(sb.toString());
-		
 		 try {
-			 CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(lines);
+			 CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(sb.toString());
 			 cmd.perform();
 			 
 			 Assert.assertTrue(cmd.isSuccess());
@@ -181,10 +177,8 @@ public final class CheckLineNumberStateCmdTest {
 		sb.append("000020 DATE-WRITTEN. May 25, 2024");
 		sb.append(LINEFEED_RETURN);
 
-		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(sb.toString());
-
 		try {
-			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(lines);
+			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(sb.toString());
 			cmd.perform();
 
 			Assert.assertTrue(cmd.isSuccess());
@@ -203,10 +197,8 @@ public final class CheckLineNumberStateCmdTest {
 		sb.append("000020 DATE-WRITTEN. May 25, 2024");
 		sb.append(LINEFEED_RETURN);
 
-		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(sb.toString());
-
 		try {
-			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(lines);
+			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(sb.toString());
 			cmd.perform();
 
 			Assert.assertTrue(cmd.isSuccess());
@@ -225,10 +217,8 @@ public final class CheckLineNumberStateCmdTest {
 		sb.append("000M020 DATE-WRITTEN. May 25, 2024");
 		sb.append(LINEFEED_RETURN);
 
-		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(sb.toString());
-
 		try {
-			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(lines);
+			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(sb.toString());
 			cmd.perform();
 
 			Assert.assertTrue(cmd.isSuccess());
@@ -253,10 +243,8 @@ public final class CheckLineNumberStateCmdTest {
 		sb.append(" DATE-WRITTEN. May 25, 2024");
 		sb.append(LINEFEED_RETURN);
 
-		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(sb.toString());
-
 		try {
-			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(lines);
+			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(sb.toString());
 			cmd.perform();
 
 			Assert.assertTrue(cmd.isSuccess());

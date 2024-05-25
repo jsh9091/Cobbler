@@ -42,6 +42,7 @@ import javax.swing.KeyStroke;
 
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.Debugger;
+import com.horvath.cobbler.gui.action.AddLineNumbersAction;
 import com.horvath.cobbler.gui.action.FindReplaceDialogAction;
 import com.horvath.cobbler.gui.action.GoToLineAction;
 import com.horvath.cobbler.gui.action.NewCobTemplateAction;
@@ -80,6 +81,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem goToLineItem;
 	protected JMenuItem findItem;
 	protected JMenuItem replaceItem;
+	protected JMenuItem addLineNumsItem;
 	protected JMenuItem settingItem;
 	
 	protected JMenu helpMenu;
@@ -123,6 +125,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		goToLineItem = new JMenuItem();
 		findItem = new JMenuItem();
 		replaceItem = new JMenuItem();
+		addLineNumsItem = new JMenuItem();
 		settingItem = new JMenuItem();
 
 		helpMenu = new JMenu("Help");
@@ -274,6 +277,9 @@ public final class CobblerMenuBar extends JMenuBar {
 		replaceItem.setText("Replace...");
 		replaceItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
+		addLineNumsItem.setAction(new AddLineNumbersAction());
+		addLineNumsItem.setText("Add Line Numbers...");
+		
 		settingItem.addActionListener(e -> {
 			SettingsDialog settingsDialog = new SettingsDialog();
 			settingsDialog.setVisible(true);
@@ -284,6 +290,8 @@ public final class CobblerMenuBar extends JMenuBar {
 		utilitiesMenu.add(goToLineItem);
 		utilitiesMenu.add(findItem);
 		utilitiesMenu.add(replaceItem);
+		utilitiesMenu.addSeparator();
+		utilitiesMenu.add(addLineNumsItem);
 		utilitiesMenu.addSeparator();
 		utilitiesMenu.add(settingItem);
 	}
