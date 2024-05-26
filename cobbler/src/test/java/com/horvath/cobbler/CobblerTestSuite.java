@@ -26,6 +26,7 @@ package com.horvath.cobbler;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.horvath.cobbler.command.AddLineNumbersCmdTest;
 import com.horvath.cobbler.command.CheckLineNumberStateCmdTest;
 import com.horvath.cobbler.command.LoadFileCmdTest;
 import com.horvath.cobbler.command.LoadSettingsCmdTest;
@@ -45,7 +46,8 @@ import com.horvath.cobbler.command.SaveSettingsCmdTest;
 	LoadSettingsCmdTest.class,
 	NewTemplateDocCmdTest.class,
 	ReadResourceTextFileCmdTest.class,
-	CheckLineNumberStateCmdTest.class
+	CheckLineNumberStateCmdTest.class,
+	AddLineNumbersCmdTest.class
 })
 
 public class CobblerTestSuite { }
