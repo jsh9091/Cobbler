@@ -57,7 +57,7 @@ public final class AddLineNumbersCmd extends AbstractLineNumberCmd {
 		success = false;
 		
 		if (lineState == LineState.INDETERMINATE) {
-			// TODO
+			doIndeterminateNumbering();
 			
 		} else {
 			doNumbering();
@@ -93,6 +93,92 @@ public final class AddLineNumbersCmd extends AbstractLineNumberCmd {
 		}
 		
 		this.result = sb.toString();
+	}
+	
+	/**
+	 * Build hard coded line numbers. This method does its best to handle
+	 * indeterminate cases where the first six columns are not all white-spaces or
+	 * all digits.
+	 */
+	private void doIndeterminateNumbering() {
+		int counter = increment; 
+		StringBuilder sb = new StringBuilder();
+		
+		for (String line : this.lines) {
+			
+			String formatted = String.format("%06d", counter);
+			
+			if (line.trim().isEmpty()) {
+				sb.append(formatted);
+				sb.append(System.lineSeparator());
+				
+			} else if (firstSixAllDigit(line) || firstSizAllSpaces(line)) {
+				line = formatted + line.substring(LAST_NUM_COL, line.length());
+				sb.append(formatted);
+				sb.append(line.substring(LAST_NUM_COL, line.length()));
+				sb.append(System.lineSeparator());
+				
+			} else {
+				// strip off any white space off the front and move the rest over
+				line = line.trim();
+				sb.append(formatted);
+				if (line.charAt(0) == '*' || line.charAt(0) == '-') {
+					sb.append(line);
+				} else {
+					// shove the text over to Area A, starting at column 8
+					sb.append(" ");
+					sb.append(line);
+				}
+				sb.append(System.lineSeparator());
+			}
+			
+			counter = counter + increment;
+		}
+		
+		this.result = sb.toString();
+	}
+	
+	/**
+	 * Checks if the first six characters are all digits. Only returns true if
+	 * the string is 6 or more characters in length and the first 6 are digits.
+	 * 
+	 * @param line String
+	 * @return boolean
+	 */
+	private boolean firstSixAllDigit(String line) {
+		boolean result = false;
+
+		if (line.length() >= LAST_NUM_COL) {
+			char[] chars = line.toCharArray();
+			if (Character.isDigit(chars[0]) && Character.isDigit(chars[1]) && Character.isDigit(chars[2])
+					&& Character.isDigit(chars[3]) && Character.isDigit(chars[4]) && Character.isDigit(chars[5])) {
+				result = true;
+			}
+		}
+
+		return result;
+	}
+	
+	/**
+	 * Checks if the first six characters are all white spaces. Only returns true if
+	 * the string is 6 or more characters in length and the first 6 are
+	 * white-spaces.
+	 * 
+	 * @param line String
+	 * @return boolean
+	 */
+	private boolean firstSizAllSpaces(String line) {
+		boolean result = false;
+
+		if (line.length() >= LAST_NUM_COL) {
+			char[] chars = line.toCharArray();
+			if (chars[0] == ' ' && chars[1] == ' ' && chars[2] == ' ' && chars[3] == ' ' && chars[4] == ' '
+					&& chars[5] == ' ') {
+				result = true;
+			}
+		}
+
+		return result;
 	}
 	
 	/**

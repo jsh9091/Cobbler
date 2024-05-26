@@ -27,10 +27,11 @@ package com.horvath.cobbler.command;
 public abstract class AbstractLineNumberCmd extends CobblerCommand {
 	
 	/**
-	 * In Cobol line numbers take up the first 6 columns of a row. 
+	 * In Cobol line numbers take up the first 6 columns of a row. Comment
+	 * indicators are in column 7, and statements (Areas A & B) start at column 8.
 	 */
 	protected final static int LAST_NUM_COL = 6;
-	
+
 	public enum LineState {
 		NUMBERED,
 		NOT_NUMBERED,
