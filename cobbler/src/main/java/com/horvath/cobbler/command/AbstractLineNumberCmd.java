@@ -47,4 +47,25 @@ public abstract class AbstractLineNumberCmd extends CobblerCommand {
 	public static String[] splitStringOnNewlines(String string) {
 		return string.split("\\r?\\n|\\r");
 	}
+	
+	/**
+	 * Checks if the first six characters are all digits. Only returns true if
+	 * the string is 6 or more characters in length and the first 6 are digits.
+	 * 
+	 * @param line String
+	 * @return boolean
+	 */
+	protected boolean firstSixAllDigit(String line) {
+		boolean result = false;
+
+		if (line.length() >= LAST_NUM_COL) {
+			char[] chars = line.toCharArray();
+			if (Character.isDigit(chars[0]) && Character.isDigit(chars[1]) && Character.isDigit(chars[2])
+					&& Character.isDigit(chars[3]) && Character.isDigit(chars[4]) && Character.isDigit(chars[5])) {
+				result = true;
+			}
+		}
+
+		return result;
+	}
 }

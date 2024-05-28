@@ -48,6 +48,7 @@ import com.horvath.cobbler.gui.action.GoToLineAction;
 import com.horvath.cobbler.gui.action.NewCobTemplateAction;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
+import com.horvath.cobbler.gui.action.RemoveLineNumsAction;
 import com.horvath.cobbler.gui.action.SaveAction;
 import com.horvath.cobbler.gui.action.ShutdownAction;
 
@@ -82,6 +83,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem findItem;
 	protected JMenuItem replaceItem;
 	protected JMenuItem addLineNumsItem;
+	protected JMenuItem removeLineNumsItem;
 	protected JMenuItem settingItem;
 	
 	protected JMenu helpMenu;
@@ -126,6 +128,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		findItem = new JMenuItem();
 		replaceItem = new JMenuItem();
 		addLineNumsItem = new JMenuItem();
+		removeLineNumsItem = new JMenuItem();
 		settingItem = new JMenuItem();
 
 		helpMenu = new JMenu("Help");
@@ -278,7 +281,10 @@ public final class CobblerMenuBar extends JMenuBar {
 		replaceItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 		addLineNumsItem.setAction(new AddLineNumbersAction());
-		addLineNumsItem.setText("Add Line Numbers...");
+		addLineNumsItem.setText("Add Line Numbers");
+		
+		removeLineNumsItem.setAction(new RemoveLineNumsAction());
+		removeLineNumsItem.setText("Remove Line Numbers");
 		
 		settingItem.addActionListener(e -> {
 			SettingsDialog settingsDialog = new SettingsDialog();
@@ -292,6 +298,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		utilitiesMenu.add(replaceItem);
 		utilitiesMenu.addSeparator();
 		utilitiesMenu.add(addLineNumsItem);
+		utilitiesMenu.add(removeLineNumsItem);
 		utilitiesMenu.addSeparator();
 		utilitiesMenu.add(settingItem);
 	}

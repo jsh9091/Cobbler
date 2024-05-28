@@ -9,11 +9,14 @@ import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.command.AbstractLineNumberCmd.LineState;
 import com.horvath.cobbler.command.AddLineNumbersCmd;
-import com.horvath.cobbler.command.CheckLineNumberStateCmd;
 import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.CobblerWindow;
 
-public class AddLineNumbersAction extends CobblerAction {
+/**
+ * Action for adding hard coded line numbers to Cobol files. 
+ * @author jhorvath
+ */
+public final class AddLineNumbersAction extends AbstractAddRemoveLineNumsAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +27,7 @@ public class AddLineNumbersAction extends CobblerAction {
 
 		String text = CobblerWindow.getWindow().getTextArea().getText();
 		
-		examineLineState(text);
+		this.lineState = examineLineState(text);
 		
 		if (lineState == LineState.INDETERMINATE) { 
 			inderterminateWarningConfirmation(text);
@@ -34,27 +37,9 @@ public class AddLineNumbersAction extends CobblerAction {
 	}
 	
 	/**
-	 * Examines and determines if the file has hard coded numbers or not. 
-	 * @param lines String[]
+	 * Perform numbering operation. 
+	 * @param text String 
 	 */
-	private void examineLineState(String text) {
-		try {
-			CheckLineNumberStateCmd cmd = new CheckLineNumberStateCmd(text);
-			cmd.perform();
-			
-			if (cmd.isSuccess()) {
-				this.lineState = cmd.getLineState();
-			} else {
-				this.lineState = LineState.INDETERMINATE;
-			}
-
-		} catch (CobblerException ex) {
-			Debugger.printLog(ex.getMessage(), this.getClass().getName(), Level.WARNING);
-			CobblerWindow.getWindow().simpleMessagePopup("Line Number Examination Error", 
-					ex.getMessage(), JOptionPane.ERROR_MESSAGE);
-		}
-	}
-	
 	private void doRenumbering(String text) {
 		
 		CobblerWindow window = CobblerWindow.getWindow();

@@ -158,5 +158,32 @@ public class AddLineNumbersCmdTest {
 		}
 	}
 
+	@Test 
+	public void perform_unexpectedCommentIndicator_pushedAsidedToCommentCol() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("  * Check the user entered a valid operator");
+		sb.append(LINEFEED_RETURN);
+
+		sb.append(WORD_SPACE_LINE);
+		sb.append(WORD_SPACE); // column 7 - comment marker column
+		sb.append("IF Operator IS NOT = \"+\"");
+		sb.append(LINEFEED_RETURN);
+		
+		try {
+			AddLineNumbersCmd cmd = new AddLineNumbersCmd(sb.toString(), LineState.INDETERMINATE, 20);
+			cmd.perform();
+
+			Assert.assertTrue(cmd.isSuccess());
+			Assert.assertTrue(cmd.getResult().contains("000020"));
+			Assert.assertTrue(cmd.getResult().contains("000040"));
+			Assert.assertTrue(cmd.getResult().contains("000020* Check the user entered a valid operator"));
+			Assert.assertTrue(CobblerState.getInstance().getData().contains("000020"));
+			Assert.assertTrue(CobblerState.getInstance().getData().contains("000040"));
+			Assert.assertTrue(CobblerState.getInstance().getData().contains("000020* Check the user entered a valid operator"));
+			
+		} catch (CobblerException ex) {
+			Assert.fail();
+		}
+	}
 
 }

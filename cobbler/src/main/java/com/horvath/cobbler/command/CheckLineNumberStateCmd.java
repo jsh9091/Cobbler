@@ -63,7 +63,7 @@ public final class CheckLineNumberStateCmd extends AbstractLineNumberCmd {
 				indeterminate = true; 
 			}
 			
-			if (line.length() > LAST_NUM_COL) {
+			if (line.length() >= LAST_NUM_COL) {
 				// do the whitespace and digit tests
 				boolean spaceline = isSixCharsForWhiteSpace(line);
 				spacesBooleanList.add(spaceline);
