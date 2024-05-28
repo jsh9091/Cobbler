@@ -33,6 +33,7 @@ import com.horvath.cobbler.command.LoadSettingsCmdTest;
 import com.horvath.cobbler.command.NewEmptyDocumentCmdTest;
 import com.horvath.cobbler.command.NewTemplateDocCmdTest;
 import com.horvath.cobbler.command.ReadResourceTextFileCmdTest;
+import com.horvath.cobbler.command.RemoveLineNumbersCmdTest;
 import com.horvath.cobbler.command.SaveFileCmdTest;
 import com.horvath.cobbler.command.SaveSettingsCmdTest;
 
@@ -47,7 +48,8 @@ import com.horvath.cobbler.command.SaveSettingsCmdTest;
 	NewTemplateDocCmdTest.class,
 	ReadResourceTextFileCmdTest.class,
 	CheckLineNumberStateCmdTest.class,
-	AddLineNumbersCmdTest.class
+	AddLineNumbersCmdTest.class,
+	RemoveLineNumbersCmdTest.class
 })
 
 public class CobblerTestSuite { }

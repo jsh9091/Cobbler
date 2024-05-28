@@ -56,7 +56,9 @@ public final class RemoveLineNumbersCmd extends AbstractLineNumberCmd {
 		
 		removeNumbering();
 		
-		this.message = this.skipCount + SKIP_COUNT_MESSAGE;
+		if (this.skipCount > 0) {
+			this.message = this.skipCount + SKIP_COUNT_MESSAGE;
+		}
 		
 		CobblerState.getInstance().setData(result);
 		success = true;
