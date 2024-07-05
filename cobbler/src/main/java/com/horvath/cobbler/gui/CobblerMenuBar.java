@@ -213,6 +213,7 @@ public final class CobblerMenuBar extends JMenuBar {
 
 			public void actionPerformed(ActionEvent ae) {
 				CobblerWindow.getWindow().getTextArea().undoLastAction();;
+			    CobblerWindow.getWindow().updateUndoRedoMenuitems();
 		    }
 		});
 		undoItem.setAccelerator(KeyStroke.getKeyStroke('Z', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -222,6 +223,7 @@ public final class CobblerMenuBar extends JMenuBar {
 
 			public void actionPerformed(ActionEvent ae) {
 				CobblerWindow.getWindow().getTextArea().redoLastAction();;
+			    CobblerWindow.getWindow().updateUndoRedoMenuitems();
 		    }
 		});
 		redoItem.setAccelerator(KeyStroke.getKeyStroke('Y', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -231,6 +233,7 @@ public final class CobblerMenuBar extends JMenuBar {
 
 			public void actionPerformed(ActionEvent ae) {
 				CobblerWindow.getWindow().getTextArea().copy();
+			    CobblerWindow.getWindow().updateUndoRedoMenuitems();
 		    }
 		});
 		copyItem.setAccelerator(KeyStroke.getKeyStroke('C', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -240,6 +243,7 @@ public final class CobblerMenuBar extends JMenuBar {
 
 			public void actionPerformed(ActionEvent ae) {
 				CobblerWindow.getWindow().getTextArea().cut();
+			    CobblerWindow.getWindow().updateUndoRedoMenuitems();
 		    }
 		});
 		cutItem.setAccelerator(KeyStroke.getKeyStroke('X', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -249,6 +253,7 @@ public final class CobblerMenuBar extends JMenuBar {
 
 			public void actionPerformed(ActionEvent ae) {
 			    CobblerWindow.getWindow().getTextArea().paste();
+			    CobblerWindow.getWindow().updateUndoRedoMenuitems();
 		    }
 		});
 		pasteItem.setAccelerator(KeyStroke.getKeyStroke('V', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -360,5 +365,5 @@ public final class CobblerMenuBar extends JMenuBar {
 		helpMenu.add(aboutItem);
 		helpMenu.add(userManualItem);
 	}
-		
+	
 }
