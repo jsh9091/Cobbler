@@ -2,12 +2,13 @@ package com.horvath.cobbler.gui;
 
 import java.io.File;
 
-import org.junit.Assert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
 
 /**
  * Performs some GUI tests. Tests are limited in scope as to not show 
@@ -63,7 +64,7 @@ public class CobGuiTests {
 		CobblerWindow window = CobblerWindow.getWindow();
 		
 		// perform action to be tested
-		CobblerWindow.getWindow().getCobMenuBar().newTemplatedItem.doClick();
+		window.getCobMenuBar().newTemplatedItem.doClick();
 		
 		Assert.assertTrue(CobblerState.getInstance().isDirty());
 		Assert.assertTrue(window.getDocumentName().toLowerCase().contains("hello"));
@@ -77,6 +78,49 @@ public class CobGuiTests {
 		Assert.assertTrue(actual.contains("PROGRAM-ID. HELLO-WORLD."));
 		Assert.assertTrue(actual.contains("DISPLAY \"Hello, \""));
 		Assert.assertTrue(actual.contains("STOP RUN"));
+	}
+	
+	@Test
+	public void gui_selectCopyPaste_textareaupdated() {
+		CobblerWindow window = CobblerWindow.getWindow();
+		CobSyntaxTextArea textarea = window.getTextArea();
+		
+		// text area is clear 
+		Assert.assertTrue(textarea.getText().trim().isEmpty());
+		
+		final String text = "Some text. ";
+		textarea.setText(text);
+		Assert.assertTrue(textarea.getText().equals(text));
+		
+		// select the text
+		window.getCobMenuBar().selectAllItem.doClick();
+		
+		// copy the text
+		window.getCobMenuBar().copyItem.doClick();
+
+		// paste the text
+		window.getCobMenuBar().pasteItem.doClick();
+		
+		Assert.assertTrue(textarea.getText().equals(text));
+		
+		// paste the text
+		window.getCobMenuBar().pasteItem.doClick();
+		
+		Assert.assertTrue(textarea.getText().equals(text + text));
+		
+		// select the text
+		window.getCobMenuBar().selectAllItem.doClick();
+		
+		// cut the text
+		window.getCobMenuBar().cutItem.doClick();
+				
+		// text area is clear 
+		Assert.assertTrue(textarea.getText().trim().isEmpty());
+
+		// paste the text
+		window.getCobMenuBar().pasteItem.doClick();
+		
+		Assert.assertTrue(textarea.getText().equals(text + text));
 	}
 
 }
