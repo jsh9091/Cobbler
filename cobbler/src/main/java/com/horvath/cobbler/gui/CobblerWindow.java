@@ -411,6 +411,10 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 		docNameLabel.setText(name);
 	}
 	
+	public String getDocumentName() {
+		return docNameLabel.getText();
+	}
+	
 	public CobblerMenuBar getCobMenuBar() {
 		return this.cobMenuBar;
 	}

@@ -36,6 +36,7 @@ import com.horvath.cobbler.command.ReadResourceTextFileCmdTest;
 import com.horvath.cobbler.command.RemoveLineNumbersCmdTest;
 import com.horvath.cobbler.command.SaveFileCmdTest;
 import com.horvath.cobbler.command.SaveSettingsCmdTest;
+import com.horvath.cobbler.gui.CobGuiTests;
 
 @RunWith(Suite.class)
 
@@ -49,7 +50,8 @@ import com.horvath.cobbler.command.SaveSettingsCmdTest;
 	ReadResourceTextFileCmdTest.class,
 	CheckLineNumberStateCmdTest.class,
 	AddLineNumbersCmdTest.class,
-	RemoveLineNumbersCmdTest.class
+	RemoveLineNumbersCmdTest.class,
+	CobGuiTests.class
 })
 
 public class CobblerTestSuite { }
