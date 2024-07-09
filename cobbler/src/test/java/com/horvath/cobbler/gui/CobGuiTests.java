@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.command.AbstractLineNumberCmd;
 import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
 
 /**
@@ -60,10 +61,11 @@ public class CobGuiTests {
         state.setDirty(false);
         state.setFile(new File(""));
 
-		CobblerWindow.getWindow().setVisible(false);
-		CobblerWindow.getWindow().getTextArea().setText(CobblerState.getInstance().getData());
-		CobblerWindow.getWindow().getTextArea().discardAllEdits();
-		CobblerWindow.getWindow().setDocumentName(" ");
+        CobblerWindow window = CobblerWindow.getWindow();
+        window.setVisible(false);
+        window.getTextArea().setText(CobblerState.getInstance().getData());
+        window.getTextArea().discardAllEdits();
+        window.setDocumentName(" ");
     }
     
 	@Test
@@ -102,12 +104,15 @@ public class CobGuiTests {
 		Assert.assertTrue(actual.contains("PROGRAM-ID. HELLO-WORLD."));
 		Assert.assertTrue(actual.contains("DISPLAY \"Hello, \""));
 		Assert.assertTrue(actual.contains("STOP RUN"));
+		
+		Assert.assertTrue(actual.length() > 350);
 	}
 	
 	@Test
 	public void gui_selectCopyPaste_textareaupdated() {
 		CobblerWindow window = CobblerWindow.getWindow();
 		CobSyntaxTextArea textarea = window.getTextArea();
+		CobblerMenuBar menubar = window.getCobMenuBar();
 		
 		// text area is clear 
 		Assert.assertTrue(textarea.getText().trim().isEmpty());
@@ -117,32 +122,32 @@ public class CobGuiTests {
 		Assert.assertTrue(textarea.getText().equals(text));
 		
 		// select the text
-		window.getCobMenuBar().selectAllItem.doClick();
+		menubar.selectAllItem.doClick();
 		
 		// copy the text
-		window.getCobMenuBar().copyItem.doClick();
+		menubar.copyItem.doClick();
 
 		// paste the text
-		window.getCobMenuBar().pasteItem.doClick();
+		menubar.pasteItem.doClick();
 		
 		Assert.assertTrue(textarea.getText().equals(text));
 		
 		// paste the text
-		window.getCobMenuBar().pasteItem.doClick();
+		menubar.pasteItem.doClick();
 		
 		Assert.assertTrue(textarea.getText().equals(text + text));
 		
 		// select the text
-		window.getCobMenuBar().selectAllItem.doClick();
+		menubar.selectAllItem.doClick();
 		
 		// cut the text
-		window.getCobMenuBar().cutItem.doClick();
+		menubar.cutItem.doClick();
 				
 		// text area is clear 
 		Assert.assertTrue(textarea.getText().trim().isEmpty());
 
 		// paste the text
-		window.getCobMenuBar().pasteItem.doClick();
+		menubar.pasteItem.doClick();
 		
 		Assert.assertTrue(textarea.getText().equals(text + text));
 	}
@@ -151,12 +156,13 @@ public class CobGuiTests {
 	public void gui_undoRedo_textAreaUpdated() {
 		CobblerWindow window = CobblerWindow.getWindow();
 		CobSyntaxTextArea textarea = window.getTextArea();
+		CobblerMenuBar menubar = window.getCobMenuBar();
 		
 		// text area is clear 
 		Assert.assertTrue(textarea.getText().trim().isEmpty());
 		
-		Assert.assertFalse(window.getCobMenuBar().undoItem.isEnabled());
-		Assert.assertFalse(window.getCobMenuBar().redoItem.isEnabled());
+		Assert.assertFalse(menubar.undoItem.isEnabled());
+		Assert.assertFalse(menubar.redoItem.isEnabled());
 		
 		Assert.assertFalse(textarea.canUndo());
 		Assert.assertFalse(textarea.canRedo());
@@ -164,29 +170,57 @@ public class CobGuiTests {
 		final String text = "Some text. ";
 		textarea.setText(text);
 		// select, cut, and paste the text to ensure listeners fire as expected inside unit test
-		window.getCobMenuBar().selectAllItem.doClick();
-		window.getCobMenuBar().cutItem.doClick();
-		window.getCobMenuBar().pasteItem.doClick();
+		menubar.selectAllItem.doClick();
+		menubar.cutItem.doClick();
+		menubar.pasteItem.doClick();
 		Assert.assertTrue(textarea.getText().equals(text));
 		
 		Assert.assertTrue(textarea.canUndo());
 		Assert.assertFalse(textarea.canRedo());
 		
-		Assert.assertTrue(window.getCobMenuBar().undoItem.isEnabled());
-		Assert.assertFalse(window.getCobMenuBar().redoItem.isEnabled());
+		Assert.assertTrue(menubar.undoItem.isEnabled());
+		Assert.assertFalse(menubar.redoItem.isEnabled());
 		
 		// undo the paste
-		window.getCobMenuBar().undoItem.doClick();
+		menubar.undoItem.doClick();
 		
 		// the text area should now be empty with the undo action applied
 		Assert.assertTrue(textarea.getText().isEmpty());
 		// the re-do menu item should now be available 
-		Assert.assertTrue(window.getCobMenuBar().redoItem.isEnabled());
+		Assert.assertTrue(menubar.redoItem.isEnabled());
 		
 		// re-do the paste
-		window.getCobMenuBar().redoItem.doClick();
+		menubar.redoItem.doClick();
 		
 		Assert.assertTrue(textarea.getText().equals(text));
+	}
+	
+	@Test
+	public void gui_addLineNumbs_lineNumsAdded() {
+		CobblerWindow window = CobblerWindow.getWindow();
+		CobSyntaxTextArea textarea = window.getTextArea();
+		CobblerMenuBar menubar = window.getCobMenuBar();
+		
+		// pre-populate text area with Cobol code with no line numbers
+		menubar.newTemplatedItem.doClick();
+		Assert.assertTrue(textarea.getText().length() > 350);
+		
+		// click the menu item we are here to test
+		menubar.addLineNumsItem.doClick();
+
+		// collect our processed actual data
+		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(textarea.getText());
+		
+		// the first six characters of every line should be a digit
+		for (String line : lines) {
+			char[] chars = line.toCharArray();
+			Assert.assertTrue(Character.isDigit(chars[0]));
+			Assert.assertTrue(Character.isDigit(chars[1]));
+			Assert.assertTrue(Character.isDigit(chars[2]));
+			Assert.assertTrue(Character.isDigit(chars[3]));
+			Assert.assertTrue(Character.isDigit(chars[4]));
+			Assert.assertTrue(Character.isDigit(chars[5]));
+		}
 	}
 
 }
