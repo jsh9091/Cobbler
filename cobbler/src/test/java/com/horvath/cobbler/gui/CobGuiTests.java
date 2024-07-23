@@ -222,5 +222,37 @@ public class CobGuiTests {
 			Assert.assertTrue(Character.isDigit(chars[5]));
 		}
 	}
+	
+	@Test
+	public void gui_removeLineNumbs_lineNumsRemoved() {
+		CobblerWindow window = CobblerWindow.getWindow();
+		CobSyntaxTextArea textarea = window.getTextArea();
+		CobblerMenuBar menubar = window.getCobMenuBar();
+		
+		// pre-populate text area with Cobol code with no line numbers
+		menubar.newTemplatedItem.doClick();
+		Assert.assertTrue(textarea.getText().length() > 350);
+		
+		// click the menu item to populate line numbers to remove
+		menubar.addLineNumsItem.doClick();
+	
+		// click the menu item we are here to test
+		menubar.removeLineNumsItem.doClick();
+		
+		// collect our processed actual data
+		String[] lines = AbstractLineNumberCmd.splitStringOnNewlines(textarea.getText());
+		
+		// the first six characters of every line should be a digit
+		for (String line : lines) {
+			char[] chars = line.toCharArray();
+			Assert.assertTrue(Character.isWhitespace(chars[0]));
+			Assert.assertTrue(Character.isWhitespace(chars[1]));
+			Assert.assertTrue(Character.isWhitespace(chars[2]));
+			Assert.assertTrue(Character.isWhitespace(chars[3]));
+			Assert.assertTrue(Character.isWhitespace(chars[4]));
+			Assert.assertTrue(Character.isWhitespace(chars[5]));
+		}
+		
+	}
 
 }
