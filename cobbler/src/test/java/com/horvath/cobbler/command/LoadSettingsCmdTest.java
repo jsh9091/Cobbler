@@ -51,8 +51,113 @@ public class LoadSettingsCmdTest {
 		File settingsFolder = new File(AbstractSettingsCmd.SETTING_FOLDER);
 		File settingsFile = new File(AbstractSettingsCmd.APP_SETTINGS);
 
-		Properties userProperties = null;
+		Properties userProperties = setupFileSystemForTest(settingsFolder, settingsFile);
 
+		Assert.assertTrue(settingsFolder.exists());
+		Assert.assertTrue(settingsFile.exists());
+
+		// build test data
+		final GuiTheme testTheme = GuiTheme.VS;
+		final String file1 = "MathTest2.cob";
+		final String file2 = "ConditionalTest4.cob";
+
+		// write test data to disk
+		try (OutputStream output = new FileOutputStream(AbstractSettingsCmd.APP_SETTINGS)) {
+			Properties prop = new Properties();
+			prop.setProperty(AbstractSettingsCmd.FIELD_THEME, testTheme.toString());
+			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILE + 0, file1);
+			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILE + 1, file2);
+			prop.setProperty(AbstractSettingsCmd.FIELD_SPELL_CHECK_ON, "true");
+			prop.setProperty(AbstractSettingsCmd.FIELD_SHOW_EOLS, "true");
+			prop.store(output, null);
+
+		} catch (IOException ex) {
+			// should not get here
+			Assert.fail();
+		}
+
+		try {
+			// run the command we are here to test
+			LoadSettingsCmd cmd = new LoadSettingsCmd();
+			cmd.perform();
+
+			Assert.assertTrue(cmd.isSuccess());
+
+			CobblerState state = CobblerState.getInstance();
+
+			// compare test data to actual state data
+			Assert.assertEquals(testTheme, state.getCurrentTheme());
+			Assert.assertTrue(state.getRecentFilesList().contains(file1));
+			Assert.assertTrue(state.getRecentFilesList().contains(file2));
+			Assert.assertTrue(state.isSpellcheckOn());
+			Assert.assertTrue(state.isShowEndOfLineCharacters());
+
+			// perform cleanup
+			if (userProperties != null) {
+				restoreUserSettings(userProperties, settingsFile);
+				
+			} else {
+				Assert.assertTrue(settingsFile.delete());
+				Assert.assertTrue(settingsFolder.delete());
+			}
+
+		} catch (CobblerException ex) {
+			// should not get here
+			Assert.fail();
+		}
+	}
+	
+	@Test
+	public void perform_noSettingsFile_DefaultsLoaded() {
+
+		File settingsFolder = new File(AbstractSettingsCmd.SETTING_FOLDER);
+		File settingsFile = new File(AbstractSettingsCmd.APP_SETTINGS);
+
+		Properties userProperties = setupFileSystemForTest(settingsFolder, settingsFile);
+		
+		Assert.assertTrue(settingsFile.delete());
+		
+		try {
+			// run the command we are here to test
+			LoadSettingsCmd cmd = new LoadSettingsCmd();
+			cmd.perform();
+
+			Assert.assertTrue(cmd.isSuccess());
+
+			CobblerState state = CobblerState.getInstance();
+
+			// compare test data to actual state data, we expect default values set in LoadSettingsCmd
+			Assert.assertEquals(GuiTheme.Default, state.getCurrentTheme());
+			Assert.assertTrue(state.isSpellcheckOn());
+			Assert.assertFalse(state.isShowEndOfLineCharacters());
+
+			// perform cleanup
+			if (userProperties != null) {
+				restoreUserSettings(userProperties, settingsFile);
+				
+			} else {
+				Assert.assertTrue(settingsFile.delete());
+				Assert.assertTrue(settingsFolder.delete());
+			}
+
+		} catch (CobblerException ex) {
+			// should not get here
+			Assert.fail();
+		}
+		
+	}
+	
+	/**
+	 * Prepares the user Cobbler folder for testing. 
+	 * If user settings file is found, it is stored so it can be replaced after tests are done. 
+	 * 
+	 * @param settingsFolder File
+	 * @param settingsFile File 
+	 * @return Properties
+	 */
+	private Properties setupFileSystemForTest(File settingsFolder, File settingsFile) {
+		Properties userProperties = null;
+		
 		if (settingsFolder.exists() && settingsFile.exists()) {
 			userProperties = new Properties();
 			try (InputStream input = new FileInputStream(AbstractSettingsCmd.APP_SETTINGS)) {
@@ -77,64 +182,28 @@ public class LoadSettingsCmdTest {
 				Assert.fail();
 			}
 		}
+		return userProperties;
+	}
+	
+	/**
+	 * Restores user properties to file system. 
+	 * 
+	 * @param userProperties Properties
+	 * @param settingsFile File 
+	 */
+	private void restoreUserSettings(Properties userProperties, File settingsFile) {
+		if (userProperties != null && settingsFile.exists()) {
+			Assert.assertTrue(settingsFile.delete());
 
-		Assert.assertTrue(settingsFolder.exists());
-		Assert.assertTrue(settingsFile.exists());
+			try (OutputStream output = new FileOutputStream(AbstractSettingsCmd.APP_SETTINGS)) {
 
-		// build test data
-		final GuiTheme testTheme = GuiTheme.VS;
-		final String file1 = "MathTest2.cob";
-		final String file2 = "ConditionalTest4.cob";
+				// save properties to project root folder
+				userProperties.store(output, null);
 
-		// write test data to disk
-		try (OutputStream output = new FileOutputStream(AbstractSettingsCmd.APP_SETTINGS)) {
-			Properties prop = new Properties();
-			prop.setProperty(AbstractSettingsCmd.FIELD_THEME, testTheme.toString());
-			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILE + 0, file1);
-			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILE + 1, file2);
-			prop.store(output, null);
-
-		} catch (IOException ex) {
-			// should not get here
-			Assert.fail();
-		}
-
-		try {
-			// run the command we are here to test
-			LoadSettingsCmd cmd = new LoadSettingsCmd();
-			cmd.perform();
-
-			Assert.assertTrue(cmd.isSuccess());
-
-			CobblerState state = CobblerState.getInstance();
-
-			// compare test data to actual state data
-			Assert.assertEquals(testTheme, state.getCurrentTheme());
-			Assert.assertTrue(state.getRecentFilesList().contains(file1));
-			Assert.assertTrue(state.getRecentFilesList().contains(file2));
-
-			// perform cleanup
-			if (userProperties != null) {
-				Assert.assertTrue(settingsFile.delete());
-
-				try (OutputStream output = new FileOutputStream(AbstractSettingsCmd.APP_SETTINGS)) {
-
-					// save properties to project root folder
-					userProperties.store(output, null);
-
-				} catch (IOException ex) {
-					// should not get here
-					Assert.fail();
-				}
-				
-			} else {
-				Assert.assertTrue(settingsFile.delete());
-				Assert.assertTrue(settingsFolder.delete());
+			} catch (IOException ex) {
+				// should not get here
+				Assert.fail();
 			}
-
-		} catch (CobblerException ex) {
-			// should not get here
-			Assert.fail();
 		}
 	}
 
