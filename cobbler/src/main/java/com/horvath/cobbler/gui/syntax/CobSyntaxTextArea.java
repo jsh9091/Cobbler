@@ -68,6 +68,8 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		atmf.putMapping(style, "com.horvath.cobbler.gui.syntax.CobolTokenMaker");
 		setSyntaxEditingStyle(style);
 		
+		setEOLMarkersVisible(CobblerState.getInstance().isShowEndOfLineCharacters());
+		
 		// typing auto-complete 
 		CompletionProvider provider = createCompletionProvider();
 		AutoCompletion ac = new AutoCompletion(provider);

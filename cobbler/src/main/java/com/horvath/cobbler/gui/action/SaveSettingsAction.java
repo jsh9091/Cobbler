@@ -58,19 +58,21 @@ public final class SaveSettingsAction extends CobblerAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// get the user selected value from the GUI
-		final String theme = (String) dialog.getThemeMenu().getSelectedItem();
+		final String userSelectedTheme = (String) dialog.getThemeMenu().getSelectedItem();
 		
-		// get the enumeration value 
+		// get the enumeration value
 		GuiTheme selectedTheme = GuiTheme.Default;
-		for (GuiTheme day : GuiTheme.values()) { 
-		    if (day.name().equals(theme)) {
-		    	selectedTheme = day;
+		// search themes for the one the user selected
+		for (GuiTheme guiTheme : GuiTheme.values()) { 
+		    if (guiTheme.name().equals(userSelectedTheme)) {
+		    	selectedTheme = guiTheme;
 		    	break;
 		    }
 		}
 		
 		final boolean clearRecent = dialog.getClearRecentCheckBox().isSelected();
 		final boolean spellCheckEnabled = dialog.getSpellcheckOnCheckBox().isSelected();
+		final boolean showEndofLineCharsEnabled = dialog.getShowEndOfLinesCheckBox().isSelected();
 		
 		// update state
 		CobblerState state = CobblerState.getInstance();
@@ -79,6 +81,7 @@ public final class SaveSettingsAction extends CobblerAction {
 			state.getRecentFilesList().clear();
 		}
 		state.setSpellcheckOn(spellCheckEnabled);
+		state.setShowEndOfLineCharacters(showEndofLineCharsEnabled);
 		
 		try {
 			// run command to update properties file 
@@ -95,6 +98,8 @@ public final class SaveSettingsAction extends CobblerAction {
 				}
 				// update the spell checker
 				window.getTextArea().enableDisableSpellchecker();
+				// update end of line character display 
+				window.getTextArea().setEOLMarkersVisible(CobblerState.getInstance().isShowEndOfLineCharacters());
 			}
 			
 		} catch (CobblerException ex) {

@@ -49,6 +49,7 @@ public final class SettingsDialog extends JDialog {
 	private JComboBox<String> themeMenu;
 	private JCheckBox clearRecentCheckBox;
 	private JCheckBox spellcheckOnCheckBox;
+	private JCheckBox showEndOfLinesCheckBox;
 	private JButton saveSettingsBtn;
 	
 	/**
@@ -66,10 +67,13 @@ public final class SettingsDialog extends JDialog {
 	 * Initializes components. 
 	 */
 	private void initializeComponents() {
+		CobblerState state = CobblerState.getInstance();
+		
 		themeMenuLabel = new JLabel();
-		themeMenu = new JComboBox<String>(CobblerState.getInstance().getCurrentTheme().names());
+		themeMenu = new JComboBox<String>(state.getCurrentTheme().names());
 		clearRecentCheckBox = new JCheckBox("Clear Recent menu", false);
-		spellcheckOnCheckBox = new JCheckBox("Spell Checker On", CobblerState.getInstance().isSpellcheckOn());
+		spellcheckOnCheckBox = new JCheckBox("Spell Checker On", state.isSpellcheckOn());
+		showEndOfLinesCheckBox = new JCheckBox("Show End of Line Characters", state.isShowEndOfLineCharacters());
 		saveSettingsBtn = new JButton();
 	}
 	
@@ -79,7 +83,7 @@ public final class SettingsDialog extends JDialog {
 	private void configureComponents() {
 		// dialog 
 		setTitle("Settings");
-		setSize(250, 160);
+		setSize(250, 190);
 		setResizable(false);
 		setLocationRelativeTo(CobblerWindow.getWindow());
 		
@@ -136,8 +140,18 @@ public final class SettingsDialog extends JDialog {
 		this.add(spellcheckOnCheckBox, gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 1;
+		gbc.gridx = 0;
 		gbc.gridy = 3;
+		gbc.gridwidth = 2;
+		gbc.weighty = 0.0;
+		gbc.weightx = 0.5;
+		gbc.insets = new Insets(0, 10, 0, 10);
+		gbc.anchor = GridBagConstraints.CENTER;
+		this.add(showEndOfLinesCheckBox, gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 1;
+		gbc.gridy = 4;
 		gbc.gridwidth = 2;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
@@ -156,6 +170,10 @@ public final class SettingsDialog extends JDialog {
 
 	public JCheckBox getSpellcheckOnCheckBox() {
 		return spellcheckOnCheckBox;
+	}
+
+	public JCheckBox getShowEndOfLinesCheckBox() {
+		return showEndOfLinesCheckBox;
 	}
 	
 }

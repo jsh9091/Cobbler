@@ -44,7 +44,8 @@ public final class CobblerState {
 	private GuiTheme currentTheme;
 	private ArrayList<String> recentFilesList;
 	public static final int MAX_RECENT_FILES = 5;
-	private boolean spellcheckOn; 
+	private boolean spellcheckOn;
+	private boolean showEndOfLineCharacters;
 	
 	/**
 	 * Constructor. 
@@ -139,6 +140,14 @@ public final class CobblerState {
 
 	public void setSpellcheckOn(boolean spellcheckOn) {
 		this.spellcheckOn = spellcheckOn;
+	}
+
+	public boolean isShowEndOfLineCharacters() {
+		return showEndOfLineCharacters;
+	}
+
+	public void setShowEndOfLineCharacters(boolean showEndOfLineCharacters) {
+		this.showEndOfLineCharacters = showEndOfLineCharacters;
 	}
 
 	@Override

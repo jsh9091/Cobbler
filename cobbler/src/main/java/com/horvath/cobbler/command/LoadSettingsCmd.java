@@ -67,7 +67,11 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             	// load theme data from file into state
             	String themeText = prop.getProperty(FIELD_THEME);
             	GuiTheme loadedTheme = GuiTheme.fromString(themeText);
-            	state.setCurrentTheme(loadedTheme);
+            	if (loadedTheme != null) {
+                	state.setCurrentTheme(loadedTheme);            		
+            	} else {
+            		state.setCurrentTheme(GuiTheme.Default);   
+            	}
             	
             	// load recent files 
             	ArrayList<String> fileList = new ArrayList<>();
@@ -89,6 +93,15 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             	} else {
             		state.setSpellcheckOn(false);
             	}
+            	
+            	// load value for if we should show end of line characters or not
+            	String showEolProp = prop.getProperty(FIELD_SHOW_EOLS);
+            	if ("true".equalsIgnoreCase(showEolProp)) {
+            		state.setShowEndOfLineCharacters(true);
+            	} else {
+            		state.setShowEndOfLineCharacters(false);
+            	}
+            	
             }
 
             success = true; 
@@ -109,5 +122,6 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 		CobblerState state = CobblerState.getInstance();
 		state.setCurrentTheme(GuiTheme.Default);
 		state.setSpellcheckOn(true);
+		state.setShowEndOfLineCharacters(false);
 	}
 }
