@@ -93,7 +93,7 @@ public class SaveSettingsCmdTest {
 		state.updateRecentFiles(file1);
 		state.updateRecentFiles(file2);
 		state.setSpellcheckOn(false);
-		state.setShowEndOfLineCharacters(true);
+		state.setShowInvisibleCharacters(true);
 		
 		try {
 			// run the command we are here to test
@@ -113,7 +113,7 @@ public class SaveSettingsCmdTest {
 			Assert.assertTrue(actualContent.contains(file1));
 			Assert.assertTrue(actualContent.contains(file2));
 			Assert.assertTrue(actualContent.contains(AbstractSettingsCmd.FIELD_SPELL_CHECK_ON + "=false"));
-			Assert.assertTrue(actualContent.contains(AbstractSettingsCmd.FIELD_SHOW_EOLS + "=true"));
+			Assert.assertTrue(actualContent.contains(AbstractSettingsCmd.FIELD_SHOW_INVISIBLES + "=true"));
 			
 			// perform cleanup 
 			if (userProperties != null) {

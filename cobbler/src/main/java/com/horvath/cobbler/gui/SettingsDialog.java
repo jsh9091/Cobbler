@@ -49,7 +49,7 @@ public final class SettingsDialog extends JDialog {
 	private JComboBox<String> themeMenu;
 	private JCheckBox clearRecentCheckBox;
 	private JCheckBox spellcheckOnCheckBox;
-	private JCheckBox showEndOfLinesCheckBox;
+	private JCheckBox showInvisibleCharactersCheckBox;
 	private JButton saveSettingsBtn;
 	
 	/**
@@ -73,7 +73,7 @@ public final class SettingsDialog extends JDialog {
 		themeMenu = new JComboBox<String>(state.getCurrentTheme().names());
 		clearRecentCheckBox = new JCheckBox("Clear Recent menu", false);
 		spellcheckOnCheckBox = new JCheckBox("Spell Checker On", state.isSpellcheckOn());
-		showEndOfLinesCheckBox = new JCheckBox("Show End of Line Characters", state.isShowEndOfLineCharacters());
+		showInvisibleCharactersCheckBox = new JCheckBox("Show Invisible Characters", state.isShowInvisibleCharacters());
 		saveSettingsBtn = new JButton();
 	}
 	
@@ -147,7 +147,7 @@ public final class SettingsDialog extends JDialog {
 		gbc.weightx = 0.5;
 		gbc.insets = new Insets(0, 10, 0, 10);
 		gbc.anchor = GridBagConstraints.CENTER;
-		this.add(showEndOfLinesCheckBox, gbc);
+		this.add(showInvisibleCharactersCheckBox, gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 1;
@@ -173,7 +173,7 @@ public final class SettingsDialog extends JDialog {
 	}
 
 	public JCheckBox getShowEndOfLinesCheckBox() {
-		return showEndOfLinesCheckBox;
+		return showInvisibleCharactersCheckBox;
 	}
 	
 }

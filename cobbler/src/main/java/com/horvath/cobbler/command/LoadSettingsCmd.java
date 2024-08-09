@@ -95,11 +95,11 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             	}
             	
             	// load value for if we should show end of line characters or not
-            	String showEolProp = prop.getProperty(FIELD_SHOW_EOLS);
-            	if ("true".equalsIgnoreCase(showEolProp)) {
-            		state.setShowEndOfLineCharacters(true);
+            	String showInvisibleProp = prop.getProperty(FIELD_SHOW_INVISIBLES);
+            	if ("true".equalsIgnoreCase(showInvisibleProp)) {
+            		state.setShowInvisibleCharacters(true);
             	} else {
-            		state.setShowEndOfLineCharacters(false);
+            		state.setShowInvisibleCharacters(false);
             	}
             	
             }
@@ -122,6 +122,6 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 		CobblerState state = CobblerState.getInstance();
 		state.setCurrentTheme(GuiTheme.Default);
 		state.setSpellcheckOn(true);
-		state.setShowEndOfLineCharacters(false);
+		state.setShowInvisibleCharacters(false);
 	}
 }

@@ -72,7 +72,7 @@ public final class SaveSettingsAction extends CobblerAction {
 		
 		final boolean clearRecent = dialog.getClearRecentCheckBox().isSelected();
 		final boolean spellCheckEnabled = dialog.getSpellcheckOnCheckBox().isSelected();
-		final boolean showEndofLineCharsEnabled = dialog.getShowEndOfLinesCheckBox().isSelected();
+		final boolean showInvisibleCharacters = dialog.getShowEndOfLinesCheckBox().isSelected();
 		
 		// update state
 		CobblerState state = CobblerState.getInstance();
@@ -81,7 +81,7 @@ public final class SaveSettingsAction extends CobblerAction {
 			state.getRecentFilesList().clear();
 		}
 		state.setSpellcheckOn(spellCheckEnabled);
-		state.setShowEndOfLineCharacters(showEndofLineCharsEnabled);
+		state.setShowInvisibleCharacters(showInvisibleCharacters);
 		
 		try {
 			// run command to update properties file 
@@ -99,7 +99,7 @@ public final class SaveSettingsAction extends CobblerAction {
 				// update the spell checker
 				window.getTextArea().enableDisableSpellchecker();
 				// update end of line character display 
-				window.getTextArea().setEOLMarkersVisible(CobblerState.getInstance().isShowEndOfLineCharacters());
+				window.getTextArea().updateShowInvisibleCharacters();
 			}
 			
 		} catch (CobblerException ex) {

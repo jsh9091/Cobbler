@@ -45,7 +45,7 @@ public final class CobblerState {
 	private ArrayList<String> recentFilesList;
 	public static final int MAX_RECENT_FILES = 5;
 	private boolean spellcheckOn;
-	private boolean showEndOfLineCharacters;
+	private boolean showInvisibleCharacters; 
 	
 	/**
 	 * Constructor. 
@@ -142,12 +142,12 @@ public final class CobblerState {
 		this.spellcheckOn = spellcheckOn;
 	}
 
-	public boolean isShowEndOfLineCharacters() {
-		return showEndOfLineCharacters;
+	public boolean isShowInvisibleCharacters() {
+		return showInvisibleCharacters;
 	}
 
-	public void setShowEndOfLineCharacters(boolean showEndOfLineCharacters) {
-		this.showEndOfLineCharacters = showEndOfLineCharacters;
+	public void setShowInvisibleCharacters(boolean showInvisibleCharacters) {
+		this.showInvisibleCharacters = showInvisibleCharacters;
 	}
 
 	@Override

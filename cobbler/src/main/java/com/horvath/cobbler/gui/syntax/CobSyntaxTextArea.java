@@ -68,7 +68,7 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		atmf.putMapping(style, "com.horvath.cobbler.gui.syntax.CobolTokenMaker");
 		setSyntaxEditingStyle(style);
 		
-		setEOLMarkersVisible(CobblerState.getInstance().isShowEndOfLineCharacters());
+		updateShowInvisibleCharacters();
 		
 		// typing auto-complete 
 		CompletionProvider provider = createCompletionProvider();
@@ -165,5 +165,13 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		} else {
 			this.removeParser(parser);
 		}
+	}
+	
+	/**
+	 * Updates if the invisible characters should be displayed or not.
+	 */
+	public void updateShowInvisibleCharacters() {
+		setEOLMarkersVisible(CobblerState.getInstance().isShowInvisibleCharacters());
+		setWhitespaceVisible(CobblerState.getInstance().isShowInvisibleCharacters());
 	}
 }

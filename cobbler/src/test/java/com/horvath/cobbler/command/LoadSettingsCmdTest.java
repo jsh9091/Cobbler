@@ -68,7 +68,7 @@ public class LoadSettingsCmdTest {
 			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILE + 0, file1);
 			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILE + 1, file2);
 			prop.setProperty(AbstractSettingsCmd.FIELD_SPELL_CHECK_ON, "true");
-			prop.setProperty(AbstractSettingsCmd.FIELD_SHOW_EOLS, "true");
+			prop.setProperty(AbstractSettingsCmd.FIELD_SHOW_INVISIBLES, "true");
 			prop.store(output, null);
 
 		} catch (IOException ex) {
@@ -90,7 +90,7 @@ public class LoadSettingsCmdTest {
 			Assert.assertTrue(state.getRecentFilesList().contains(file1));
 			Assert.assertTrue(state.getRecentFilesList().contains(file2));
 			Assert.assertTrue(state.isSpellcheckOn());
-			Assert.assertTrue(state.isShowEndOfLineCharacters());
+			Assert.assertTrue(state.isShowInvisibleCharacters());
 
 			// perform cleanup
 			if (userProperties != null) {
@@ -129,7 +129,7 @@ public class LoadSettingsCmdTest {
 			// compare test data to actual state data, we expect default values set in LoadSettingsCmd
 			Assert.assertEquals(GuiTheme.Default, state.getCurrentTheme());
 			Assert.assertTrue(state.isSpellcheckOn());
-			Assert.assertFalse(state.isShowEndOfLineCharacters());
+			Assert.assertFalse(state.isShowInvisibleCharacters());
 
 			// perform cleanup
 			if (userProperties != null) {

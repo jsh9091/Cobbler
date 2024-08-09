@@ -56,7 +56,7 @@ public final class SaveSettingsCmd extends AbstractSettingsCmd {
             // set the properties values from state
             prop.setProperty(FIELD_THEME, state.getCurrentTheme().toString());
             prop.setProperty(FIELD_SPELL_CHECK_ON, String.valueOf(state.isSpellcheckOn()));
-            prop.setProperty(FIELD_SHOW_EOLS, String.valueOf(state.isShowEndOfLineCharacters()));
+            prop.setProperty(FIELD_SHOW_INVISIBLES, String.valueOf(state.isShowInvisibleCharacters()));
             
             // for (String recentFile : CobblerState.getInstance().getRecentFilesList()) {
             for (int i = 0; i < state.getRecentFilesList().size(); i++) {
