@@ -34,11 +34,15 @@ import java.io.InputStream;
 import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+
+import org.fife.ui.rtextarea.SearchContext;
 
 import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.Debugger;
@@ -82,6 +86,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem goToLineItem;
 	protected JMenuItem findItem;
 	protected JMenuItem replaceItem;
+	protected JMenuItem showHideFindReplaceBarItem;
 	protected JMenuItem addLineNumsItem;
 	protected JMenuItem removeLineNumsItem;
 	protected JMenuItem settingItem;
@@ -127,6 +132,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		goToLineItem = new JMenuItem();
 		findItem = new JMenuItem();
 		replaceItem = new JMenuItem();
+		showHideFindReplaceBarItem = new JMenuItem();
 		addLineNumsItem = new JMenuItem();
 		removeLineNumsItem = new JMenuItem();
 		settingItem = new JMenuItem();
@@ -284,6 +290,46 @@ public final class CobblerMenuBar extends JMenuBar {
 		replaceItem.setAction(new FindReplaceDialogAction(FindReplaceDialogAction.Mode.REPLACE));
 		replaceItem.setText("Replace...");
 		replaceItem.setAccelerator(KeyStroke.getKeyStroke('R', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		
+		showHideFindReplaceBarItem.setAction(new AbstractAction("Find/Replace Bar") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				CobblerWindow window = CobblerWindow.getWindow();
+				
+				if (window.isFindReplaceBarDisplayed()) {
+					// cannot call hideBottomComponent() on CollapsibleSecPanel because library assumes use of BorderLayout
+					// therefore cannot animate close and code is more ugly
+					window.getCollapsibleSecPanel().removeAll();
+					window.repaint();
+					window.revalidate();
+
+				} else {
+					if (window.getFindDialog() != null) {
+						SearchContext context = window.getFindDialog().getSearchContext();
+						window.getFindToolBar().setSearchContext(context);
+					}
+					
+					if (window.getReplaceDialog() != null) {
+						SearchContext context = window.getReplaceDialog().getSearchContext();
+						window.getReplaceToolBar().setSearchContext(context);
+					}
+					
+					KeyStroke ks = KeyStroke.getKeyStroke('~', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+					Action findBarAction = window.getCollapsibleSecPanel().addBottomComponent(ks, window.getFindToolBar());
+					Action repalceBarAction = window.getCollapsibleSecPanel().addBottomComponent(ks, window.getReplaceToolBar());
+					
+					// ugly code needed because of how library API works
+					JButton button = new JButton(findBarAction);
+					button.doClick();
+					button = new JButton(repalceBarAction);
+					button.doClick();
+				}
+				
+				// toggle bar status
+				window.setFindReplaceBarDisplayed(!window.isFindReplaceBarDisplayed());
+		    }
+		});		
 
 		addLineNumsItem.setAction(new AddLineNumbersAction());
 		addLineNumsItem.setText("Add Line Numbers");
@@ -301,6 +347,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		utilitiesMenu.add(goToLineItem);
 		utilitiesMenu.add(findItem);
 		utilitiesMenu.add(replaceItem);
+		utilitiesMenu.add(showHideFindReplaceBarItem);
 		utilitiesMenu.addSeparator();
 		utilitiesMenu.add(addLineNumsItem);
 		utilitiesMenu.add(removeLineNumsItem);

@@ -50,8 +50,11 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.rsta.ui.search.FindDialog;
+import org.fife.rsta.ui.search.FindToolBar;
 import org.fife.rsta.ui.search.ReplaceDialog;
+import org.fife.rsta.ui.search.ReplaceToolBar;
 import org.fife.rsta.ui.search.SearchEvent;
 import org.fife.rsta.ui.search.SearchListener;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -84,8 +87,12 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 	private CobSyntaxTextArea textArea;
 	private RTextScrollPane scrollpane;
 	
-	private FindDialog findDialog;
-	private ReplaceDialog replaceDialog;
+	private FindDialog findDialog = null;
+	private ReplaceDialog replaceDialog = null;
+	private CollapsibleSectionPanel collapsibleSecPanel;
+	private FindToolBar findToolBar;
+	private ReplaceToolBar replaceToolBar;
+	private boolean findReplaceBarDisplayed;
 	private StatusBar statusBar;
 	
 	public static final String APP_ICON = "/resources/Cobber-icon.png";
@@ -125,6 +132,12 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 		textArea = new CobSyntaxTextArea(20, 60);
 		scrollpane = new RTextScrollPane(textArea);
 		statusBar = new StatusBar();
+		collapsibleSecPanel = new CollapsibleSectionPanel();
+		
+		// Find/Replace tool bars
+		findReplaceBarDisplayed = false;
+		findToolBar = new FindToolBar(this);
+		replaceToolBar = new ReplaceToolBar(this);
 		
 		ImageIcon icon = getImageIcon();
 		
@@ -210,6 +223,16 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 		gbc.gridy = 3;
 		gbc.gridwidth = 1;
 		gbc.weighty = 0.0;
+		gbc.weightx = 0.0;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.anchor = GridBagConstraints.LINE_END;
+		add(collapsibleSecPanel, gbc);
+		
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.gridwidth = 1;
+		gbc.weighty = 0.01;
 		gbc.weightx = 0.0;
 		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.anchor = GridBagConstraints.LINE_END;
@@ -442,6 +465,27 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 	public StatusBar getStatusBar() {
 		return statusBar;
 	}
+
+	public CollapsibleSectionPanel getCollapsibleSecPanel() {
+		return collapsibleSecPanel;
+	}
+
+	public FindToolBar getFindToolBar() {
+		return findToolBar;
+	}
+
+	public ReplaceToolBar getReplaceToolBar() {
+		return replaceToolBar;
+	}
+
+	public boolean isFindReplaceBarDisplayed() {
+		return findReplaceBarDisplayed;
+	}
+
+	public void setFindReplaceBarDisplayed(boolean findReplaceBarDisplayed) {
+		this.findReplaceBarDisplayed = findReplaceBarDisplayed;
+	}
+
 
 	/**
 	 * The status bar for this application.
