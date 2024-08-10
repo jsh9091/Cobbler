@@ -110,9 +110,9 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             	}
             	
             	// load value for maximum number of recent files
-            	String maxRecentFilesString = prop.getProperty(FIELD_SHOW_INVISIBLES);
+            	String maxRecentFilesString = prop.getProperty(FIELD_RECENT_FILES_MAX);
             	try {
-            		   int max = Integer.parseInt(maxRecentFilesString);
+            		int max = Integer.parseInt(maxRecentFilesString);
             		   
             		   // make sure number in range we will allow
             		   if (max < 1) {

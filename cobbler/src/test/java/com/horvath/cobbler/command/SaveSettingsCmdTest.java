@@ -86,6 +86,7 @@ public class SaveSettingsCmdTest {
 		final GuiTheme testTheme = GuiTheme.Eclipse;
 		final String file1 = "MathTest.cob";
 		final String file2 = "LoopTest.cob";
+		final int maxRecentFiles = 12;
 		
 		// load into state
 		state.setCurrentTheme(testTheme);
@@ -94,6 +95,7 @@ public class SaveSettingsCmdTest {
 		state.updateRecentFiles(file2);
 		state.setSpellcheckOn(false);
 		state.setShowInvisibleCharacters(true);
+		state.setMaxNumOfRecentFiles(maxRecentFiles);
 		
 		try {
 			// run the command we are here to test
@@ -114,6 +116,7 @@ public class SaveSettingsCmdTest {
 			Assert.assertTrue(actualContent.contains(file2));
 			Assert.assertTrue(actualContent.contains(AbstractSettingsCmd.FIELD_SPELL_CHECK_ON + "=false"));
 			Assert.assertTrue(actualContent.contains(AbstractSettingsCmd.FIELD_SHOW_INVISIBLES + "=true"));
+			Assert.assertTrue(actualContent.contains(AbstractSettingsCmd.FIELD_RECENT_FILES_MAX + "=" + maxRecentFiles));
 			
 			// perform cleanup 
 			if (userProperties != null) {

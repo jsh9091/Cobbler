@@ -60,6 +60,7 @@ public class LoadSettingsCmdTest {
 		final GuiTheme testTheme = GuiTheme.VS;
 		final String file1 = "MathTest2.cob";
 		final String file2 = "ConditionalTest4.cob";
+		final int maxRecentFiles = 14;
 
 		// write test data to disk
 		try (OutputStream output = new FileOutputStream(AbstractSettingsCmd.APP_SETTINGS)) {
@@ -69,6 +70,7 @@ public class LoadSettingsCmdTest {
 			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILE + 1, file2);
 			prop.setProperty(AbstractSettingsCmd.FIELD_SPELL_CHECK_ON, "true");
 			prop.setProperty(AbstractSettingsCmd.FIELD_SHOW_INVISIBLES, "true");
+			prop.setProperty(AbstractSettingsCmd.FIELD_RECENT_FILES_MAX, String.valueOf(maxRecentFiles));
 			prop.store(output, null);
 
 		} catch (IOException ex) {
@@ -91,6 +93,7 @@ public class LoadSettingsCmdTest {
 			Assert.assertTrue(state.getRecentFilesList().contains(file2));
 			Assert.assertTrue(state.isSpellcheckOn());
 			Assert.assertTrue(state.isShowInvisibleCharacters());
+			Assert.assertEquals(maxRecentFiles, state.getMaxNumOfRecentFiles());
 
 			// perform cleanup
 			if (userProperties != null) {
