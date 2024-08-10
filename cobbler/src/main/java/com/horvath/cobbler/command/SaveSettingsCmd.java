@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import com.horvath.cobbler.application.CobblerApplication;
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.exception.CobblerException;
@@ -57,6 +58,7 @@ public final class SaveSettingsCmd extends AbstractSettingsCmd {
             prop.setProperty(FIELD_THEME, state.getCurrentTheme().toString());
             prop.setProperty(FIELD_SPELL_CHECK_ON, String.valueOf(state.isSpellcheckOn()));
             prop.setProperty(FIELD_SHOW_INVISIBLES, String.valueOf(state.isShowInvisibleCharacters()));
+            prop.setProperty(FIELD_RECENT_FILES_MAX, String.valueOf(state.getMaxNumOfRecentFiles()));
             
             // for (String recentFile : CobblerState.getInstance().getRecentFilesList()) {
             for (int i = 0; i < state.getRecentFilesList().size(); i++) {
@@ -64,8 +66,11 @@ public final class SaveSettingsCmd extends AbstractSettingsCmd {
             	prop.setProperty(FIELD_RECENT_FILE + i, filepath);
             }
 
+			final String comment = "Settings file for " + CobblerApplication.APP_NAME + " version "
+					+ CobblerApplication.APP_VERSION + " for user: " + System.getProperty("user.name");
+			
             // save properties to disk
-            prop.store(output, null);
+            prop.store(output, comment);
 
             success = true;
 

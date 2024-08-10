@@ -70,6 +70,7 @@ public final class SaveSettingsAction extends CobblerAction {
 		    }
 		}
 		
+		final Integer maxRecentFiles = (Integer) dialog.getMaxNumRecentFilesMenu().getSelectedItem();
 		final boolean clearRecent = dialog.getClearRecentCheckBox().isSelected();
 		final boolean spellCheckEnabled = dialog.getSpellcheckOnCheckBox().isSelected();
 		final boolean showInvisibleCharacters = dialog.getShowEndOfLinesCheckBox().isSelected();
@@ -80,6 +81,14 @@ public final class SaveSettingsAction extends CobblerAction {
 		if (clearRecent) {
 			state.getRecentFilesList().clear();
 		}
+		state.setMaxNumOfRecentFiles(maxRecentFiles.intValue());
+		// if we currently have more recent files than settings change allow for
+		boolean truncatedFileList = false;
+		while (state.getRecentFilesList().size() > state.getMaxNumOfRecentFiles()) {
+			state.getRecentFilesList().remove(state.getRecentFilesList().size() - 1);
+			truncatedFileList = true;
+		}
+		
 		state.setSpellcheckOn(spellCheckEnabled);
 		state.setShowInvisibleCharacters(showInvisibleCharacters);
 		
@@ -93,9 +102,11 @@ public final class SaveSettingsAction extends CobblerAction {
 				dialog.dispose();
 				CobblerWindow window = CobblerWindow.getWindow();
 				window.updateTextAreaTheme();
-				if (clearRecent) {
+				
+				if (clearRecent || truncatedFileList) {
 					window.updateRecentFilesMenu();
 				}
+				
 				// update the spell checker
 				window.getTextArea().enableDisableSpellchecker();
 				// update end of line character display 

@@ -41,6 +41,13 @@ import com.horvath.cobbler.gui.syntax.GuiTheme;
  * @author jhorvath
  */
 public final class LoadSettingsCmd extends AbstractSettingsCmd {
+	
+	/**
+	 * Controls the default maximum number of files displayed in the recent files menu.
+	 */
+	public static final int DEFAULT_RECENT_FILES = 5;
+	
+	public static final int MAX_SUPPORTED_RECENT_FILES = 20;
 
 	@Override
 	public void perform() throws CobblerException {
@@ -75,7 +82,7 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             	
             	// load recent files 
             	ArrayList<String> fileList = new ArrayList<>();
-            	for (int i = 0; i < CobblerState.MAX_RECENT_FILES; i++) {
+            	for (int i = 0; i < state.getMaxNumOfRecentFiles(); i++) {
             		String filepath = prop.getProperty(FIELD_RECENT_FILE + i);
             		if (filepath == null) {
             			break;
@@ -102,6 +109,23 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             		state.setShowInvisibleCharacters(false);
             	}
             	
+            	// load value for maximum number of recent files
+            	String maxRecentFilesString = prop.getProperty(FIELD_SHOW_INVISIBLES);
+            	try {
+            		   int max = Integer.parseInt(maxRecentFilesString);
+            		   
+            		   // make sure number in range we will allow
+            		   if (max < 1) {
+            			   max = DEFAULT_RECENT_FILES;
+            		   } else if (max > MAX_SUPPORTED_RECENT_FILES) {
+            			   max = MAX_SUPPORTED_RECENT_FILES;
+            		   }
+            		   
+            		   state.setMaxNumOfRecentFiles(max);
+            		   
+            		} catch (NumberFormatException e) {
+            			state.setMaxNumOfRecentFiles(DEFAULT_RECENT_FILES);
+            		}
             }
 
             success = true; 
@@ -123,5 +147,6 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 		state.setCurrentTheme(GuiTheme.Default);
 		state.setSpellcheckOn(true);
 		state.setShowInvisibleCharacters(false);
+		state.setMaxNumOfRecentFiles(DEFAULT_RECENT_FILES);
 	}
 }

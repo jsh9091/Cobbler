@@ -27,6 +27,7 @@ package com.horvath.cobbler.application;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.horvath.cobbler.command.LoadSettingsCmd;
 import com.horvath.cobbler.gui.syntax.GuiTheme;
 
 /**
@@ -43,9 +44,9 @@ public final class CobblerState {
 	private boolean dirty;
 	private GuiTheme currentTheme;
 	private ArrayList<String> recentFilesList;
-	public static final int MAX_RECENT_FILES = 5;
 	private boolean spellcheckOn;
-	private boolean showInvisibleCharacters; 
+	private boolean showInvisibleCharacters;
+	private int maxNumOfRecentFiles = LoadSettingsCmd.DEFAULT_RECENT_FILES;
 	
 	/**
 	 * Constructor. 
@@ -90,7 +91,7 @@ public final class CobblerState {
 		}
 		
 		// if recent files collection is greater than max, then truncate 
-		while (recentFilesList.size() > MAX_RECENT_FILES) {
+		while (recentFilesList.size() > maxNumOfRecentFiles) {
 			recentFilesList.remove(recentFilesList.size() - 1);
 		}
 	}
@@ -150,9 +151,19 @@ public final class CobblerState {
 		this.showInvisibleCharacters = showInvisibleCharacters;
 	}
 
+	public int getMaxNumOfRecentFiles() {
+		return maxNumOfRecentFiles;
+	}
+
+	public void setMaxNumOfRecentFiles(int maxNumOfRecentFiles) {
+		this.maxNumOfRecentFiles = maxNumOfRecentFiles;
+	}
+
 	@Override
 	public String toString() {
-		return "CobblerState [file=" + file + ", dirty=" + dirty + "]";
+		return "CobblerState [file=" + file + ", data=" + data + ", dirty=" + dirty + ", currentTheme=" + currentTheme
+				+ ", spellcheckOn=" + spellcheckOn + ", showInvisibleCharacters=" + showInvisibleCharacters
+				+ ", maxNumOfRecentFiles=" + maxNumOfRecentFiles + "]";
 	}
-	
-}
+
+ }

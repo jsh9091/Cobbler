@@ -27,6 +27,7 @@ package com.horvath.cobbler.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,6 +36,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import com.horvath.cobbler.application.CobblerState;
+import com.horvath.cobbler.command.LoadSettingsCmd;
 import com.horvath.cobbler.gui.action.SaveSettingsAction;
 
 /**
@@ -47,6 +49,9 @@ public final class SettingsDialog extends JDialog {
 	
 	private JLabel themeMenuLabel;
 	private JComboBox<String> themeMenu;
+	private JLabel maxNumRecentFilesMenuLabel;
+	private Integer[] maxNumRecentFilesOptions;
+	private JComboBox<Integer> maxNumRecentFilesMenu;
 	private JCheckBox clearRecentCheckBox;
 	private JCheckBox spellcheckOnCheckBox;
 	private JCheckBox showInvisibleCharactersCheckBox;
@@ -71,6 +76,14 @@ public final class SettingsDialog extends JDialog {
 		
 		themeMenuLabel = new JLabel();
 		themeMenu = new JComboBox<String>(state.getCurrentTheme().names());
+		
+		maxNumRecentFilesOptions = new Integer[LoadSettingsCmd.MAX_SUPPORTED_RECENT_FILES];
+		maxNumRecentFilesMenuLabel = new JLabel();
+		for (int i = 0; i < LoadSettingsCmd.MAX_SUPPORTED_RECENT_FILES; i++) {
+			maxNumRecentFilesOptions[i] = i + 1;
+		}
+		maxNumRecentFilesMenu = new JComboBox<>(maxNumRecentFilesOptions);
+		
 		clearRecentCheckBox = new JCheckBox("Clear Recent menu", false);
 		spellcheckOnCheckBox = new JCheckBox("Spell Checker On", state.isSpellcheckOn());
 		showInvisibleCharactersCheckBox = new JCheckBox("Show Invisible Characters", state.isShowInvisibleCharacters());
@@ -81,15 +94,28 @@ public final class SettingsDialog extends JDialog {
 	 * Configure the components. 
 	 */
 	private void configureComponents() {
-		// dialog 
+		CobblerState state = CobblerState.getInstance();
+		
+		/* dialog */ 
 		setTitle("Settings");
-		setSize(250, 190);
+		setSize(280, 230);
 		setResizable(false);
 		setLocationRelativeTo(CobblerWindow.getWindow());
 		
-		// dialog components 
+		/* dialog components */
+		// theme menu
 		themeMenuLabel.setText("Select Theme:");
 		themeMenu.setSelectedItem(CobblerState.getInstance().getCurrentTheme().name());
+		
+		// menu to control the maximum number of recent files to track
+		maxNumRecentFilesMenuLabel.setText("Num of Recent Files:");
+		// verify that state value is legitimate  
+		if (Arrays.stream(maxNumRecentFilesOptions).anyMatch(new Integer(state.getMaxNumOfRecentFiles())::equals)) {
+			maxNumRecentFilesMenu.setSelectedItem(state.getMaxNumOfRecentFiles());
+		} else {
+			maxNumRecentFilesMenu.setSelectedItem(LoadSettingsCmd.DEFAULT_RECENT_FILES);
+		}
+		
 		saveSettingsBtn.setAction(new SaveSettingsAction(this));
 		saveSettingsBtn.setText("Save");
 	}
@@ -101,27 +127,45 @@ public final class SettingsDialog extends JDialog {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		setLayout(new GridBagLayout());
+		int yPos = 0;
 
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridy = yPos;
 		gbc.insets = new Insets(10, 10, 10, 10);
 		gbc.anchor = GridBagConstraints.WEST;
 		this.add(themeMenuLabel, gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 1;
-		gbc.gridy = 0;
+		gbc.gridy = yPos++;
 		gbc.gridwidth = 1;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
 		gbc.insets = new Insets(15, 10, 10, 10);
 		gbc.anchor = GridBagConstraints.WEST;
 		this.add(themeMenu, gbc);
+
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridx = 0;
+		gbc.gridy = yPos;
+		gbc.insets = new Insets(0, 10, 10, 10);
+		gbc.anchor = GridBagConstraints.WEST;
+		this.add(maxNumRecentFilesMenuLabel, gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 1;
+		gbc.gridy = yPos++;;
+		gbc.gridwidth = 1;
+		gbc.weighty = 0.0;
+		gbc.weightx = 0.5;
+		gbc.insets = new Insets(0, 10, 10, 10);
+		gbc.anchor = GridBagConstraints.WEST;
+		this.add(maxNumRecentFilesMenu, gbc); // maxNumRecentFilesMenuLabel
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = yPos++;
 		gbc.gridwidth = 2;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
@@ -131,7 +175,7 @@ public final class SettingsDialog extends JDialog {
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = yPos++;
 		gbc.gridwidth = 2;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
@@ -141,7 +185,7 @@ public final class SettingsDialog extends JDialog {
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = yPos++;
 		gbc.gridwidth = 2;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
@@ -151,7 +195,7 @@ public final class SettingsDialog extends JDialog {
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 1;
-		gbc.gridy = 4;
+		gbc.gridy = yPos++;
 		gbc.gridwidth = 2;
 		gbc.weighty = 0.0;
 		gbc.weightx = 0.5;
@@ -174,6 +218,10 @@ public final class SettingsDialog extends JDialog {
 
 	public JCheckBox getShowEndOfLinesCheckBox() {
 		return showInvisibleCharactersCheckBox;
+	}
+
+	public JComboBox<Integer> getMaxNumRecentFilesMenu() {
+		return maxNumRecentFilesMenu;
 	}
 	
 }
