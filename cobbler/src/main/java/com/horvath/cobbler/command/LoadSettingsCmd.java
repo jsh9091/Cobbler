@@ -38,6 +38,8 @@ import com.horvath.cobbler.gui.syntax.GuiTheme;
 
 /**
  * Reads application properties file into state. 
+ * Default values for settings are established and controlled in this class.
+ * 
  * @author jhorvath
  */
 public final class LoadSettingsCmd extends AbstractSettingsCmd {
@@ -47,8 +49,21 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 	 */
 	public static final int DEFAULT_RECENT_FILES = 5;
 	
+	/**
+	 * The maximum number of recent files allowed. 
+	 */
 	public static final int MAX_SUPPORTED_RECENT_FILES = 20;
-
+	
+	/**
+	 * Values that are used for options to increment added line numbers by. 
+	 */
+	public static final Integer[] ADD_LINE_NUM_INCREMENT_OPTIONS = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+	
+	/**
+	 * Default value to increment added line numbers by.
+	 */
+	public static final int DEFAULT_LINE_NUM_INCREMENT = 10;
+	
 	@Override
 	public void perform() throws CobblerException {
 		Debugger.printLog("Load Settings Properties File", this.getClass().getName());
@@ -111,21 +126,37 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
             	
             	// load value for maximum number of recent files
             	String maxRecentFilesString = prop.getProperty(FIELD_RECENT_FILES_MAX);
-            	try {
-            		int max = Integer.parseInt(maxRecentFilesString);
-            		   
-            		   // make sure number in range we will allow
-            		   if (max < 1) {
-            			   max = DEFAULT_RECENT_FILES;
-            		   } else if (max > MAX_SUPPORTED_RECENT_FILES) {
-            			   max = MAX_SUPPORTED_RECENT_FILES;
-            		   }
-            		   
-            		   state.setMaxNumOfRecentFiles(max);
-            		   
-            		} catch (NumberFormatException e) {
-            			state.setMaxNumOfRecentFiles(DEFAULT_RECENT_FILES);
-            		}
+				try {
+					int max = Integer.parseInt(maxRecentFilesString);
+
+					// make sure number in range we will allow
+					if (max < 1) {
+						max = DEFAULT_RECENT_FILES;
+					} else if (max > MAX_SUPPORTED_RECENT_FILES) {
+						max = MAX_SUPPORTED_RECENT_FILES;
+					}
+
+					state.setMaxNumOfRecentFiles(max);
+
+				} catch (NumberFormatException e) {
+					state.setMaxNumOfRecentFiles(DEFAULT_RECENT_FILES);
+				}
+				
+				// load value for maximum number of recent files
+            	String addLineIncrementValueString = prop.getProperty(FIELD_ADD_LINE_INCREMENT_VALUE);
+				try {
+					int addLineIncrementValue = Integer.parseInt(addLineIncrementValueString);
+
+					// make sure number in range we will allow
+					if (addLineIncrementValueInValidRange(addLineIncrementValue)) {
+						// this will allow manual entry from properties file
+						state.setAddLineIncrementValue(addLineIncrementValue);
+					} else {
+						state.setAddLineIncrementValue(DEFAULT_LINE_NUM_INCREMENT);
+					}
+				} catch (NumberFormatException e) {
+					state.setAddLineIncrementValue(DEFAULT_LINE_NUM_INCREMENT);
+				}
             }
 
             success = true; 
@@ -148,5 +179,15 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 		state.setSpellcheckOn(true);
 		state.setShowInvisibleCharacters(false);
 		state.setMaxNumOfRecentFiles(DEFAULT_RECENT_FILES);
+		state.setAddLineIncrementValue(DEFAULT_LINE_NUM_INCREMENT);
+	}
+	
+	/**
+	 * Validates if the given value is within acceptable range to increment line numbers by.
+	 * @param value int
+	 * @return boolean
+	 */
+	public static boolean addLineIncrementValueInValidRange(int value) {
+		return value > 0 && value <= 100;
 	}
 }

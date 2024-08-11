@@ -46,7 +46,7 @@ public final class AddLineNumbersAction extends AbstractAddRemoveLineNumsAction 
 		window.guiWait();
 		
 		try {
-			AddLineNumbersCmd cmd = new AddLineNumbersCmd(text, this.lineState, 10);
+			AddLineNumbersCmd cmd = new AddLineNumbersCmd(text, this.lineState, CobblerState.getInstance().getAddLineIncrementValue());
 			cmd.perform();
 			
 			if (cmd.isSuccess()) {

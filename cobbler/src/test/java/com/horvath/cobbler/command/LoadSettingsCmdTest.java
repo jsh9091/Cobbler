@@ -188,6 +188,23 @@ public class LoadSettingsCmdTest {
 		return userProperties;
 	}
 	
+	@Test 
+	public void addLineIncrementValueInValidRange_intTooLow_FalseReturned() {
+		Assert.assertFalse(LoadSettingsCmd.addLineIncrementValueInValidRange(0));
+	}
+	
+	@Test 
+	public void addLineIncrementValueInValidRange_intValid_TrueReturned() {
+		Assert.assertTrue(LoadSettingsCmd.addLineIncrementValueInValidRange(1));
+		Assert.assertTrue(LoadSettingsCmd.addLineIncrementValueInValidRange(50));
+		Assert.assertTrue(LoadSettingsCmd.addLineIncrementValueInValidRange(100));
+	}
+	
+	@Test 
+	public void addLineIncrementValueInValidRange_intTooHigh_FalseReturned() {
+		Assert.assertFalse(LoadSettingsCmd.addLineIncrementValueInValidRange(101));		
+	}
+	
 	/**
 	 * Restores user properties to file system. 
 	 * 

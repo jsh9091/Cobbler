@@ -49,6 +49,7 @@ public abstract class AbstractSettingsCmd extends CobblerCommand {
 	protected static final String FIELD_SPELL_CHECK_ON = "spellcheck";
 	protected static final String FIELD_SHOW_INVISIBLES = "show_invisibles";
 	protected static final String FIELD_RECENT_FILES_MAX = "max_recent_files";
+	protected static final String FIELD_ADD_LINE_INCREMENT_VALUE = "add_line_increment";
 		
 	/**
 	 * Checks that settings folder and file exist, and if they don't creates them. 

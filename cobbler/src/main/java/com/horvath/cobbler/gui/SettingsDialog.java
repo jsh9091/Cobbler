@@ -28,13 +28,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Arrays;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-
 import com.horvath.cobbler.application.CobblerState;
 import com.horvath.cobbler.command.LoadSettingsCmd;
 import com.horvath.cobbler.gui.action.SaveSettingsAction;
@@ -55,6 +53,9 @@ public final class SettingsDialog extends JDialog {
 	private JCheckBox clearRecentCheckBox;
 	private JCheckBox spellcheckOnCheckBox;
 	private JCheckBox showInvisibleCharactersCheckBox;
+	private Integer[] addLineIncMenuOptions;
+	private JLabel addLineIncMenuLabel;
+	private JComboBox<Integer> addLineIncMenu;
 	private JButton saveSettingsBtn;
 	
 	/**
@@ -87,6 +88,23 @@ public final class SettingsDialog extends JDialog {
 		clearRecentCheckBox = new JCheckBox("Clear Recent menu", false);
 		spellcheckOnCheckBox = new JCheckBox("Spell Checker On", state.isSpellcheckOn());
 		showInvisibleCharactersCheckBox = new JCheckBox("Show Invisible Characters", state.isShowInvisibleCharacters());
+		
+		addLineIncMenuLabel = new JLabel();
+		final int stateAddInc = state.getAddLineIncrementValue();
+		addLineIncMenuOptions = LoadSettingsCmd.ADD_LINE_NUM_INCREMENT_OPTIONS;
+		// if the current state value is not in our collection, but is in valid range
+		if ((!Arrays.stream(addLineIncMenuOptions).anyMatch(new Integer(stateAddInc)::equals)) 
+				&& LoadSettingsCmd.addLineIncrementValueInValidRange(stateAddInc)) {
+			// add the value to our collection to display and sort it
+			addLineIncMenuOptions = new Integer[addLineIncMenuOptions.length + 1];
+			for (int i = 0; i < LoadSettingsCmd.ADD_LINE_NUM_INCREMENT_OPTIONS.length; i++) {
+				addLineIncMenuOptions[i] = LoadSettingsCmd.ADD_LINE_NUM_INCREMENT_OPTIONS[i];
+			}
+			addLineIncMenuOptions[addLineIncMenuOptions.length - 1] = new Integer(stateAddInc);
+			Arrays.sort(addLineIncMenuOptions);
+		}
+		addLineIncMenu = new JComboBox<Integer>(addLineIncMenuOptions);
+		
 		saveSettingsBtn = new JButton();
 	}
 	
@@ -98,7 +116,7 @@ public final class SettingsDialog extends JDialog {
 		
 		/* dialog */ 
 		setTitle("Settings");
-		setSize(280, 230);
+		setSize(290, 260);
 		setResizable(false);
 		setLocationRelativeTo(CobblerWindow.getWindow());
 		
@@ -115,6 +133,9 @@ public final class SettingsDialog extends JDialog {
 		} else {
 			maxNumRecentFilesMenu.setSelectedItem(LoadSettingsCmd.DEFAULT_RECENT_FILES);
 		}
+		
+		addLineIncMenuLabel.setText("Add Line Number Increment:");
+		addLineIncMenu.setSelectedItem(state.getAddLineIncrementValue());
 		
 		saveSettingsBtn.setAction(new SaveSettingsAction(this));
 		saveSettingsBtn.setText("Save");
@@ -161,7 +182,24 @@ public final class SettingsDialog extends JDialog {
 		gbc.weightx = 0.5;
 		gbc.insets = new Insets(0, 10, 10, 10);
 		gbc.anchor = GridBagConstraints.WEST;
-		this.add(maxNumRecentFilesMenu, gbc); // maxNumRecentFilesMenuLabel
+		this.add(maxNumRecentFilesMenu, gbc);
+
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridx = 0;
+		gbc.gridy = yPos;
+		gbc.insets = new Insets(0, 10, 10, 10);
+		gbc.anchor = GridBagConstraints.WEST;
+		this.add(addLineIncMenuLabel, gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 1;
+		gbc.gridy = yPos++;;
+		gbc.gridwidth = 1;
+		gbc.weighty = 0.0;
+		gbc.weightx = 0.5;
+		gbc.insets = new Insets(0, 10, 10, 10);
+		gbc.anchor = GridBagConstraints.WEST;
+		this.add(addLineIncMenu, gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
@@ -192,7 +230,7 @@ public final class SettingsDialog extends JDialog {
 		gbc.insets = new Insets(0, 10, 0, 10);
 		gbc.anchor = GridBagConstraints.CENTER;
 		this.add(showInvisibleCharactersCheckBox, gbc);
-		
+
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 1;
 		gbc.gridy = yPos++;
@@ -222,6 +260,10 @@ public final class SettingsDialog extends JDialog {
 
 	public JComboBox<Integer> getMaxNumRecentFilesMenu() {
 		return maxNumRecentFilesMenu;
+	}
+
+	public JComboBox<Integer> getAddLineIncMenu() {
+		return addLineIncMenu;
 	}
 	
 }

@@ -47,6 +47,7 @@ public final class CobblerState {
 	private boolean spellcheckOn;
 	private boolean showInvisibleCharacters;
 	private int maxNumOfRecentFiles = LoadSettingsCmd.DEFAULT_RECENT_FILES;
+	private int addLineIncrementValue;
 	
 	/**
 	 * Constructor. 
@@ -158,12 +159,22 @@ public final class CobblerState {
 	public void setMaxNumOfRecentFiles(int maxNumOfRecentFiles) {
 		this.maxNumOfRecentFiles = maxNumOfRecentFiles;
 	}
+	
+
+	public int getAddLineIncrementValue() {
+		return addLineIncrementValue;
+	}
+
+	public void setAddLineIncrementValue(int addLineIncrementValue) {
+		this.addLineIncrementValue = addLineIncrementValue;
+	}
 
 	@Override
 	public String toString() {
 		return "CobblerState [file=" + file + ", data=" + data + ", dirty=" + dirty + ", currentTheme=" + currentTheme
 				+ ", spellcheckOn=" + spellcheckOn + ", showInvisibleCharacters=" + showInvisibleCharacters
-				+ ", maxNumOfRecentFiles=" + maxNumOfRecentFiles + "]";
+				+ ", maxNumOfRecentFiles=" + maxNumOfRecentFiles + ", addLineIncrementValue=" + addLineIncrementValue
+				+ "]";
 	}
 
  }

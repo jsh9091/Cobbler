@@ -71,6 +71,7 @@ public final class SaveSettingsAction extends CobblerAction {
 		}
 		
 		final Integer maxRecentFiles = (Integer) dialog.getMaxNumRecentFilesMenu().getSelectedItem();
+		final Integer addLineNumIncrement = (Integer) dialog.getAddLineIncMenu().getSelectedItem();
 		final boolean clearRecent = dialog.getClearRecentCheckBox().isSelected();
 		final boolean spellCheckEnabled = dialog.getSpellcheckOnCheckBox().isSelected();
 		final boolean showInvisibleCharacters = dialog.getShowEndOfLinesCheckBox().isSelected();
@@ -82,6 +83,7 @@ public final class SaveSettingsAction extends CobblerAction {
 			state.getRecentFilesList().clear();
 		}
 		state.setMaxNumOfRecentFiles(maxRecentFiles.intValue());
+		state.setAddLineIncrementValue(addLineNumIncrement.intValue());
 		// if we currently have more recent files than settings change allow for
 		boolean truncatedFileList = false;
 		while (state.getRecentFilesList().size() > state.getMaxNumOfRecentFiles()) {
