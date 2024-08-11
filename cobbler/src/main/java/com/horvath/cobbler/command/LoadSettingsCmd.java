@@ -37,95 +37,96 @@ import com.horvath.cobbler.exception.CobblerException;
 import com.horvath.cobbler.gui.syntax.GuiTheme;
 
 /**
- * Reads application properties file into state. 
- * Default values for settings are established and controlled in this class.
+ * Reads application properties file into state. Default values for settings are
+ * established and controlled in this class.
  * 
  * @author jhorvath
  */
 public final class LoadSettingsCmd extends AbstractSettingsCmd {
-	
+
 	/**
-	 * Controls the default maximum number of files displayed in the recent files menu.
+	 * Controls the default maximum number of files displayed in the recent files
+	 * menu.
 	 */
 	public static final int DEFAULT_RECENT_FILES = 5;
-	
+
 	/**
-	 * The maximum number of recent files allowed. 
+	 * The maximum number of recent files allowed.
 	 */
 	public static final int MAX_SUPPORTED_RECENT_FILES = 20;
-	
+
 	/**
-	 * Values that are used for options to increment added line numbers by. 
+	 * Values that are used for options to increment added line numbers by.
 	 */
-	public static final Integer[] ADD_LINE_NUM_INCREMENT_OPTIONS = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-	
+	public static final Integer[] ADD_LINE_NUM_INCREMENT_OPTIONS = { 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+
 	/**
 	 * Default value to increment added line numbers by.
 	 */
 	public static final int DEFAULT_LINE_NUM_INCREMENT = 10;
-	
+
 	@Override
 	public void perform() throws CobblerException {
 		Debugger.printLog("Load Settings Properties File", this.getClass().getName());
-		
-		success = false; 
-		
+
+		success = false;
+
 		setupSettingsFolderAndFile();
-		
-        try (InputStream input = new FileInputStream(APP_SETTINGS)) {
 
-        	Properties prop = new Properties();    
+		try (InputStream input = new FileInputStream(APP_SETTINGS)) {
 
-        	// load the properties file
-            prop.load(input);
+			Properties prop = new Properties();
 
-            if (prop.isEmpty()) {
-            	// load default values into state
-            	defaultSettings();
-            	
-            } else {
-            	CobblerState state = CobblerState.getInstance();
-            	
-            	// load theme data from file into state
-            	String themeText = prop.getProperty(FIELD_THEME);
-            	GuiTheme loadedTheme = GuiTheme.fromString(themeText);
-            	if (loadedTheme != null) {
-                	state.setCurrentTheme(loadedTheme);            		
-            	} else {
-            		state.setCurrentTheme(GuiTheme.Default);   
-            	}
-            	
-            	// load recent files 
-            	ArrayList<String> fileList = new ArrayList<>();
-            	for (int i = 0; i < state.getMaxNumOfRecentFiles(); i++) {
-            		String filepath = prop.getProperty(FIELD_RECENT_FILE + i);
-            		if (filepath == null) {
-            			break;
-            		}
-            		fileList.add(filepath);
-            	}
-            	if (!fileList.isEmpty()) {
-            		state.getRecentFilesList().addAll(fileList);
-            	}
-            	
-            	// load spell check setting
-            	String spellcheckOnProp = prop.getProperty(FIELD_SPELL_CHECK_ON);
-            	if ("true".equalsIgnoreCase(spellcheckOnProp)) {
-            		state.setSpellcheckOn(true);
-            	} else {
-            		state.setSpellcheckOn(false);
-            	}
-            	
-            	// load value for if we should show end of line characters or not
-            	String showInvisibleProp = prop.getProperty(FIELD_SHOW_INVISIBLES);
-            	if ("true".equalsIgnoreCase(showInvisibleProp)) {
-            		state.setShowInvisibleCharacters(true);
-            	} else {
-            		state.setShowInvisibleCharacters(false);
-            	}
-            	
-            	// load value for maximum number of recent files
-            	String maxRecentFilesString = prop.getProperty(FIELD_RECENT_FILES_MAX);
+			// load the properties file
+			prop.load(input);
+
+			if (prop.isEmpty()) {
+				// load default values into state
+				defaultSettings();
+
+			} else {
+				CobblerState state = CobblerState.getInstance();
+
+				// load theme data from file into state
+				String themeText = prop.getProperty(FIELD_THEME);
+				GuiTheme loadedTheme = GuiTheme.fromString(themeText);
+				if (loadedTheme != null) {
+					state.setCurrentTheme(loadedTheme);
+				} else {
+					state.setCurrentTheme(GuiTheme.Default);
+				}
+
+				// load recent files
+				ArrayList<String> fileList = new ArrayList<>();
+				for (int i = 0; i < state.getMaxNumOfRecentFiles(); i++) {
+					String filepath = prop.getProperty(FIELD_RECENT_FILE + i);
+					if (filepath == null) {
+						break;
+					}
+					fileList.add(filepath);
+				}
+				if (!fileList.isEmpty()) {
+					state.getRecentFilesList().addAll(fileList);
+				}
+
+				// load spell check setting
+				String spellcheckOnProp = prop.getProperty(FIELD_SPELL_CHECK_ON);
+				if ("true".equalsIgnoreCase(spellcheckOnProp)) {
+					state.setSpellcheckOn(true);
+				} else {
+					state.setSpellcheckOn(false);
+				}
+
+				// load value for if we should show end of line characters or not
+				String showInvisibleProp = prop.getProperty(FIELD_SHOW_INVISIBLES);
+				if ("true".equalsIgnoreCase(showInvisibleProp)) {
+					state.setShowInvisibleCharacters(true);
+				} else {
+					state.setShowInvisibleCharacters(false);
+				}
+
+				// load value for maximum number of recent files
+				String maxRecentFilesString = prop.getProperty(FIELD_RECENT_FILES_MAX);
 				try {
 					int max = Integer.parseInt(maxRecentFilesString);
 
@@ -141,9 +142,9 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 				} catch (NumberFormatException e) {
 					state.setMaxNumOfRecentFiles(DEFAULT_RECENT_FILES);
 				}
-				
+
 				// load value for maximum number of recent files
-            	String addLineIncrementValueString = prop.getProperty(FIELD_ADD_LINE_INCREMENT_VALUE);
+				String addLineIncrementValueString = prop.getProperty(FIELD_ADD_LINE_INCREMENT_VALUE);
 				try {
 					int addLineIncrementValue = Integer.parseInt(addLineIncrementValueString);
 
@@ -157,21 +158,20 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 				} catch (NumberFormatException e) {
 					state.setAddLineIncrementValue(DEFAULT_LINE_NUM_INCREMENT);
 				}
-            }
+			}
 
-            success = true; 
-            
-        } catch (IOException io) {
-        	defaultSettings();
+			success = true;
+
+		} catch (IOException io) {
+			defaultSettings();
 			final String message = "Error Reading the properties file." + io.getMessage();
-			Debugger.printLog(message, this.getClass().getName(),
-					Level.SEVERE);
-			throw new CobblerException(message, io); 
-        }
+			Debugger.printLog(message, this.getClass().getName(), Level.SEVERE);
+			throw new CobblerException(message, io);
+		}
 	}
-	
+
 	/**
-	 * Loads default values to state. 
+	 * Loads default values to state.
 	 */
 	private void defaultSettings() {
 		CobblerState state = CobblerState.getInstance();
@@ -181,9 +181,11 @@ public final class LoadSettingsCmd extends AbstractSettingsCmd {
 		state.setMaxNumOfRecentFiles(DEFAULT_RECENT_FILES);
 		state.setAddLineIncrementValue(DEFAULT_LINE_NUM_INCREMENT);
 	}
-	
+
 	/**
-	 * Validates if the given value is within acceptable range to increment line numbers by.
+	 * Validates if the given value is within acceptable range to increment line
+	 * numbers by.
+	 * 
 	 * @param value int
 	 * @return boolean
 	 */

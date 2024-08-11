@@ -63,11 +63,11 @@ public final class SaveSettingsAction extends CobblerAction {
 		// get the enumeration value
 		GuiTheme selectedTheme = GuiTheme.Default;
 		// search themes for the one the user selected
-		for (GuiTheme guiTheme : GuiTheme.values()) { 
-		    if (guiTheme.name().equals(userSelectedTheme)) {
-		    	selectedTheme = guiTheme;
-		    	break;
-		    }
+		for (GuiTheme guiTheme : GuiTheme.values()) {
+			if (guiTheme.name().equals(userSelectedTheme)) {
+				selectedTheme = guiTheme;
+				break;
+			}
 		}
 		
 		final Integer maxRecentFiles = (Integer) dialog.getMaxNumRecentFilesMenu().getSelectedItem();

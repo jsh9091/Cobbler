@@ -36,51 +36,51 @@ import com.horvath.cobbler.application.Debugger;
 import com.horvath.cobbler.exception.CobblerException;
 
 /**
- * Saves state settings data to properties file. 
- * @jhorvath 
+ * Saves state settings data to properties file.
+ * 
+ * @jhorvath
  */
 public final class SaveSettingsCmd extends AbstractSettingsCmd {
 
 	@Override
 	public void perform() throws CobblerException {
 		success = false;
-		
+
 		Debugger.printLog("Saving Settings Properties File", this.getClass().getName());
-		
+
 		setupSettingsFolderAndFile();
-		
+
 		try (OutputStream output = new FileOutputStream(APP_SETTINGS)) {
 
-            Properties prop = new Properties();
-            CobblerState state =  CobblerState.getInstance();
+			Properties prop = new Properties();
+			CobblerState state = CobblerState.getInstance();
 
-            // set the properties values from state
-            prop.setProperty(FIELD_THEME, state.getCurrentTheme().toString());
-            prop.setProperty(FIELD_SPELL_CHECK_ON, String.valueOf(state.isSpellcheckOn()));
-            prop.setProperty(FIELD_SHOW_INVISIBLES, String.valueOf(state.isShowInvisibleCharacters()));
-            prop.setProperty(FIELD_RECENT_FILES_MAX, String.valueOf(state.getMaxNumOfRecentFiles()));
-            prop.setProperty(FIELD_ADD_LINE_INCREMENT_VALUE, String.valueOf(state.getAddLineIncrementValue()));
-            
-            // for (String recentFile : CobblerState.getInstance().getRecentFilesList()) {
-            for (int i = 0; i < state.getRecentFilesList().size(); i++) {
-            	String filepath = state.getRecentFilesList().get(i);
-            	prop.setProperty(FIELD_RECENT_FILE + i, filepath);
-            }
+			// set the properties values from state
+			prop.setProperty(FIELD_THEME, state.getCurrentTheme().toString());
+			prop.setProperty(FIELD_SPELL_CHECK_ON, String.valueOf(state.isSpellcheckOn()));
+			prop.setProperty(FIELD_SHOW_INVISIBLES, String.valueOf(state.isShowInvisibleCharacters()));
+			prop.setProperty(FIELD_RECENT_FILES_MAX, String.valueOf(state.getMaxNumOfRecentFiles()));
+			prop.setProperty(FIELD_ADD_LINE_INCREMENT_VALUE, String.valueOf(state.getAddLineIncrementValue()));
+
+			// for (String recentFile : CobblerState.getInstance().getRecentFilesList()) {
+			for (int i = 0; i < state.getRecentFilesList().size(); i++) {
+				String filepath = state.getRecentFilesList().get(i);
+				prop.setProperty(FIELD_RECENT_FILE + i, filepath);
+			}
 
 			final String comment = "Settings file for " + CobblerApplication.APP_NAME + " version "
 					+ CobblerApplication.APP_VERSION + " for user: " + System.getProperty("user.name");
-			
-            // save properties to disk
-            prop.store(output, comment);
 
-            success = true;
+			// save properties to disk
+			prop.store(output, comment);
 
-        } catch (IOException io) {
+			success = true;
+
+		} catch (IOException io) {
 			final String message = "Error Saving the properties file." + io.getMessage();
-			Debugger.printLog(message, this.getClass().getName(),
-					Level.SEVERE);
-			throw new CobblerException(message, io); 
-        }
+			Debugger.printLog(message, this.getClass().getName(), Level.SEVERE);
+			throw new CobblerException(message, io);
+		}
 	}
 
 }

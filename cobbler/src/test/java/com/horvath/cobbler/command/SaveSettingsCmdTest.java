@@ -59,13 +59,13 @@ public class SaveSettingsCmdTest {
 			userProperties = new Properties();
 			try (InputStream input = new FileInputStream(AbstractSettingsCmd.APP_SETTINGS)) {
 
-	        	// load a properties file
+				// load a properties file
 				userProperties.load(input);
 				
 				// need to remove dictionary for proper test operations
 				File dictionary = new File(AbstractSettingsCmd.APP_DICTIONARY);
 				dictionary.delete();
-	            
+
 			} catch (IOException io) {
 				// should not get here
 				Assert.fail();
