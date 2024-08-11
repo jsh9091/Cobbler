@@ -120,6 +120,7 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 				String text = getText();
 				state.setData(text);
 				CobblerWindow.getWindow().updateUndoRedoMenuitems();
+				CobblerWindow.getWindow().updateDocumentNameDisplay(state.getFile().getName());
 			}
 		});
 	}

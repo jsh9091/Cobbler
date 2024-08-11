@@ -65,7 +65,7 @@ public class CobGuiTests {
         window.setVisible(false);
         window.getTextArea().setText(CobblerState.getInstance().getData());
         window.getTextArea().discardAllEdits();
-        window.setDocumentName(" ");
+        window.updateDocumentNameDisplay(" ");
     }
     
 	@Test
@@ -73,7 +73,7 @@ public class CobGuiTests {
 		final String oldName = "OLD File.cob";
 		CobblerState.getInstance().setFile(new File(oldName));
 		CobblerWindow window = CobblerWindow.getWindow();
-		window.setDocumentName(oldName);
+		window.updateDocumentNameDisplay(oldName);
 		
 		Assert.assertEquals(oldName, window.getDocumentName());
 		

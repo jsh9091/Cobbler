@@ -430,9 +430,16 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 		statusBar.updateText(text);
 	}
 	
-	public void setDocumentName(String name) {
+	
+	
+	public void updateDocumentNameDisplay(String name) {
+		setDocumentName(name + (CobblerState.getInstance().isDirty() ? "*" : ""));
+	}
+	
+	private void setDocumentName(String name) {
 		docNameLabel.setText(name);
 	}
+	
 	
 	public String getDocumentName() {
 		return docNameLabel.getText();

@@ -86,9 +86,6 @@ public class OpenRecentAction extends CobblerAction {
 				window.getTextArea().setCaretPosition(0);
 				window.getTextArea().discardAllEdits();
 				
-				// display document name to user in GUI
-				window.setDocumentName(state.getFile().getName());
-				
 				// recent files updates
 				state.updateRecentFiles(file.getAbsolutePath());
 				window.updateRecentFilesMenu();
@@ -99,6 +96,10 @@ public class OpenRecentAction extends CobblerAction {
 				
 				// need to clear state because GUI updates impact the state dirty flag
 				state.setDirty(false);
+				
+				// display document name to user in GUI, needs to be after clearing dirty state
+				window.updateDocumentNameDisplay(state.getFile().getName());
+
 				
 			} else {
 				CobblerWindow.getWindow().simpleMessagePopup("Load Error",

@@ -54,10 +54,14 @@ public final class NewDocumentAction extends OpenSaveAsAction {
 			cmd.perform();
 			
 			if (cmd.isSuccess()) {
+				CobblerState state = CobblerState.getInstance();
+				CobblerWindow window = CobblerWindow.getWindow();
+				
 				// refresh GUI
-				CobblerWindow.getWindow().getTextArea().setText(CobblerState.getInstance().getData());
-				CobblerWindow.getWindow().getTextArea().discardAllEdits();
-				CobblerWindow.getWindow().setDocumentName(" ");
+				window.getTextArea().setText(state.getData());
+				window.getTextArea().discardAllEdits();
+				state.setDirty(false); // must be between above and below statements
+				window.updateDocumentNameDisplay(" ");
 			}
 			
 		} catch (CobblerException ex) {

@@ -150,7 +150,7 @@ public final class SaveAction extends OpenSaveAsAction {
 			if (cmd.isSuccess()) {
 				CobblerWindow window = CobblerWindow.getWindow();
 				CobblerState state = CobblerState.getInstance();
-				window.setDocumentName(state.getFile().getName());
+				window.updateDocumentNameDisplay(state.getFile().getName());
 				
 				// recent files updates
 				state.updateRecentFiles(file.getAbsolutePath());

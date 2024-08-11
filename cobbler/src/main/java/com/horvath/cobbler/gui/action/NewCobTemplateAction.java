@@ -58,7 +58,7 @@ public final class NewCobTemplateAction extends OpenSaveAsAction {
 				// refresh GUI
 				CobblerWindow.getWindow().getTextArea().setText(CobblerState.getInstance().getData());
 				CobblerWindow.getWindow().getTextArea().discardAllEdits();
-				CobblerWindow.getWindow().setDocumentName(CobblerState.getInstance().getFile().getName());
+				CobblerWindow.getWindow().updateDocumentNameDisplay(CobblerState.getInstance().getFile().getName());
 			}
 			
 		} catch (CobblerException ex) {
