@@ -41,33 +41,33 @@ import com.horvath.cobbler.gui.syntax.CobSyntaxTextArea;
  * @author jhorvath
  */
 public class CobGuiTests {
-	
+
 	@Before
-    public void setUp() {
-    	setupTeardownHelper();
-    }
-	
-    @After
-    public void tearDown() {
-    	setupTeardownHelper();
-    }
+	public void setUp() {
+		setupTeardownHelper();
+	}
 
-    /**
-     * Helper method for setting up and cleaning up window and state for tests.
-     */
-    private void setupTeardownHelper() {
-        CobblerState state = CobblerState.getInstance();
-        state.setData("");
-        state.setDirty(false);
-        state.setFile(new File(""));
+	@After
+	public void tearDown() {
+		setupTeardownHelper();
+	}
 
-        CobblerWindow window = CobblerWindow.getWindow();
-        window.setVisible(false);
-        window.getTextArea().setText(CobblerState.getInstance().getData());
-        window.getTextArea().discardAllEdits();
-        window.updateDocumentNameDisplay(" ");
-    }
-    
+	/**
+	 * Helper method for setting up and cleaning up window and state for tests.
+	 */
+	private void setupTeardownHelper() {
+		CobblerState state = CobblerState.getInstance();
+		state.setData("");
+		state.setDirty(false);
+		state.setFile(new File(""));
+
+		CobblerWindow window = CobblerWindow.getWindow();
+		window.setVisible(false);
+		window.getTextArea().setText(CobblerState.getInstance().getData());
+		window.getTextArea().discardAllEdits();
+		window.updateDocumentNameDisplay(" ");
+	}
+
 	@Test
 	public void gui_newFile_guiCleared() {
 		final String oldName = "OLD File.cob";
@@ -222,13 +222,13 @@ public class CobGuiTests {
 			Assert.assertTrue(Character.isDigit(chars[5]));
 		}
 	}
-	
+
 	@Test
 	public void gui_removeLineNumbs_lineNumsRemoved() {
 		CobblerWindow window = CobblerWindow.getWindow();
 		CobSyntaxTextArea textarea = window.getTextArea();
 		CobblerMenuBar menubar = window.getCobMenuBar();
-		
+
 		// pre-populate text area with Cobol code with no line numbers
 		menubar.newTemplatedItem.doClick();
 		Assert.assertTrue(textarea.getText().length() > 350);

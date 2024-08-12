@@ -210,7 +210,7 @@ public final class SettingsDialog extends JDialog {
 		gbc.insets = new Insets(0, 10, 0, 10);
 		gbc.anchor = GridBagConstraints.CENTER;
 		this.add(clearRecentCheckBox, gbc);
-		
+
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
 		gbc.gridy = yPos++;

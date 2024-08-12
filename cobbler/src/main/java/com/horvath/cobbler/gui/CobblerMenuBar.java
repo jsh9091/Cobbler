@@ -365,8 +365,8 @@ public final class CobblerMenuBar extends JMenuBar {
 
 			public void actionPerformed(ActionEvent ae) {
 				CobblerWindow.getWindow().simpleMessagePopup("About Cobbler v. " + CobblerApplication.APP_VERSION, 
-						"Cobbler is a simple COBOL text editor.");
-		    }
+						"Cobbler is a simple COBOL text editor, by Josh Horvath.");
+			}
 		});
 		
 		userManualItem.setAction(new AbstractAction("User Manual") {

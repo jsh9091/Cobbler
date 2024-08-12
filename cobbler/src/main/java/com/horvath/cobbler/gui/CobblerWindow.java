@@ -156,10 +156,10 @@ public final class CobblerWindow extends JFrame implements SearchListener {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		addWindowListener(new WindowAdapter() {
-		    @Override
-		    public void windowClosing(WindowEvent windowEvent) {
-		    	new ShutdownAction().shutdownApplication();
-		    }
+			@Override
+			public void windowClosing(WindowEvent windowEvent) {
+				new ShutdownAction().shutdownApplication();
+			}
 		});
 		// action listener above is in charge of shutting down application
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

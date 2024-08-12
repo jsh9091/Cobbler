@@ -124,7 +124,7 @@ public class SaveSettingsCmdTest {
 				
 				try (OutputStream output = new FileOutputStream(AbstractSettingsCmd.APP_SETTINGS)) {
 					
-		            // save properties to project root folder
+					// save properties to project root folder
 					userProperties.store(output, null);
 					
 				} catch (IOException ex) {

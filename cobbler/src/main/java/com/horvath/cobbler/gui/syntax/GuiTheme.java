@@ -40,13 +40,14 @@ public enum GuiTheme {
 	
 	private final String text;
 
-    /**
-     * Constructor. 
-     * @param text String 
-     */
+	/**
+	 * Constructor.
+	 * 
+	 * @param text String
+	 */
 	private GuiTheme(final String text) {
-        this.text = text;
-    }
+		this.text = text;
+	}
 	
 	public String[] names() {
 		String[] nameArray = new String[GuiTheme.values().length];
@@ -61,16 +62,16 @@ public enum GuiTheme {
 	}
 	
 	public static GuiTheme fromString(String text) {
-        for (GuiTheme theme : GuiTheme.values()) {
-            if (theme.text.equalsIgnoreCase(text)) {
-                return theme;
-            }
-        }
-        return null;
-    }
+		for (GuiTheme theme : GuiTheme.values()) {
+			if (theme.text.equalsIgnoreCase(text)) {
+				return theme;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public String toString() {
-        return text;
-    }
+	@Override
+	public String toString() {
+		return text;
+	}
 }

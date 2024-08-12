@@ -54,28 +54,28 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 	 */
 	public Token getTokenList(Segment text, int startTokenType, int startOffset) {
 
-	   resetTokenList();
+		resetTokenList();
 
-	   char[] array = text.array;
-	   int offset = text.offset;
-	   int count = text.count;
-	   int end = offset + count;
+		char[] array = text.array;
+		int offset = text.offset;
+		int count = text.count;
+		int end = offset + count;
 
-	   // Token starting offsets are always of the form:
-	   // 'startOffset + (currentTokenStart-offset)', but since startOffset and
-	   // offset are constant, tokens' starting positions become:
-	   // 'newStartOffset+currentTokenStart'.
-	   int newStartOffset = startOffset - offset;
+		// Token starting offsets are always of the form:
+		// 'startOffset + (currentTokenStart-offset)', but since startOffset and
+		// offset are constant, tokens' starting positions become:
+		// 'newStartOffset+currentTokenStart'.
+		int newStartOffset = startOffset - offset;
 
-	   currentTokenStart = offset;
-	   currentTokenType  = startTokenType;
+		currentTokenStart = offset;
+		currentTokenType = startTokenType;
 
-	   final int commentMarkerPosition = 6; 
-	   
-	   for (int i=offset; i<end; i++) {
+		final int commentMarkerPosition = 6;
 
-	      char c = array[i];
-	      
+		for (int i = offset; i < end; i++) {
+
+			char c = array[i];
+
 			if ((offset + commentMarkerPosition) < array.length - 1) {
 				// parse out comment tokens, either character in column 7
 				if (array[offset + commentMarkerPosition] == '*' || array[offset + commentMarkerPosition] == '/') {
@@ -86,207 +86,211 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 					}
 				}
 			}
-			
-	      switch (currentTokenType) {
 
-	         case Token.NULL:
+			switch (currentTokenType) {
 
-	            currentTokenStart = i;   // Starting a new token here.
+			case Token.NULL:
 
-	            switch (c) {
+				currentTokenStart = i; // Starting a new token here.
 
-	               case ' ':
-	               case '\t':
-	                  currentTokenType = Token.WHITESPACE;
-	                  break;
+				switch (c) {
 
-	               case '"':
-	                  currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
-	                  break;
+				case ' ':
+				case '\t':
+					currentTokenType = Token.WHITESPACE;
+					break;
 
-	               default:
-	                  if (RSyntaxUtilities.isDigit(c)) {
-	                     currentTokenType = Token.LITERAL_NUMBER_DECIMAL_INT;
-	                     break;
-	                  }
-	                  else if (RSyntaxUtilities.isLetter(c) || c=='/' || c=='_') {
-	                     currentTokenType = Token.IDENTIFIER;
-	                     break;
-	                  }
-	                  
-	                  // Anything not currently handled - mark as an identifier
-	                  currentTokenType = Token.IDENTIFIER;
-	                  break;
+				case '"':
+					currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
+					break;
 
-	            } // End of switch (c).
+				default:
+					if (RSyntaxUtilities.isDigit(c)) {
+						currentTokenType = Token.LITERAL_NUMBER_DECIMAL_INT;
+						break;
+					} else if (RSyntaxUtilities.isLetter(c) || c == '/' || c == '_') {
+						currentTokenType = Token.IDENTIFIER;
+						break;
+					}
 
-	            break;
+					// Anything not currently handled - mark as an identifier
+					currentTokenType = Token.IDENTIFIER;
+					break;
 
-	         case Token.WHITESPACE:
+				} // End of switch (c).
 
-	            switch (c) {
+				break;
 
-	               case ' ':
-	               case '\t':
-	                  break;   // Still whitespace.
+			case Token.WHITESPACE:
 
-	               case '"':
-	                  addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
-	                  currentTokenStart = i;
-	                  currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
-	                  break;
+				switch (c) {
 
-	               case '#':
-	                  addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
-	                  currentTokenStart = i;
-	                  currentTokenType = Token.COMMENT_EOL;
-	                  break;
+				case ' ':
+				case '\t':
+					break; // Still whitespace.
 
-	               default:   // Add the whitespace token and start anew.
+				case '"':
+					addToken(text, currentTokenStart, i - 1, Token.WHITESPACE, newStartOffset + currentTokenStart);
+					currentTokenStart = i;
+					currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
+					break;
 
-	                  addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
-	                  currentTokenStart = i;
+				case '#':
+					addToken(text, currentTokenStart, i - 1, Token.WHITESPACE, newStartOffset + currentTokenStart);
+					currentTokenStart = i;
+					currentTokenType = Token.COMMENT_EOL;
+					break;
 
-	                  if (RSyntaxUtilities.isDigit(c)) {
-	                     currentTokenType = Token.LITERAL_NUMBER_DECIMAL_INT;
-	                     break;
-	                  }
-	                  else if (RSyntaxUtilities.isLetter(c) || c=='/' || c=='_') {
-	                     currentTokenType = Token.IDENTIFIER;
-	                     break;
-	                  }
+				default: // Add the whitespace token and start anew.
 
-	                  // Anything not currently handled - mark as identifier
-	                  currentTokenType = Token.IDENTIFIER;
+					addToken(text, currentTokenStart, i - 1, Token.WHITESPACE, newStartOffset + currentTokenStart);
+					currentTokenStart = i;
 
-	            } // End of switch (c).
+					if (RSyntaxUtilities.isDigit(c)) {
+						currentTokenType = Token.LITERAL_NUMBER_DECIMAL_INT;
+						break;
+					} else if (RSyntaxUtilities.isLetter(c) || c == '/' || c == '_') {
+						currentTokenType = Token.IDENTIFIER;
+						break;
+					}
 
-	            break;
+					// Anything not currently handled - mark as identifier
+					currentTokenType = Token.IDENTIFIER;
 
-	         default: // Should never happen
-	         case Token.IDENTIFIER:
+				} // End of switch (c).
 
-	            switch (c) {
+				break;
 
-	               case ' ':
-	               case '\t':
-	                  addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
-	                  currentTokenStart = i;
-	                  currentTokenType = Token.WHITESPACE;
-	                  break;
+			default: // Should never happen
+			case Token.IDENTIFIER:
 
-	               case '"':
-	                  addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
-	                  currentTokenStart = i;
-	                  currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
-	                  break;
+				switch (c) {
 
-	               default:
-	                  if (RSyntaxUtilities.isLetterOrDigit(c) || c=='/' || c=='_') {
-	                     break;   // Still an identifier of some type.
-	                  }
-	                  // Otherwise, we're still an identifier (?).
+				case ' ':
+				case '\t':
+					addToken(text, currentTokenStart, i - 1, Token.IDENTIFIER, newStartOffset + currentTokenStart);
+					currentTokenStart = i;
+					currentTokenType = Token.WHITESPACE;
+					break;
 
-	            } // End of switch (c).
+				case '"':
+					addToken(text, currentTokenStart, i - 1, Token.IDENTIFIER, newStartOffset + currentTokenStart);
+					currentTokenStart = i;
+					currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
+					break;
 
-	            break;
+				default:
+					if (RSyntaxUtilities.isLetterOrDigit(c) || c == '/' || c == '_') {
+						break; // Still an identifier of some type.
+					}
+					// Otherwise, we're still an identifier (?).
 
-	         case Token.LITERAL_NUMBER_DECIMAL_INT:
+				} // End of switch (c).
 
-	            switch (c) {
+				break;
 
-	               case ' ':
-	               case '\t':
-	                  addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
-	                  currentTokenStart = i;
-	                  currentTokenType = Token.WHITESPACE;
-	                  break;
+			case Token.LITERAL_NUMBER_DECIMAL_INT:
 
-	               case '"':
-	                  addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
-	                  currentTokenStart = i;
-	                  currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
-	                  break;
+				switch (c) {
 
-	               default:
+				case ' ':
+				case '\t':
+					addToken(text, currentTokenStart, i - 1, Token.LITERAL_NUMBER_DECIMAL_INT,
+							newStartOffset + currentTokenStart);
+					currentTokenStart = i;
+					currentTokenType = Token.WHITESPACE;
+					break;
 
-	                  if (RSyntaxUtilities.isDigit(c)) {
-	                     break;   // Still a literal number.
-	                  }
+				case '"':
+					addToken(text, currentTokenStart, i - 1, Token.LITERAL_NUMBER_DECIMAL_INT,
+							newStartOffset + currentTokenStart);
+					currentTokenStart = i;
+					currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
+					break;
 
-	                  // Otherwise, remember this was a number and start over.
-	                  addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
-	                  i--;
-	                  currentTokenType = Token.NULL;
+				default:
 
-	            } // End of switch (c).
+					if (RSyntaxUtilities.isDigit(c)) {
+						break; // Still a literal number.
+					}
 
-	            break;
+					// Otherwise, remember this was a number and start over.
+					addToken(text, currentTokenStart, i - 1, Token.LITERAL_NUMBER_DECIMAL_INT,
+							newStartOffset + currentTokenStart);
+					i--;
+					currentTokenType = Token.NULL;
 
-	         case Token.COMMENT_KEYWORD:
-		            i = end - 1;
-		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
-		            currentTokenType = Token.NULL;
-		            break;
+				} // End of switch (c).
 
-	         case Token.COMMENT_MULTILINE:
-		            i = end - 1;
-		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
-		            currentTokenType = Token.NULL;
-		            break;
+				break;
 
-	         case Token.COMMENT_MARKUP:
-		            i = end - 1;
-		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
-		            currentTokenType = Token.NULL;
-		            break;
-		            
-	         case Token.COMMENT_DOCUMENTATION:
-		            i = end - 1;
-		            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
-		            // We need to set token type to null so at the bottom we don't add one more token.
-		            currentTokenType = Token.NULL;
-		            break;
-		            
-	         case Token.COMMENT_EOL:
-	            i = end - 1;
-	            addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
-	            // We need to set token type to null so at the bottom we don't add one more token.
-	            currentTokenType = Token.NULL;
-	            break;
+			case Token.COMMENT_KEYWORD:
+				i = end - 1;
+				addToken(text, currentTokenStart, i, currentTokenType, newStartOffset + currentTokenStart);
+				currentTokenType = Token.NULL;
+				break;
 
-	         case Token.LITERAL_STRING_DOUBLE_QUOTE:
-	            if (c=='"') {
-	               addToken(text, currentTokenStart,i, Token.LITERAL_STRING_DOUBLE_QUOTE, newStartOffset+currentTokenStart);
-	               currentTokenType = Token.NULL;
-	            }
-	            break;
+			case Token.COMMENT_MULTILINE:
+				i = end - 1;
+				addToken(text, currentTokenStart, i, currentTokenType, newStartOffset + currentTokenStart);
+				currentTokenType = Token.NULL;
+				break;
 
-	      } // End of switch (currentTokenType).
+			case Token.COMMENT_MARKUP:
+				i = end - 1;
+				addToken(text, currentTokenStart, i, currentTokenType, newStartOffset + currentTokenStart);
+				currentTokenType = Token.NULL;
+				break;
 
-	   } // End of for (int i=offset; i<end; i++).
+			case Token.COMMENT_DOCUMENTATION:
+				i = end - 1;
+				addToken(text, currentTokenStart, i, currentTokenType, newStartOffset + currentTokenStart);
+				// We need to set token type to null so at the bottom we don't add one more
+				// token.
+				currentTokenType = Token.NULL;
+				break;
 
-	   switch (currentTokenType) {
+			case Token.COMMENT_EOL:
+				i = end - 1;
+				addToken(text, currentTokenStart, i, currentTokenType, newStartOffset + currentTokenStart);
+				// We need to set token type to null so at the bottom we don't add one more
+				// token.
+				currentTokenType = Token.NULL;
+				break;
 
-	      // Remember what token type to begin the next line with.
-	      case Token.LITERAL_STRING_DOUBLE_QUOTE:
-	         addToken(text, currentTokenStart,end-1, currentTokenType, newStartOffset+currentTokenStart);
-	         break;
+			case Token.LITERAL_STRING_DOUBLE_QUOTE:
+				if (c == '"') {
+					addToken(text, currentTokenStart, i, Token.LITERAL_STRING_DOUBLE_QUOTE,
+							newStartOffset + currentTokenStart);
+					currentTokenType = Token.NULL;
+				}
+				break;
 
-	      // Do nothing if everything was okay.
-	      case Token.NULL:
-	         addNullToken();
-	         break;
+			} // End of switch (currentTokenType).
 
-	      // All other token types don't continue to the next line...
-	      default:
-	         addToken(text, currentTokenStart,end-1, currentTokenType, newStartOffset+currentTokenStart);
-	         addNullToken();
+		} // End of for (int i=offset; i<end; i++).
 
-	   }
+		switch (currentTokenType) {
 
-	   // Return the first token in our linked list.
-	   return firstToken;
+		// Remember what token type to begin the next line with.
+		case Token.LITERAL_STRING_DOUBLE_QUOTE:
+			addToken(text, currentTokenStart, end - 1, currentTokenType, newStartOffset + currentTokenStart);
+			break;
+
+		// Do nothing if everything was okay.
+		case Token.NULL:
+			addNullToken();
+			break;
+
+		// All other token types don't continue to the next line...
+		default:
+			addToken(text, currentTokenStart, end - 1, currentTokenType, newStartOffset + currentTokenStart);
+			addNullToken();
+
+		}
+
+		// Return the first token in our linked list.
+		return firstToken;
 
 	}
 
@@ -362,12 +366,12 @@ public class CobolTokenMaker extends AbstractTokenMaker {
 	 */
 	private TokenMap processFunctions(ArrayList<String> list, TokenMap tokenMap) {
 		
-		for (String s : list) {			
+		for (String s : list) {
 			tokenMap.put(s.toLowerCase(), Token.FUNCTION);
 			tokenMap.put(s.toUpperCase(), Token.FUNCTION);
 			tokenMap.put(SyntaxUtils.toTitleCase(s), Token.FUNCTION);
 		}
-		
+
 		return tokenMap;
 	}
 
