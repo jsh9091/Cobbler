@@ -21,11 +21,7 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
-pptdiffer/.classpath
-pptdiffer/.project
-pptdiffer/.settings/org.eclipse.core.resources.prefs
-pptdiffer/.settings/org.eclipse.jdt.core.prefs
-pptdiffer/.settings/org.eclipse.m2e.core.prefs
+
 cobbler/.project
 cobbler/.classpath
 cobbler/.settings/org.eclipse.core.resources.prefs
