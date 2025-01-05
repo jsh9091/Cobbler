@@ -1,4 +1,4 @@
 # Cobbler
 Cobbler is a desktop application for text editing of COBOL program text files. The tool offers basic light editing features and syntax highlighting. For details see user manual and developer's guide documents. 
 
-![cobbler icon](icon.png)
+![cobbler icon](cobbler/src/main/java/resources/Cobber-icon.png)
