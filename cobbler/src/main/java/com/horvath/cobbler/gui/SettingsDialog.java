@@ -114,9 +114,12 @@ public final class SettingsDialog extends JDialog {
 	private void configureComponents() {
 		CobblerState state = CobblerState.getInstance();
 		
+		final int dialogWidth = 350;
+		final int dialogHeight = 260;
+		
 		/* dialog */ 
 		setTitle("Settings");
-		setSize(290, 260);
+		setSize(dialogWidth, dialogHeight);
 		setResizable(false);
 		setLocationRelativeTo(CobblerWindow.getWindow());
 		
