@@ -55,6 +55,7 @@ public class PrintAction extends CobblerAction {
 		
 		// set up printer code
 		PrinterJob job = PrinterJob.getPrinterJob();
+		job.setJobName(CobblerState.getInstance().getFile().getName());
 		job.setPrintable(new PrintProcessor(code));
 		
 		// if the user did not cancel

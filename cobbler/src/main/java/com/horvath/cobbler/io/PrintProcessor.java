@@ -30,9 +30,6 @@ import java.awt.Graphics2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 
 /**
  * Class for low level operations for printing page. 
@@ -40,14 +37,15 @@ import java.io.StringReader;
  */
 public class PrintProcessor implements Printable {
 	
-	private String data;
+	private String[] data; // array of lines to print
+	int[] pageBreaks; // array of page break line positions
 	
 	/**
 	 * Constructor. 
 	 * @param data String 
 	 */
 	public PrintProcessor(String data) {
-		this.data = data;
+		this.data = data.split("\\R");
 	}
 
 	/**
@@ -60,36 +58,47 @@ public class PrintProcessor implements Printable {
 	 */
 	@Override
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+		
+		final int margin = 50;
 
-	    if (pageIndex > 0) {
-	        return NO_SUCH_PAGE;
-	    }
+		Font font = new Font("Serif", Font.PLAIN, 10);
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		int lineHeight = metrics.getHeight();
 
-	    Graphics2D graphics2d = (Graphics2D) graphics;
-	    int x = (int) pageFormat.getImageableX();
-	    int y = (int) pageFormat.getImageableY();
-	    graphics2d.translate(x, y); 
+		if (pageBreaks == null) {
+			int linesPerPage = (int) (pageFormat.getImageableHeight() / lineHeight) - 7;
+			int numBreaks = (data.length - 1) / linesPerPage;
+			pageBreaks = new int[numBreaks];
+			for (int b = 0; b < numBreaks; b++) {
+				pageBreaks[b] = (b + 1) * linesPerPage;
+			}
+		}
 
-	    Font font = new Font("Monospaced", Font.PLAIN, 10);
-	    FontMetrics metrics = graphics.getFontMetrics(font);
-	    // get the height for updating y-position in writing 
-	    int lineHeight = metrics.getHeight();
+		if (pageIndex > pageBreaks.length) {
+			return NO_SUCH_PAGE;
+		}
 
-	    BufferedReader bufReader = new BufferedReader(new StringReader(data));
+		/*
+		 * User (0,0) is typically outside the image-able area, so we must translate by
+		 * the X and Y values in the PageFormat to avoid clipping
+		 */
+		Graphics2D g2d = (Graphics2D) graphics;
+		g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
-	    try {
-	        String line;
-	        x += 50;
-	        y += 50;
-	        while ((line = bufReader.readLine()) != null) {
-	            y += lineHeight;
-	            graphics2d.drawString(line, x, y);
-	        }
-	    } catch (IOException ex)  {
-	        throw new PrinterException(ex.getMessage());
-	    }
+		/*
+		 * Draw each line that is on this page. Increment 'y' position by lineHeight for
+		 * each line.
+		 */
+		int y = margin;
+		int start = (pageIndex == 0) ? 0 : pageBreaks[pageIndex - 1];
+		int end = (pageIndex == pageBreaks.length) ? data.length : pageBreaks[pageIndex];
+		for (int line = start; line < end; line++) {
+			y += lineHeight;
+			graphics.drawString(data[line], margin, y);
+		}
 
-	    return PAGE_EXISTS;
+		/* tell the caller that this page is part of the printed document */
+		return PAGE_EXISTS;
 	}
 
 }
