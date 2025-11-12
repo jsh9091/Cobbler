@@ -52,6 +52,7 @@ import com.horvath.cobbler.gui.action.GoToLineAction;
 import com.horvath.cobbler.gui.action.NewCobTemplateAction;
 import com.horvath.cobbler.gui.action.NewDocumentAction;
 import com.horvath.cobbler.gui.action.OpenFileAction;
+import com.horvath.cobbler.gui.action.PrintAction;
 import com.horvath.cobbler.gui.action.RemoveLineNumsAction;
 import com.horvath.cobbler.gui.action.SaveAction;
 import com.horvath.cobbler.gui.action.ShutdownAction;
@@ -72,6 +73,7 @@ public final class CobblerMenuBar extends JMenuBar {
 	protected JMenuItem closeItem;
 	protected JMenuItem saveItem;
 	protected JMenuItem saveAsItem;
+	protected JMenuItem printItem;
 	protected JMenuItem quitItem;
 	
 	protected JMenu editMenu;
@@ -118,6 +120,7 @@ public final class CobblerMenuBar extends JMenuBar {
 		closeItem = new JMenuItem();
 		saveItem = new JMenuItem();
 		saveAsItem = new JMenuItem();
+		printItem = new JMenuItem();
 		quitItem = new JMenuItem();
 		
 		editMenu = new JMenu("Edit");
@@ -184,6 +187,9 @@ public final class CobblerMenuBar extends JMenuBar {
 		
 		saveAsItem.setAction(new SaveAction(SaveAction.SaveType.SAVE_AS));
 		saveAsItem.setText("Save As...");
+
+		printItem.setAction(new PrintAction());
+		printItem.setText("Print...");
 		
 		quitItem.setAction(new ShutdownAction());
 		quitItem.setText("Quit");
@@ -197,6 +203,8 @@ public final class CobblerMenuBar extends JMenuBar {
 		fileMenu.add(closeItem);
 		fileMenu.add(saveItem);
 		fileMenu.add(saveAsItem);
+		fileMenu.addSeparator();
+		fileMenu.add(printItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
 	}
