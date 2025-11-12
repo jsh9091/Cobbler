@@ -46,6 +46,13 @@ public class PrintAction extends CobblerAction {
 		// get the current contents of the document from state
 		final String code = CobblerState.getInstance().getData();
 		
+		// if there is nothing to print
+		if (code.trim().isEmpty()) {
+			CobblerWindow.getWindow().simpleMessagePopup("Printing Stopped", 
+					"The current document is empty. " + System.lineSeparator() + "Printing operation stopped.");
+			return;
+		}
+		
 		// set up printer code
 		PrinterJob job = PrinterJob.getPrinterJob();
 		job.setPrintable(new PrintProcessor(code));
@@ -56,7 +63,6 @@ public class PrintAction extends CobblerAction {
 				// fire the operation of sending print job to the printer
 				job.print();
 			} catch (PrinterException ex) {
-				ex.printStackTrace(); // TODO
 				CobblerWindow.getWindow().simpleMessagePopup("Printing Error",
 						"There was a problem printing the document: " + ex.getMessage(), 
 						JOptionPane.ERROR_MESSAGE);
