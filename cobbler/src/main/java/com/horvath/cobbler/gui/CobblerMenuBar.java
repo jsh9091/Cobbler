@@ -190,6 +190,7 @@ public final class CobblerMenuBar extends JMenuBar {
 
 		printItem.setAction(new PrintAction());
 		printItem.setText("Print...");
+		printItem.setAccelerator(KeyStroke.getKeyStroke('P', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
 		quitItem.setAction(new ShutdownAction());
 		quitItem.setText("Quit");
