@@ -25,9 +25,12 @@
 package com.horvath.cobbler.command;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 
 import com.horvath.cobbler.application.Debugger;
@@ -91,11 +94,10 @@ public abstract class AbstractSettingsCmd extends CobblerCommand {
 	 * @throws IOException
 	 */
 	private static void copyFile(File dictionaryFile, String fileName) throws IOException {
-		try (InputStream is = AbstractSettingsCmd.class.getResourceAsStream(fileName);
-				FileOutputStream fos = new FileOutputStream(dictionaryFile)) {
-			while (is.available() > 0) {
-				fos.write(is.read());
-			}
+		try (InputStream inputStream = AbstractSettingsCmd.class.getResourceAsStream(fileName)) {
+			Path targetPath = Paths.get(dictionaryFile.getAbsolutePath());
+			long bytesCopied = Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+			Debugger.printLog("Copied " + bytesCopied + " bytes", AbstractSettingsCmd.class.getName(), Level.INFO);
 		}
 	}
 	
