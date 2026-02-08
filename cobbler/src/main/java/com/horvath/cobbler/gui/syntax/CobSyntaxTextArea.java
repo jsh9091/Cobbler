@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -67,6 +69,7 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		final String style = "text/COBOL";
 		atmf.putMapping(style, "com.horvath.cobbler.gui.syntax.CobolTokenMaker");
 		setSyntaxEditingStyle(style);
+		setCodeFoldingEnabled(false);
 		
 		updateShowInvisibleCharacters();
 		
@@ -90,6 +93,21 @@ public final class CobSyntaxTextArea extends RSyntaxTextArea {
 		// initializing listeners must come after setting code style
 		initListeners();
 	}
+	
+	@Override
+	protected JPopupMenu createPopupMenu() {
+		JPopupMenu menu = super.createPopupMenu();
+		if (menu.getComponentCount() > 0) {
+			
+			JMenuItem item = (JMenuItem)menu.getComponent(menu.getComponentCount() - 1);
+			if (item.getText().toLowerCase().contains("folding")) {
+				menu.remove(item);
+				// remove the separator bar
+				menu.remove(menu.getComponentCount() - 1);
+			}
+		}
+		return menu;
+    }
 	
 	/**
 	 * Listeners for changes within the text area. 
